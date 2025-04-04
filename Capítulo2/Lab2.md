@@ -63,8 +63,8 @@ from pyspark.sql import SparkSession
 
 # Crear una sesión de Spark
 spark = SparkSession.builder \
-  .master(“local”) \
-  .appName(“MiPrimeraAplicacionSpark”) \\
+  .master("local") \
+  .appName("MiPrimeraAplicacionSpark") \
   .getOrCreate()
 
 # Obtener el SparkContext
@@ -80,7 +80,7 @@ from pyspark.sql import SparkSession
 
 spark = SparkSession.builder \
   .master(‘local\[2\]’) \
-  .appName(“MiPrimeraAplicacionSpark”) \
+  .appName("MiPrimeraAplicacionSpark") \
   .getOrCreate()
 
 print (spark)
@@ -96,9 +96,9 @@ Una forma de establecer características de trabajo es definir parámetros al ob
 import pyspark.sql
 
 spark = pyspark.sql.SparkSession.builder \
-  .appName(“EjemploPySpark”) \
-  .config(“spark.memory.offHeap.enabled”, “true”) \
-  .config(“spark.memory.offHeap.size”, “10g”) \
+  .appName("EjemploPySpark") \
+  .config("spark.memory.offHeap.enabled", "true") \
+  .config("spark.memory.offHeap.size", "10g") \
   .getOrCreate()
 
 print(spark)
@@ -115,13 +115,13 @@ from pyspark import SparkContext, SparkConf
 # Configuración básica
 conf = SparkConf() \
   .setAppName("MiApp")\
-  .setMaster("local\[\*\]")
+  .setMaster("local\[*]")
 
 # Crear el SparkContext
 sc = SparkContext(conf=conf)
 
 # Ejemplo de operación
-data = \[1, 2, 3, 4, 5\]
+data = [1, 2, 3, 4, 5]
 rdd = sc.parallelize(data)
 print(rdd.collect())
 
@@ -140,9 +140,9 @@ from pyspark import SparkContext, SparkConf
 # Configuración avanzada
 conf = SparkConf() \
   .setAppName("MiAppAvanzada") \
-  .setMaster("local\[\*\]") \
+  .setMaster("local\[*]") \
   .set("spark.executor.memory", "2g") \
-  .set("spark.driver.memory", "1g") \\
+  .set("spark.driver.memory", "1g") \
   .set("spark.cores.max", "4")
 
 # Crear el SparkContext
@@ -164,24 +164,18 @@ Aunque está disponible, la recomendación es no utilizar el objeto SparkContext
 
 # Crear una SparkSession
 spark = SparkSession.builder \
+  .appName(“MiAppAvanzada”) \
+  .master(“local\[\*\]”) \
+  .config(“spark.executor.memory”, “2g”) \
+  .config(“spark.driver.memory”, “1g”) \
+  .config(“spark.cores.max”, “4”)\
+  .getOrCreate()
 
-.appName(“MiAppAvanzada”) \\
+# Operaciones de procesamiento…
 
-.master(“local\[\*\]”) \\
-
-.config(“spark.executor.memory”, “2g”) \\
-
-.config(“spark.driver.memory”, “1g”) \\
-
-.config(“spark.cores.max”, “4”)\\
-
-.getOrCreate()
-
-\# Operaciones de procesamiento…
-
-\# Detener la SparkSession
-
+# Detener la SparkSession
 spark.stop()
+
 ```
 
 <img src="./media/image10.png" style="width:4.35567in;height:3.30741in" />
@@ -204,21 +198,17 @@ Se pueden crear de varias maneras.
 ```
 from pyspark.sql import SparkSession
 
-\# Create spark session
-
-spark = SparkSession \\
-
-.builder \\
-
-.appName("Ejamplo RDDs vacío") \\
-
-.getOrCreate()
+# Create spark session
+spark = SparkSession \
+  .builder \
+  .appName("Ejamplo RDDs vacío") \
+  .getOrCreate()
 
 sc = spark.sparkContext
-
 rddVacio = sc.emptyRDD
 
 print(rddVacio)
+
 ```
 
 <img src="./media/image12.png" style="width:4.47979in;height:2.79206in" />
@@ -249,6 +239,8 @@ rdd\_rango = sc.parallelize(range(1, 1001))
 \# Contar elementos
 
 print(rdd\_rango.count()) \# Salida: 1000
+
+```
 
 <img src="./media/image14.png" style="width:5.38617in;height:3.563in" />
 
