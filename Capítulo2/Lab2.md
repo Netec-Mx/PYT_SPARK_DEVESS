@@ -164,11 +164,11 @@ Aunque está disponible, la recomendación es no utilizar el objeto SparkContext
 
 # Crear una SparkSession
 spark = SparkSession.builder \
-  .appName(“MiAppAvanzada”) \
-  .master(“local\[\*\]”) \
-  .config(“spark.executor.memory”, “2g”) \
-  .config(“spark.driver.memory”, “1g”) \
-  .config(“spark.cores.max”, “4”)\
+  .appName("MiAppAvanzada") \
+  .master("local\[*]") \
+  .config("spark.executor.memory", "2g") \
+  .config("spark.driver.memory", "1g") \
+  .config("spark.cores.max", "4") \
   .getOrCreate()
 
 # Operaciones de procesamiento…
@@ -220,28 +220,21 @@ print(rddVacio)
 ```
 from pyspark import SparkContext, SparkConf
 
-\# Configuración de la sesión
+# Configuración de la sesión
+conf = SparkConf() \
+.setAppName("Ejemplo con rango") \
+.setMaster("local\[*]") \
 
-conf = SparkConf() \\
-
-.setAppName("Ejemplo con rango") \\
-
-.setMaster("local\[\*\]") \\
-
-\# Crear el SparkContext
-
+# Crear el SparkContext
 sc = SparkContext(conf=conf)
 
-\# Crear RDD con números del 1 al 1000
+# Crear RDD con números del 1 al 1000
+rdd_rango = sc.parallelize(range(1, 1001))
 
-rdd\_rango = sc.parallelize(range(1, 1001))
-
-\# Contar elementos
-
-print(rdd\_rango.count()) \# Salida: 1000
+# Contar elementos
+print(rdd_rango.count()) # Salida: 1000
 
 ```
-
 <img src="./media/image14.png" style="width:5.38617in;height:3.563in" />
 
 <img src="./media/image15.png" style="width:6.1375in;height:0.88125in" />
