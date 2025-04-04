@@ -1,6 +1,7 @@
 # Práctica 1. Instalación de ambiente (Spark, Python y bibliotecas)
 
 **Objetivo de la práctica:**
+
 Al finalizar la práctica serás capaz de:
 - Configurar el servidor de PySpark en Linux y el IDE PyCharm.
 
@@ -38,9 +39,11 @@ Abrir una ventana de terminal. Desde aquí instalaremos el JDK de Java.
 
 Editar el archivo .bashrc para agregar los binarios de Java a la ruta del ambiente.
 
-> **nano ~/.bashrc**
->
-> **export JAVA\_HOME=/usr/lib/jvm/java-8-openjdk-amd64/**
+```
+**nano ~/.bashrc**
+
+**export JAVA\_HOME=/usr/lib/jvm/java-8-openjdk-amd64/**
+```
 
 <img src="./media/image4.png" style="width:4.21755in;height:2.79213in" />
 
