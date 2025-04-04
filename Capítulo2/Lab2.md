@@ -10,8 +10,8 @@ Al finalizar la práctica serás capaz de:
 
 **Prerequisitos:**
 
-• Acceso a ambiente Linux (credenciales provistas en el curso) o Linux local con interfaz gráfica
-• Haber completado la instalación del ambiente (laboratorio 1)
+• Acceso al ambiente Linux (credenciales provistas en el curso) o Linux local con interfaz gráfica.
+• Haber completado la instalación del ambiente (Práctica 1).
 
 **Contexto:**
 
@@ -60,21 +60,30 @@ Pero encontramos otras funciones muy importantes para configurar la sesión:
 
 ```
 from pyspark.sql import SparkSession
-spark = SparkSession.builder \\
-.master(“local”) \\
-.appName(“MiPrimeraAplicacionSpark”) \\
-.getOrCreate()
+
+# Crear una sesión de Spark
+spark = SparkSession.builder \
+  .master(“local”) \
+  .appName(“MiPrimeraAplicacionSpark”) \\
+  .getOrCreate()
+
+# Obtener el SparkContext
+sc = spark.sparkContext
 print(spark)
+
 ```
 
 En el parámetro master, es posible indicar en cuántos núcleos queremos lanzar la ejecución.
 
 ```
 from pyspark.sql import SparkSession
-spark = SparkSession.builder \\
-.master(‘local\[2\]’) \\
-.appName(“MiPrimeraAplicacionSpark”) \\
-.getOrCreate()
+
+spark = SparkSession.builder \
+  .master(‘local\[2\]’) \
+  .appName(“MiPrimeraAplicacionSpark”) \
+  .getOrCreate()
+
+print (spark)
 ```
 
 <img src="./media/image6.png" style="width:6.1375in;height:3.38333in" />
@@ -85,12 +94,15 @@ Una forma de establecer características de trabajo es definir parámetros al ob
 
 ```
 import pyspark.sql
-spark = pyspark.sql.SparkSession.builder \\
-.appName(“EjemploPySpark”) \\
-.config(“spark.memory.offHeap.enabled”, “true”) \\
-.config(“spark.memory.offHeap.size”, “10g”) \\
-.getOrCreate()
+
+spark = pyspark.sql.SparkSession.builder \
+  .appName(“EjemploPySpark”) \
+  .config(“spark.memory.offHeap.enabled”, “true”) \
+  .config(“spark.memory.offHeap.size”, “10g”) \
+  .getOrCreate()
+
 print(spark)
+
 ```
 
 <img src="./media/image7.png" style="width:4.45194in;height:1.80334in" />
@@ -99,18 +111,23 @@ Otra forma es crear el objeto SparkConf. Esto principalmente por necesidad de co
 
 ```
 from pyspark import SparkContext, SparkConf
-\# Configuración básica
-conf = SparkConf() \\
-.setAppName(“MiApp”)\\
-.setMaster(“local\[\*\]”)
-\# Crear el SparkContext
+
+# Configuración básica
+conf = SparkConf() \
+  .setAppName("MiApp")\
+  .setMaster("local\[\*\]")
+
+# Crear el SparkContext
 sc = SparkContext(conf=conf)
-\# Ejemplo de operación
+
+# Ejemplo de operación
 data = \[1, 2, 3, 4, 5\]
 rdd = sc.parallelize(data)
 print(rdd.collect())
-\# Detener el SparkContext
+
+# Detener el SparkContext
 sc.stop()
+
 ```
 
 <img src="./media/image8.png" style="width:4.25406in;height:2.48803in" />
@@ -119,18 +136,23 @@ Los mismos parámetros de configuración que se utilizaron anteriormente, se pue
 
 ```
 from pyspark import SparkContext, SparkConf
-\# Configuración avanzada
-conf = SparkConf() \\
-.setAppName(“MiAppAvanzada”) \\
-.setMaster(“local\[\*\]”) \\
-.set(“spark.executor.memory”, “2g”) \\
-.set(“spark.driver.memory”, “1g”) \\
-.set(“spark.cores.max”, “4”)
-\# Crear el SparkContext
+
+# Configuración avanzada
+conf = SparkConf() \
+  .setAppName("MiAppAvanzada") \
+  .setMaster("local\[\*\]") \
+  .set("spark.executor.memory", "2g") \
+  .set("spark.driver.memory", "1g") \\
+  .set("spark.cores.max", "4")
+
+# Crear el SparkContext
 sc = SparkContext(conf=conf)
-\# Aquí vendrían instrucciones para la operación…
-\# Detener el SparkContext
+
+# Aquí vendrían instrucciones para la operación…
+
+# Detener el SparkContext
 sc.stop()
+
 ```
 
 <img src="./media/image9.png" style="width:4.49572in;height:2.84098in" />
@@ -140,9 +162,8 @@ Aunque está disponible, la recomendación es no utilizar el objeto SparkContext
 ```
 <u>from pyspark.sql import SparkSession</u>
 
-\# Crear una SparkSession
-
-spark = SparkSession.builder \\
+# Crear una SparkSession
+spark = SparkSession.builder \
 
 .appName(“MiAppAvanzada”) \\
 
@@ -161,9 +182,10 @@ spark = SparkSession.builder \\
 \# Detener la SparkSession
 
 spark.stop()
+```
 
 <img src="./media/image10.png" style="width:4.35567in;height:3.30741in" />
-```
+
 
 ## 
 
@@ -379,6 +401,7 @@ print(line)
 
 Se pueden usar acciones como `collect(), take(), o first()` para inspeccionar los datos del RDD.
 
+```
 from pyspark import SparkContext
 
 sc = SparkContext(“local”, “Consulta RDD”)
@@ -390,11 +413,13 @@ print(rdd.collect()) \# Ver todos los datos
 print(rdd.take(2)) \# Ver los primeros 2 elementos
 
 print(rdd.first()) \# Ver el primer elemento
+```
 
 <img src="./media/image23.png" style="width:5.41573in;height:2.32611in" />
 
 **Leer usando SparkContext**
 
+```
 \# Crear SparkContext
 
 sc = SparkContext(“local”, “RDD desde CSV”)
@@ -414,6 +439,7 @@ rdd\_split = rdd\_data.map(lambda line: line.split(“,”)) \# Dividir cada lí
 \# Mostrar las primeras filas
 
 print(rdd\_split.take(5))
+```
 
 <img src="./media/image24.png" style="width:5.7294in;height:2.03232in" />
 
@@ -423,14 +449,19 @@ print(rdd\_split.take(5))
 
 En PySpark, se pueden guardar RDD en diferentes tipos de archivos utilizando varios métodos. Para estos ejemplos, usaremos un directorio llamado salidas
 
+```
 mkdir ~/salidas
+```
 
 **Guardar RDD como archivo de texto**
 
+```
 rdd.saveAsTextFile(“ruta/del/archivo”)
+```
 
 Este método guarda el RDD como un archivo de texto en la ruta especificada. Cada elemento del RDD se guarda en una nueva línea.
 
+```
 \# Crear una SparkSession
 
 spark = SparkSession.builder.appName(“GuardarRDDs”).getOrCreate()
@@ -448,10 +479,11 @@ df = spark.createDataFrame(rdd, \[”nombre”, “id”\])
 \# Guardar el DataFrame como archivo Parquet
 
 df.write.parquet(“ruta/a/parquet”)
+```
 
 <img src="./media/image25.png" style="width:6.1375in;height:2.68819in" />
 
-Y si desde una ventana de Terminal consultamos la ruta, aparecerá el archivo
+Y si desde una ventana de Terminal consultamos la ruta, aparecerá el archivo.
 
 <img src="./media/image26.png" style="width:4.77083in;height:3.15302in" />
 
@@ -459,12 +491,15 @@ Y si desde una ventana de Terminal consultamos la ruta, aparecerá el archivo
 
 Este método guarda el RDD como un SequenceFile, que es un formato binario utilizado por Hadoop.
 
+```
 rdd.saveAsSequenceFile(“ruta/del/archivo”)
+```
 
 Guardar RDD como archivo Parquet
 
 Para guardar un RDD como archivo Parquet, primero debes convertirlo a un DataFrame:
 
+```
 from pyspark.sql import SparkSession
 
 spark = SparkSession.builder.appName(“GuardarRDD”).getOrCreate()
@@ -476,11 +511,13 @@ df = rdd.toDF(\[”columna1”, “columna2”\])
 \# Guardar DataFrame como archivo Parquet
 
 df.write.parquet(“ruta/del/archivo”)
+```
 
 Guardar RDD como archivo JSON
 
 De manera similar, se puede convertir el RDD a un DataFrame y luego guardarlo como un archivo JSON:
 
+```
 \# Convertir RDD a DataFrame
 
 df = rdd.toDF(\[”columna1”, “columna2”\])
@@ -488,11 +525,13 @@ df = rdd.toDF(\[”columna1”, “columna2”\])
 \# Guardar DataFrame como archivo JSON
 
 df.write.json(“ruta/del/archivo”)
+```
 
 Guardar RDD como archivo CSV
 
 Para guardar un RDD como archivo CSV, también se debe convertirlo a un DataFrame:
 
+```
 \# Convertir RDD a DataFrame
 
 df = rdd.toDF(\[”columna1”, “columna2”\])
@@ -500,5 +539,6 @@ df = rdd.toDF(\[”columna1”, “columna2”\])
 \# Guardar DataFrame como archivo CSV
 
 df.write.csv(“ruta/del/archivo”)
+```
 
 \*\*\*Fin del laboratorio
