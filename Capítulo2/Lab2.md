@@ -1,13 +1,16 @@
-# Laboratorio 2: Creación de RDD en PySpark
+# Práctica 2. Creación de RDD en PySpark
 
-**Objetivo:** Iniciar la carga de datos en RDD a partir de diferentes fuentes de información.
+**Objetivo de la práctica:** 
 
-**Tiempo estimado:** 45 minutos
+Al finalizar la práctica serás capaz de:
+- Iniciar la carga de datos en RDD a partir de diferentes fuentes de información.
+
+**Duración aproximada:** 
+- 45 minutos.
 
 **Prerequisitos:**
 
 • Acceso a ambiente Linux (credenciales provistas en el curso) o Linux local con interfaz gráfica
-
 • Haber completado la instalación del ambiente (laboratorio 1)
 
 **Contexto:**
@@ -18,7 +21,8 @@ Un RDD (Resilient Distributed Dataset) es la unidad básica de datos en Spark. P
 
 Antes de crear RDDs, necesitamos una sesión de Spark. Esta sesión es la conexión entre nuestro programa y el motor de Spark.
 
-SparkSession es un punto de inicio a la funcionalidad de Spark, y es necesaria para crear un contexto para operar PySpark. SparkContext representa la conexión a un clúster de Spark.
+SparkSession es un punto de inicio a la funcionalidad de Spark, y es necesaria para crear un contexto para operar PySpark. 
+SparkContext representa la conexión a un clúster de Spark.
 
 <img src="./media/image2.png" style="width:6.13542in;height:2.78125in" />
 
@@ -28,17 +32,21 @@ SparkSession es un punto de inicio a la funcionalidad de Spark, y es necesaria p
 
 Iniciamos PyCharm con el siguiente comando:
 
+```
 pycharm-community
+```
 
-Creamos un proyecto y editamos el archivo .py
+Crear un proyecto y editar el archivo .py
 
 <img src="./media/image3.png" style="width:3.34484in;height:2.81121in" />
 
 Para acceder a la sesión de Spark y tener acceso a RDDs, vamos a crear un SparkSession. Este puede tomar diferentes parámetros para tomar el control de las características de la conexión desde Python. La manera más simple es:
 
+```
 spark = SparkSession.builder \\
 
 .getOrCreate()
+```
 
 <img src="./media/image4.png" style="width:5.29533in;height:2.30735in" />
 
@@ -46,12 +54,12 @@ La función **SparkSession.builder.getOrCreate()** obtiene una SparkSession exis
 
 Pero encontramos otras funciones muy importantes para configurar la sesión:
 
--   **SparkSession.builder.appName(name)** Establece un nombre para la aplicación, que se mostrará en la interfaz de usuario web de Spark.
-
--   **SparkSession.builder.master(master)** Establece la dirección URL maestra de Spark a la que conectarse, como “local” para ejecutarse localmente, “local\[4\]” para ejecutarse localmente con 4 núcleos o “spark://master:7077” para ejecutarse en un clúster independiente de Spark.
+- **SparkSession.builder.appName(name)** Establece un nombre para la aplicación, que se mostrará en la interfaz de usuario web de Spark.
+- **SparkSession.builder.master(master)** Establece la dirección URL maestra de Spark a la que conectarse, como “local” para ejecutarse localmente, “local\[4\]” para ejecutarse localmente con 4 núcleos o “spark://master:7077” para ejecutarse en un clúster independiente de Spark.
 
 <img src="./media/image5.png" style="width:5.44437in;height:2.32292in" />
 
+```
 from pyspark.sql import SparkSession
 
 spark = SparkSession.builder \\
@@ -63,9 +71,11 @@ spark = SparkSession.builder \\
 .getOrCreate()
 
 print(spark)
+```
 
 En el parámetro master, es posible indicar en cuántos núcleos queremos lanzar la ejecución.
 
+```
 from pyspark.sql import SparkSession
 
 spark = SparkSession.builder \\
@@ -75,6 +85,7 @@ spark = SparkSession.builder \\
 .appName(“MiPrimeraAplicacionSpark”) \\
 
 .getOrCreate()
+```
 
 <img src="./media/image6.png" style="width:6.1375in;height:3.38333in" />
 
@@ -82,6 +93,7 @@ spark = SparkSession.builder \\
 
 Una forma de establecer características de trabajo es definir parámetros al objeto SparkContext. Estas opciones pueden aplicar también a características de configuración. Por ejemplo, el uso de memoria:
 
+```
 import pyspark.sql
 
 spark = pyspark.sql.SparkSession.builder \\
@@ -95,11 +107,13 @@ spark = pyspark.sql.SparkSession.builder \\
 .getOrCreate()
 
 print(spark)
+```
 
 <img src="./media/image7.png" style="width:4.45194in;height:1.80334in" />
 
 Otra forma es crear el objeto SparkConf. Esto principalmente por necesidad de control a bajo nivel o por compatibilidad.:
 
+```
 from pyspark import SparkContext, SparkConf
 
 \# Configuración básica
@@ -125,11 +139,13 @@ print(rdd.collect())
 \# Detener el SparkContext
 
 sc.stop()
+```
 
 <img src="./media/image8.png" style="width:4.25406in;height:2.48803in" />
 
 Los mismos parámetros de configuración que se utilizaron anteriormente, se pueden aplicar al objeto SparkConfig:
 
+```
 from pyspark import SparkContext, SparkConf
 
 \# Configuración avanzada
@@ -155,11 +171,13 @@ sc = SparkContext(conf=conf)
 \# Detener el SparkContext
 
 sc.stop()
+```
 
 <img src="./media/image9.png" style="width:4.49572in;height:2.84098in" />
 
 Aunque está disponible, la recomendación es no utilizar el objeto SparkContext directamente, ya que SparkSession es una interfaz unificada que incluye SparkContext, SQLContext y HiveContext. Lo cual simplifica el código:
 
+```
 <u>from pyspark.sql import SparkSession</u>
 
 \# Crear una SparkSession
@@ -185,12 +203,13 @@ spark = SparkSession.builder \\
 spark.stop()
 
 <img src="./media/image10.png" style="width:4.35567in;height:3.30741in" />
+```
 
 ## 
 
 ## Tarea 2: Creando RDDs a partir de conjuntos
 
-En RDD, cada registro se procesa de forma independiente amanera de fila. No existen las columnas. Los RDD son la estructura de datos fundamental que representa colecciones distribuidas de objetos.
+En RDD, cada registro se procesa de forma independiente a manera de fila. No existen las columnas. Los RDD son la estructura de datos fundamental que representa colecciones distribuidas de objetos.
 
 Los RDD son inmutables y tolerantes a fallos por naturaleza. Son la forma de representar un conjunto de datos distribuido en varios nodos de un clúster, que se puede operar en paralelo. Los RDD se denominan resilientes porque siempre se pueden volver a calcular cuando se produce un error en un nodo.
 
@@ -200,6 +219,7 @@ Se pueden crear de varias maneras.
 
 **Ejemplo con RDD vacío:**
 
+```
 from pyspark.sql import SparkSession
 
 \# Create spark session
@@ -217,6 +237,7 @@ sc = spark.sparkContext
 rddVacio = sc.emptyRDD
 
 print(rddVacio)
+```
 
 <img src="./media/image12.png" style="width:4.47979in;height:2.79206in" />
 
@@ -224,6 +245,7 @@ print(rddVacio)
 
 **Crear RDD con range**
 
+```
 from pyspark import SparkContext, SparkConf
 
 \# Configuración de la sesión
@@ -269,6 +291,7 @@ data = \[”Laptop”, “Impresora”, “Teclado”, “Memoria”\]
 rdd = spark.sparkContext.parallelize(data)
 
 print (data)
+```
 
 <img src="./media/image16.png" style="width:4.73452in;height:2.35226in" />
 
@@ -276,6 +299,7 @@ En PySpark, el método **parallelize** se usa para crear un RDD a partir de una 
 
 **Creando RDD desde tuplas**
 
+```
 from pyspark import SparkContext
 
 \# Inicializar SparkContext
@@ -297,6 +321,7 @@ print("Contenido del RDD:", rdd.collect())
 \# Mostrar el tipo de datos
 
 print("Tipo de datos:", type(rdd))
+```
 
 <img src="./media/image17.png" style="width:5.79247in;height:3.00042in" />
 
@@ -305,13 +330,13 @@ print("Tipo de datos:", type(rdd))
 En este ejemplo:
 
 -   **sc.parallelize(data):** Convierte la lista data en un RDD.
-
 -   **rdd.collect():** Recupera todos los elementos del RDD y los devuelve como una lista.
 
 ## Tarea 3: Creando RDDs a partir de un archivo de texto
 
 Para crear RDD (conjuntos de datos distribuidos resistentes) a partir de archivos en Apache Spark, se pueden usar métodos integrados para leer datos del archivo, gererar un DataSet (se explicarán más adelante) y crear un RDD.
 
+```
 from pyspark import SparkContext
 
 \# Inicializar SparkContext
@@ -339,6 +364,7 @@ print("Primeras 5 líneas:")
 for line in text\_rdd.take(5):
 
 print(line)
+```
 
 <img src="./media/image19.png" style="width:6.1375in;height:3.36389in" />
 
@@ -348,6 +374,7 @@ print(line)
 
 Es posible recuperar una lista de archivos desde un directorio definido
 
+```
 from pyspark import SparkContext
 
 \# Inicializar SparkContext
@@ -373,6 +400,7 @@ print("Primeras 5 líneas:")
 for line in multi\_rdd.take(5):
 
 print(line)
+```
 
 <img src="./media/image21.png" style="width:6.1375in;height:2.92083in" />
 
@@ -381,18 +409,15 @@ print(line)
 **Notas importantes:**
 
 -   collect() trae todos los datos al driver, solo úsalo con conjuntos pequeños
-
 -   Para conjuntos grandes, utilizar take(n) o first()
-
 -   Los RDDs son inmutables (no se pueden modificar después de creados)
-
 -   Es mejor usar DataFrames para datos estructurados en la mayoría de casos
 
 ## Tarea 4: Obtener Información de un RDD
 
 **Inspeccionar el contenido de un RDD**
 
-Se pueden usar acciones como collect(), take(), o first() para inspeccionar los datos del RDD.
+Se pueden usar acciones como `collect(), take(), o first()` para inspeccionar los datos del RDD.
 
 from pyspark import SparkContext
 
