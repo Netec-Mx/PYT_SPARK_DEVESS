@@ -46,9 +46,12 @@ Editar el archivo .bashrc para agregar los binarios de Java a la ruta del ambien
 
 Aplicar los cambios y verificar la versión de Java.
 
+```
 source ~/.bashrc
 
 java –version
+
+```
 
 <img src="./media/image5.png" style="width:6.1375in;height:1.23264in" />
 
@@ -69,11 +72,14 @@ pip3 –version
 
 Renombrar comando pip3 a pip (esto es opcional).
 
+```
 echo alias pip=pip3 &gt;&gt; ~/.bashrc
 
 source ~/.bashrc
 
 pip --version
+
+```
 
 <img src="./media/image7.png" style="width:6.1375in;height:1.01736in" />
 
@@ -87,13 +93,19 @@ Ya con el prerrequisito de Java, ahora se instalará el motor de Spark. Para ell
 
 Descomprimir el paquete con el siguiente comando:
 
+```
 tar -xvzf
+
+```
 
 <img src="./media/image10.png" style="width:3.80208in;height:2.49913in" />
 
 No es estrictamente necesario, pero se puede mover el directorio de Spark a una ubicación más accesible:
 
+```
 sudo mv spark-3.5.4-bin-hadoop3 /usr/local/spark
+
+```
 
 ## 
 
@@ -101,6 +113,8 @@ sudo mv spark-3.5.4-bin-hadoop3 /usr/local/spark
 
 Establecer las variables necesarias para Spark, de acuerdo al directorio donde se haya desempaquetado. Para ello, con el editor preferido, editar el archivo .bashrc.
 
+
+```
 nano ~/.bashrc
 
 export SPARK\_HOME=/usr/local/spark
@@ -110,6 +124,8 @@ export PATH=$PATH:$SPARK\_HOME/bin
 export PYTHONPATH=$SPARK\_HOME/python:$SPARK\_HOME/python/lib/py4j-0.10.9.7-src.zip:$PYTHONPATH
 
 export PYSPARK\_PYTHON=python3
+
+```
 
 >***Importante: El nombre del archivo py4j dependerá de la versión que se tenga instalada***
 
