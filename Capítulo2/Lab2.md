@@ -243,22 +243,19 @@ print(rdd_rango.count()) # Salida: 1000
 
 Una forma de crear RDD es a partir de listas.
 
+```
 from pyspark.sql import SparkSession
 
-spark = SparkSession.builder \\
-
-.master(“local”) \\
-
-.appName(“RDDdesdeLista”) \\
-
+spark = SparkSession.builder \
+.master("local") \
+.appName("RDDdesdeLista") \
 .getOrCreate()
 
-data = \[”Laptop”, “Impresora”, “Teclado”, “Memoria”\]
-
+data = ["Laptop", "Impresora", "Teclado", "Memoria"]
 rdd = spark.sparkContext.parallelize(data)
 
 print (data)
-
+```
 
 <img src="./media/image16.png" style="width:4.73452in;height:2.35226in" />
 
@@ -269,25 +266,19 @@ En PySpark, el método **parallelize** se usa para crear un RDD a partir de una 
 ```
 from pyspark import SparkContext
 
-\# Inicializar SparkContext
-
+# Inicializar SparkContext
 sc = SparkContext("local", "Ejemplo RDD")
 
-\# Datos en una lista de Python
-
-datos = \[("Ana", 25), ("Berta", 30), ("Carolina", 35)\]
-
-\# Crear un RDD
-
+# Datos en una lista de Python
+datos = [("Ana", 25), ("Berta", 30), ("Carolina", 35)]
+# Crear un RDD
 rdd = sc.parallelize(datos)
-
-\# Mostrar los datos
-
+# Mostrar los datos
 print("Contenido del RDD:", rdd.collect())
 
-\# Mostrar el tipo de datos
-
+# Mostrar el tipo de datos
 print("Tipo de datos:", type(rdd))
+
 ```
 
 <img src="./media/image17.png" style="width:5.79247in;height:3.00042in" />
@@ -301,34 +292,26 @@ En este ejemplo:
 
 ## Tarea 3: Creando RDDs a partir de un archivo de texto
 
-Para crear RDD (conjuntos de datos distribuidos resistentes) a partir de archivos en Apache Spark, se pueden usar métodos integrados para leer datos del archivo, gererar un DataSet (se explicarán más adelante) y crear un RDD.
+Para crear RDD (conjuntos de datos distribuidos resistentes) a partir de archivos en Apache Spark, se pueden usar métodos integrados para leer datos del archivo, generar un DataSet (se explicarán más adelante) y crear un RDD.
 
 ```
 from pyspark import SparkContext
 
-\# Inicializar SparkContext
-
+# Inicializar SparkContext
 sc = SparkContext("local", "RDD desde archivo")
+# Crear RDD desde un archivo de texto
+text_rdd = sc.textFile("/home/miguel/data/salesrpt.txt")
 
-\# Crear RDD desde un archivo de texto
-
-text\_rdd = sc.textFile("/home/miguel/data/salesrpt.txt")
-
-\# Mostrar el contenido
-
+# Mostrar el contenido
 print("Contenido del archivo texto:")
+print(text_rdd.collect()) # collect() trae todos los datos al driver
 
-print(text\_rdd.collect()) \# collect() trae todos los datos al driver
-
-\# Contar líneas
-
-print(f"Número de líneas: {text\_rdd.count()}")
-
-\# Mostrar primeras 5 líneas
-
+# Contar líneas
+print(f"Número de líneas: {text_rdd.count()}")
+# Mostrar primeras 5 líneas
 print("Primeras 5 líneas:")
 
-for line in text\_rdd.take(5):
+for line in text_rdd.take(5):
 
 print(line)
 ```
@@ -344,29 +327,21 @@ Es posible recuperar una lista de archivos desde un directorio definido
 ```
 from pyspark import SparkContext
 
-\# Inicializar SparkContext
-
+# Inicializar SparkContext
 sc = SparkContext("local", "RDD desde varios archivo")
 
-\# Leer múltiples archivos (pueden usar patrones como \*.txt)
+# Leer múltiples archivos (pueden usar patrones como *.txt)
+multi_rdd = sc.textFile("/home/miguel/data/dirtxt/*.txt")
+print(multi_rdd.collect())
+# collect() trae todos los datos al driver
+# Contar líneas
+print("Conteo total de líneas en todos los archivos:", multi_rdd.count())
 
-multi\_rdd = sc.textFile("/home/miguel/data/dirtxt/\*.txt")
-
-print(multi\_rdd.collect())
-
-\# collect() trae todos los datos al driver
-
-\# Contar líneas
-
-print("Conteo total de líneas en todos los archivos:", multi\_rdd.count())
-
-\# Mostrar primeras 5 líneas
-
+# Mostrar primeras 5 líneas
 print("Primeras 5 líneas:")
+for line in multi_rdd.take(5):
+  print(line)
 
-for line in multi\_rdd.take(5):
-
-print(line)
 ```
 
 <img src="./media/image21.png" style="width:6.1375in;height:2.92083in" />
@@ -384,20 +359,18 @@ print(line)
 
 **Inspeccionar el contenido de un RDD**
 
-Se pueden usar acciones como `collect(), take(), o first()` para inspeccionar los datos del RDD.
+Se pueden usar acciones como `collect()`, `take()`, o `first()` para inspeccionar los datos del RDD.
 
 ```
 from pyspark import SparkContext
 
 sc = SparkContext(“local”, “Consulta RDD”)
 
-rdd = sc.parallelize(\[(1, “Alicia”, 25), (2, “Bernardo”, 30), (3, “Carla”, 35)\])
+rdd = sc.parallelize([(1, "Alicia", 25), (2, "Bernardo", 30), (3, "Carla", 35)\])
+print(rdd.collect()) # Ver todos los datos
+print(rdd.take(2)) # Ver los primeros 2 elementos
+print(rdd.first()) # Ver el primer elemento
 
-print(rdd.collect()) \# Ver todos los datos
-
-print(rdd.take(2)) \# Ver los primeros 2 elementos
-
-print(rdd.first()) \# Ver el primer elemento
 ```
 
 <img src="./media/image23.png" style="width:5.41573in;height:2.32611in" />
@@ -405,25 +378,24 @@ print(rdd.first()) \# Ver el primer elemento
 **Leer usando SparkContext**
 
 ```
-\# Crear SparkContext
+from pyspark import SparkContext
 
-sc = SparkContext(“local”, “RDD desde CSV”)
+# Crear SparkContext
+sc = SparkContext("local", "RDD desde CSV")
 
-\# Leer el archivo CSV
+# Leer el archivo CSV
+rdd = sc.textFile("ruta/al/archivo.csv")
 
-rdd = sc.textFile(“ruta/al/archivo.csv”)
+# Procesar las líneas para dividirlas en columnas
+header = rdd.first() # Obtener la primera línea (encabezado)
 
-\# Procesar las líneas para dividirlas en columnas
+rdd_data = rdd.filter(lambda line: line != header) # Filtrar el encabezado
 
-header = rdd.first() \# Obtener la primera línea (encabezado)
+rdd_split = rdd_data.map(lambda line: line.split(",") # Dividir cada línea por comas
 
-rdd\_data = rdd.filter(lambda line: line != header) \# Filtrar el encabezado
+# Mostrar las primeras filas
+print(rdd_split.take(5))
 
-rdd\_split = rdd\_data.map(lambda line: line.split(“,”)) \# Dividir cada línea por comas
-
-\# Mostrar las primeras filas
-
-print(rdd\_split.take(5))
 ```
 
 <img src="./media/image24.png" style="width:5.7294in;height:2.03232in" />
@@ -447,23 +419,19 @@ rdd.saveAsTextFile(“ruta/del/archivo”)
 Este método guarda el RDD como un archivo de texto en la ruta especificada. Cada elemento del RDD se guarda en una nueva línea.
 
 ```
-\# Crear una SparkSession
+# Crear una SparkSession
+spark = SparkSession.builder.appName("GuardarRDDs").getOrCreate()
 
-spark = SparkSession.builder.appName(“GuardarRDDs”).getOrCreate()
-
-\# Crear un RDD
-
-data = \[(“Alice”, 1), (“Bob”, 2), (“Charlie”, 3)\]
-
+# Crear un RDD
+data = [("Alice", 1), ("Bob", 2), ("Charlie", 3)]
 rdd = spark.sparkContext.parallelize(data)
 
-\# Convertir el RDD a un DataFrame
+# Convertir el RDD a un DataFrame
+df = spark.createDataFrame(rdd, ["nombre", "id"])
 
-df = spark.createDataFrame(rdd, \[”nombre”, “id”\])
+# Guardar el DataFrame como archivo Parquet
+df.write.parquet("ruta/a/parquet")
 
-\# Guardar el DataFrame como archivo Parquet
-
-df.write.parquet(“ruta/a/parquet”)
 ```
 
 <img src="./media/image25.png" style="width:6.1375in;height:2.68819in" />
@@ -480,50 +448,47 @@ Este método guarda el RDD como un SequenceFile, que es un formato binario utili
 rdd.saveAsSequenceFile(“ruta/del/archivo”)
 ```
 
-Guardar RDD como archivo Parquet
+**Guardar RDD como archivo Parquet**
 
 Para guardar un RDD como archivo Parquet, primero debes convertirlo a un DataFrame:
 
 ```
 from pyspark.sql import SparkSession
 
-spark = SparkSession.builder.appName(“GuardarRDD”).getOrCreate()
+spark = SparkSession.builder.appName("GuardarRDD").getOrCreate()
 
-\# Convertir RDD a DataFrame
+# Convertir RDD a DataFrame
+df = rdd.toDF(["columna1", "columna2"])
 
-df = rdd.toDF(\[”columna1”, “columna2”\])
+# Guardar DataFrame como archivo Parquet
+df.write.parquet("ruta/del/archivo")
 
-\# Guardar DataFrame como archivo Parquet
-
-df.write.parquet(“ruta/del/archivo”)
 ```
 
-Guardar RDD como archivo JSON
+**Guardar RDD como archivo JSON**
 
 De manera similar, se puede convertir el RDD a un DataFrame y luego guardarlo como un archivo JSON:
 
 ```
-\# Convertir RDD a DataFrame
+# Convertir RDD a DataFrame
+df = rdd.toDF(["columna1", "columna2"])
 
-df = rdd.toDF(\[”columna1”, “columna2”\])
-
-\# Guardar DataFrame como archivo JSON
-
-df.write.json(“ruta/del/archivo”)
-```
-
-Guardar RDD como archivo CSV
-
-Para guardar un RDD como archivo CSV, también se debe convertirlo a un DataFrame:
+# Guardar DataFrame como archivo JSON
+df.write.json("ruta/del/archivo")
 
 ```
-\# Convertir RDD a DataFrame
 
-df = rdd.toDF(\[”columna1”, “columna2”\])
+**Guardar RDD como archivo CSV**
 
-\# Guardar DataFrame como archivo CSV
+Para guardar un RDD como archivo CSV, también se debe convertir a un DataFrame:
 
-df.write.csv(“ruta/del/archivo”)
+```
+# Convertir RDD a DataFrame
+df = rdd.toDF(["columna1", "columna2"])
+
+# Guardar DataFrame como archivo CSV
+df.write.csv("ruta/del/archivo")
+
 ```
 
-\*\*\*Fin del laboratorio
+**Fin del laboratorio**
