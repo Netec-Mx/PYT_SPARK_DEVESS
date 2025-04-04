@@ -56,11 +56,14 @@ java –version
 
 PIP es un gestor de paquetes y librerías para Python, permite gestionar dependencias de una manera muy sencilla. Primero, se actualizan los paquetes y se instala pip3:
 
+```
 sudo apt-get update
 
 sudo apt-get install python3-pip
 
 pip3 –version
+
+```
 
 <img src="./media/image6.png" style="width:6.1375in;height:2.22569in" />
 
