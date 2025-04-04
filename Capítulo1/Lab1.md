@@ -179,14 +179,14 @@ pycharm-community
 
 <img src="./media/image16.png" style="width:4.19043in;height:2.76042in" />
 
-Aceptar el acuerdo de licencia. Opcionalmente podemos aceptar o negar el compartir información de sesiones
+Aceptar el acuerdo de licencia. Opcionalmente podemos aceptar o negar el compartir información de sesiones.
 
 <img src="./media/image17.png" style="width:3.9837in;height:3.03353in" />
 
 <img src="./media/image18.png" style="width:3.62375in;height:2.75369in" />
 
-Finalmente, tenemos la pantalla de inicio
+Finalmente, tenemos la pantalla de inicio.
 
 <img src="./media/image19.png" style="width:4.32608in;height:3.50374in" />
 
-**\*\*\* Fin del laboratorio**
+**Fin del laboratorio**
