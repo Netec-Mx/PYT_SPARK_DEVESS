@@ -258,7 +258,7 @@ data = \[”Laptop”, “Impresora”, “Teclado”, “Memoria”\]
 rdd = spark.sparkContext.parallelize(data)
 
 print (data)
-```
+
 
 <img src="./media/image16.png" style="width:4.73452in;height:2.35226in" />
 
