@@ -44,7 +44,6 @@ Para acceder a la sesión de Spark y tener acceso a RDDs, vamos a crear un Spark
 
 ```
 spark = SparkSession.builder \\
-
 .getOrCreate()
 ```
 
@@ -61,15 +60,10 @@ Pero encontramos otras funciones muy importantes para configurar la sesión:
 
 ```
 from pyspark.sql import SparkSession
-
 spark = SparkSession.builder \\
-
 .master(“local”) \\
-
 .appName(“MiPrimeraAplicacionSpark”) \\
-
 .getOrCreate()
-
 print(spark)
 ```
 
@@ -77,13 +71,9 @@ En el parámetro master, es posible indicar en cuántos núcleos queremos lanzar
 
 ```
 from pyspark.sql import SparkSession
-
 spark = SparkSession.builder \\
-
 .master(‘local\[2\]’) \\
-
 .appName(“MiPrimeraAplicacionSpark”) \\
-
 .getOrCreate()
 ```
 
@@ -95,17 +85,11 @@ Una forma de establecer características de trabajo es definir parámetros al ob
 
 ```
 import pyspark.sql
-
 spark = pyspark.sql.SparkSession.builder \\
-
 .appName(“EjemploPySpark”) \\
-
 .config(“spark.memory.offHeap.enabled”, “true”) \\
-
 .config(“spark.memory.offHeap.size”, “10g”) \\
-
 .getOrCreate()
-
 print(spark)
 ```
 
@@ -115,29 +99,17 @@ Otra forma es crear el objeto SparkConf. Esto principalmente por necesidad de co
 
 ```
 from pyspark import SparkContext, SparkConf
-
 \# Configuración básica
-
 conf = SparkConf() \\
-
 .setAppName(“MiApp”)\\
-
 .setMaster(“local\[\*\]”)
-
 \# Crear el SparkContext
-
 sc = SparkContext(conf=conf)
-
 \# Ejemplo de operación
-
 data = \[1, 2, 3, 4, 5\]
-
 rdd = sc.parallelize(data)
-
 print(rdd.collect())
-
 \# Detener el SparkContext
-
 sc.stop()
 ```
 
@@ -147,29 +119,17 @@ Los mismos parámetros de configuración que se utilizaron anteriormente, se pue
 
 ```
 from pyspark import SparkContext, SparkConf
-
 \# Configuración avanzada
-
 conf = SparkConf() \\
-
 .setAppName(“MiAppAvanzada”) \\
-
 .setMaster(“local\[\*\]”) \\
-
 .set(“spark.executor.memory”, “2g”) \\
-
 .set(“spark.driver.memory”, “1g”) \\
-
 .set(“spark.cores.max”, “4”)
-
 \# Crear el SparkContext
-
 sc = SparkContext(conf=conf)
-
 \# Aquí vendrían instrucciones para la operación…
-
 \# Detener el SparkContext
-
 sc.stop()
 ```
 
