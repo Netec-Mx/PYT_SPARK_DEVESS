@@ -31,7 +31,9 @@ Proveer las credenciales del usuario y contraseña provistos en el curso:
 
 Abrir una ventana de terminal. Desde aquí instalaremos el JDK de Java.
 
-> **sudo apt-get install openjdk-8-jdk**
+```
+sudo apt-get install openjdk-8-jdk
+```
 
 <img src="./media/image3.png" style="width:6.1375in;height:3.17639in" />
 
@@ -40,9 +42,9 @@ Abrir una ventana de terminal. Desde aquí instalaremos el JDK de Java.
 Editar el archivo .bashrc para agregar los binarios de Java a la ruta del ambiente.
 
 ```
-**nano ~/.bashrc**
+nano ~/.bashrc
 
-**export JAVA\_HOME=/usr/lib/jvm/java-8-openjdk-amd64/**
+export JAVA\_HOME=/usr/lib/jvm/java-8-openjdk-amd64/
 ```
 
 <img src="./media/image4.png" style="width:4.21755in;height:2.79213in" />
@@ -81,7 +83,6 @@ echo alias pip=pip3 &gt;&gt; ~/.bashrc
 source ~/.bashrc
 
 pip --version
-
 ```
 
 <img src="./media/image7.png" style="width:6.1375in;height:1.01736in" />
@@ -98,7 +99,6 @@ Descomprimir el paquete con el siguiente comando:
 
 ```
 tar -xvzf
-
 ```
 
 <img src="./media/image10.png" style="width:3.80208in;height:2.49913in" />
@@ -107,7 +107,6 @@ No es estrictamente necesario, pero se puede mover el directorio de Spark a una 
 
 ```
 sudo mv spark-3.5.4-bin-hadoop3 /usr/local/spark
-
 ```
 
 ## 
@@ -127,7 +126,6 @@ export PATH=$PATH:$SPARK\_HOME/bin
 export PYTHONPATH=$SPARK\_HOME/python:$SPARK\_HOME/python/lib/py4j-0.10.9.7-src.zip:$PYTHONPATH
 
 export PYSPARK\_PYTHON=python3
-
 ```
 
 >***Importante: El nombre del archivo py4j dependerá de la versión que se tenga instalada***
@@ -137,13 +135,17 @@ export PYSPARK\_PYTHON=python3
 Guardar los cambios y salir del editor. 
 Aplicar estos cambios con el siguiente comando:
 
+```
 source: ~/.bashrc
+```
 
 **Probar al acceso a pyspark**
 
 Una vez instalado, hacemos la prueba desde línea a terminal:
 
+```
 pyspark
+```
 
 <img src="./media/image12.png" style="width:5.92021in;height:1.91667in" />
 
@@ -153,14 +155,13 @@ pyspark
 
 Nótese que se establecieron diferentes elementos por omisión:
 
-Spark context Web UI available at http://pyspark1.internal.cloudapp.net:4040
-
-Spark context available as 'sc' (master = local\[\*\], app id = local-1737635834756).
-
-SparkSession available as 'spark'.
+- **Spark context Web UI available at http://pyspark1.internal.cloudapp.net:4040**
+- **Spark context available as 'sc' (master = local\[\*\], app id = local-1737635834756).**
+- **SparkSession available as 'spark'.**
 
 Probar la instalación con los siguientes comandos:
 
+```
 print(sc)
 
 print(sc.version)
@@ -168,6 +169,7 @@ print(sc.version)
 print(spark)
 
 exit()
+```
 
 <img src="./media/image13.png" style="width:4.79143in;height:2.4933in" />
 
@@ -179,25 +181,31 @@ Vamos a requerir una herramienta para trabajar con el código de PySpark. Existe
 
 Actualizar Linux con los siguientes comandos:
 
+```
 sudo apt-get update -y
 
 sudo apt-get upgrade -y
+```
 
 <img src="./media/image14.png" style="width:4.53873in;height:2.03467in" />
 
 Para instalar PyCharm en el sistema, debes tener instalada la utilidad Snap. Ejecutar el comando para instalarla.
 
+```
 sudo apt install snapd
+```
 
 Hay varias formas de instalar las diferentes ediciones de PyCharm. El siguiente comando instalará la edición de la comunidad desde la línea de comandos:
 
+```
 sudo snap install pycharm-community --classic
+```
 
 <img src="./media/image15.png" style="width:4.03892in;height:2.66428in" />
 
 Iniciar con
 
-pycharm-community
+`pycharm-community` 
 
 <img src="./media/image16.png" style="width:4.19043in;height:2.76042in" />
 
