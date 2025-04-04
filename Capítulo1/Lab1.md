@@ -1,6 +1,6 @@
 # Práctica 1. Instalación de ambiente (Spark, Python y bibliotecas)
 
-**Objetivo de la práctica**
+**Objetivo de la práctica:**
 Al finalizar la práctica serás capaz de:
 - Configurar el servidor de PySpark en Linux y el IDE PyCharm.
 
