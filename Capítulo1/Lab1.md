@@ -189,7 +189,7 @@ sudo apt-get upgrade -y
 
 <img src="./media/image14.png" style="width:4.53873in;height:2.03467in" />
 
-Para instalar PyCharm en el sistema, debes tener instalada la utilidad Snap. Ejecutar el comando para instalarla.
+Para instalar PyCharm en el sistema debes tener instalada la utilidad Snap. Ejecutar el comando para instalarla.
 
 ```
 sudo apt install snapd
@@ -205,7 +205,9 @@ sudo snap install pycharm-community --classic
 
 Iniciar con
 
-`pycharm-community` 
+```
+pycharm-community
+```
 
 <img src="./media/image16.png" style="width:4.19043in;height:2.76042in" />
 
