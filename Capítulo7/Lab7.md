@@ -1,18 +1,18 @@
 # Laboratorio 7: Uso de agregaciones, agrupaciones y relaciones
 
-**Objetivo:**
-Aplicar agregaciones, agrupaciones y relaciones
+**Objetivo de la práctica:**
 
-**Tiempo estimado:**
-60 minutos
+Al finalizar la práctica serás capaz de:
+- Aplicar agregaciones, agrupaciones y relaciones.
+
+**Tiempo aproximado:**
+- 60 minutos.
 
 **Prerequisitos:**
 
-- Acceso a ambiente Linux (credenciales provistas en el curso) o Linux local con interfaz gráfica
-
-- Tener los archivos de datos
-
-- Completar el laboratorio 1
+- Acceso al ambiente Linux (credenciales provistas en el curso) o Linux local con interfaz gráfica.
+- Tener los archivos de datos.
+- Completar el laboratorio 1.
 
 **Contexto:**
 
@@ -36,45 +36,37 @@ Las funciones de agregación más comunes en SQL son:
 
     **Instrucciones:**
 
-Tarea1: Agregaciones y agrupaciones con SQL
+## Tarea 1: Agregaciones y agrupaciones con SQL
 
 **Agrupar DataFrames**
 
-Abrimos la sesión de PyCharm e introducimos el siguente código:
+Abrir la sesión de PyCharm e introducir el siguente código:
 
-**from pyspark.sql import SparkSession**
+```
+from pyspark.sql import SparkSession
 
-**spark = SparkSession\\**
+spark = SparkSession\
+.builder\
+.appName("Usra SQL y DataFrames")\
+.getOrCreate()
 
-**.builder\\**
+# Crear DataFrame
+dfSales = spark.read.csv("/home/miguel/data/Sales.csv", inferSchema=True, header=True)
+# Registrar el DataFrame como una tabla temporal
+dfSales.createOrReplaceTempView("ventas")
 
-**.appName("Usra SQL y DataFrames")\\**
+query = ("SELECT Country, SUM(Sales) AS TotalSales "
+         " FROM ventas "
+         " GROUP BY Country "
+         )
 
-**.getOrCreate()**
-
-**\# Crear DataFrame**
-
-**dfSales = spark.read.csv("/home/miguel/data/Sales.csv", inferSchema=True, header=True)**
-
-**\# Registrar el DataFrame como una tabla temporal**
-
-**dfSales.createOrReplaceTempView("ventas")**
-
-**query = ("SELECT Country, SUM(Sales) AS TotalSales "**
-
-**" FROM ventas "**
-
-**" GROUP BY Country "**
-
-**)**
-
-**spark.sql(query).show()**
+spark.sql(query).show()
+```
 
 **En este ejemplo:**
 
-- **createOrReplaceTempView** expone el DataFrame como table para usarse en la sentencia SQL
-
-- **SUM()** suma los valores del campo Sales y los corta por Country
+- **createOrReplaceTempView** expone el DataFrame como table para usarse en la sentencia SQL.
+- **SUM()** suma los valores del campo Sales y los corta por Country.
 
 <img src="./media/image1.png" style="width:3.6255in;height:2.07857in" />
 
@@ -84,33 +76,26 @@ Abrimos la sesión de PyCharm e introducimos el siguente código:
 
 Se pueden aplicar cortes en más de un campo. Es importante considerar que si los campos no utilizan una función de agregación, todos ellos deberán estar en GROUP BY. El primer campo declarado maneja la agrupación principal.
 
+```
 from pyspark.sql import SparkSession
 
-spark = SparkSession\\
-
-.builder\\
-
-.appName("Usra SQL y DataFrames")\\
-
+spark = SparkSession\
+.builder\
+.appName("Usra SQL y DataFrames")\
 .getOrCreate()
 
-\# Crear DataFrame
-
+# Crear DataFrame
 dfSales = spark.read.csv("/home/miguel/data/Sales.csv", inferSchema=True, header=True)
-
-\# Registrar el DataFrame como una tabla temporal
-
+# Registrar el DataFrame como una tabla temporal
 dfSales.createOrReplaceTempView("ventas")
 
 query = ("SELECT Territory, Country, SUM(Sales) AS TotalSales "
-
-" FROM ventas "
-
-" GROUP BY Territory, Country "
-
-)
+         " FROM ventas "
+         " GROUP BY Territory, Country "
+         )
 
 spark.sql(query).show()
+```
 
 <img src="./media/image3.png" style="width:4.37252in;height:2.41087in" />
 
@@ -118,35 +103,28 @@ spark.sql(query).show()
 
 **Aplicar múltiples funciones de agregación**
 
+```
 from pyspark.sql import SparkSession
 
-spark = SparkSession\\
-
-.builder\\
-
-.appName("Usra SQL y DataFrames")\\
-
+spark = SparkSession\
+.builder\
+.appName("Usra SQL y DataFrames")\
 .getOrCreate()
 
-\# Crear DataFrame
-
+# Crear DataFrame
 dfSales = spark.read.csv("/home/miguel/data/Model/Products.csv", inferSchema=True, header=True)
-
-\# Registrar el DataFrame como una tabla temporal
-
+# Registrar el DataFrame como una tabla temporal
 dfSales.createOrReplaceTempView("productos")
 
 query = ("SELECT Category, SUM(Price) As TotalSales, AVG(Price) as Average, MIN(Price) as MinPrice"
-
-" FROM productos "
-
-" GROUP BY Category "
-
-)
+         " FROM productos "
+         " GROUP BY Category "
+         )
 
 dfVentas= spark.sql(query)
 
 dfVentas.show()
+```
 
 <img src="./media/image5.png" style="width:4.1684in;height:2.2738in" />
 
@@ -156,39 +134,30 @@ dfVentas.show()
 
 Notemos la ejecución del siguiente código
 
+```
 from pyspark.sql import SparkSession
 
-spark = SparkSession\\
-
-.builder\\
-
-.appName("Usra SQL y DataFrames")\\
-
+spark = SparkSession\
+.builder\
+.appName("Usra SQL y DataFrames")\
 .getOrCreate()
 
-\# Crear DataFrame
-
+# Crear DataFrame
 dfProducts = spark.read.csv("/home/miguel/data/Model/Products.csv", inferSchema=True, header=True)
-
-\# Registrar el DataFrame como una tabla temporal
-
+# Registrar el DataFrame como una tabla temporal
 dfProducts.createOrReplaceTempView("productos")
 
-\# Consultar la cantidad de productos por categoría
-
+# Consultar la cantidad de productos por categoría
 query = ("SELECT Category, COUNT(Product) as NoProducts"
-
-" FROM productos "
-
-" GROUP BY Category "
-
-\# "HAVING COUNT(Product) &gt;5"
-
-)
+         " FROM productos "
+       " GROUP BY Category "
+     #   "HAVING COUNT(Product) &gt;5"
+       )
 
 dfProducts= spark.sql(query)
 
 dfProducts.show()
+```
 
 <img src="./media/image7.png" style="width:4.39647in;height:2.54098in" />
 
@@ -198,39 +167,30 @@ dfProducts.show()
 
 La cláusula WHERE no puede ser aplicable porque esta se aplica a nivel registro y no a nivel agrupación. Para aplicar condiciones por grupo se tiene a la cláusula HAVING
 
+```
 from pyspark.sql import SparkSession
 
-spark = SparkSession\\
-
-.builder\\
-
-.appName("Usra SQL y DataFrames")\\
-
+spark = SparkSession\
+.builder\
+.appName("Usra SQL y DataFrames")\
 .getOrCreate()
 
-\# Crear DataFrame
-
+# Crear DataFrame
 dfProducts = spark.read.csv("/home/netec/data/Model/Products.csv", inferSchema=True, header=True)
-
-\# Registrar el DataFrame como una tabla temporal
-
+# Registrar el DataFrame como una tabla temporal
 dfProducts.createOrReplaceTempView("productos")
 
-\# Consultar la cantidad de productos por categoría
-
+# Consultar la cantidad de productos por categoría
 query = ("SELECT Category, COUNT(Product) as NoProducts"
-
-" FROM productos "
-
-" GROUP BY Category "
-
-"HAVING COUNT(Product) &gt;100"
-
-)
+         " FROM productos "
+       " GROUP BY Category "
+         "HAVING COUNT(Product) &gt;100"
+         )
 
 dfProducts= spark.sql(query)
 
 dfProducts.show()
+```
 
 La cláusula HAVING se puede aplicar a cualquier agregación. También se puede combinar con WHERE, ya que esta filtra registros y HAVING agregaciones.
 
@@ -242,37 +202,29 @@ La cláusula HAVING se puede aplicar a cualquier agregación. También se puede 
 
 Si no se usa GROUP BY, las funciones de agregación se aplican a toda la tabla.
 
+```
 from pyspark.sql import SparkSession
 
-spark = SparkSession\\
-
-.builder\\
-
-.appName("Usra SQL y DataFrames")\\
-
+spark = SparkSession\
+.builder\
+.appName("Usra SQL y DataFrames")\
 .getOrCreate()
 
-\# Crear DataFrame
-
+# Crear DataFrame
 dfProducts = spark.read.csv("/home/miguel/data/Model/Products.csv", inferSchema=True, header=True)
-
-\# Registrar el DataFrame como una tabla temporal
-
+# Registrar el DataFrame como una tabla temporal
 dfProducts.createOrReplaceTempView("productos")
 
-\# Consultar la cantidad de productos por categoría
-
+# Consultar la cantidad de productos por categoría
 query = ("SELECT SUM(Price) As TotalSales, AVG(Price) as Average, MAX(Price) as MaxPrice,"
-
-" MIN(Price) as MinPrice, COUNT(price) as NoProducts"
-
-" FROM productos "
-
-)
+         " MIN(Price) as MinPrice, COUNT(price) as NoProducts"
+         " FROM productos "
+         )
 
 dfProducts= spark.sql(query)
 
 dfProducts.show()
+```
 
 <img src="./media/image11.png" style="width:4.29099in;height:2.42078in" />
 
@@ -294,55 +246,41 @@ JOIN se utiliza para combinar filas de dos o más tablas basadas en una condici�
 
 - **FULL JOIN (o FULL OUTER JOIN):** Devuelve todas las filas cuando hay una coincidencia en cualquiera de las tablas. Si no hay coincidencias, se devuelven NULL para las columnas de la tabla sin coincidencias.
 
+```
 from pyspark.sql import SparkSession
 
-spark = SparkSession\\
-
-.builder\\
-
-.appName("Usra SQL y DataFrames")\\
-
+spark = SparkSession\
+.builder\
+.appName("Usra SQL y DataFrames")\
 .getOrCreate()
 
-\# Crear DataFrame de productos
-
+# Crear DataFrame de productos
 dfProducts = spark.read.csv("/home/miguel /data/Model/Products.csv", inferSchema=True, header=True)
-
-\# Registrar el DataFrame como una tabla temporal
-
+# Registrar el DataFrame como una tabla temporal
 dfProducts.createOrReplaceTempView("productos")
 
-\# Crear DataFrame de clientes
-
+# Crear DataFrame de clientes
 dfProducts = spark.read.csv("/home/miguel /data/Model/Customers.csv", inferSchema=True, header=True)
-
-\# Registrar el DataFrame como una tabla temporal
-
+# Registrar el DataFrame como una tabla temporal
 dfProducts.createOrReplaceTempView("clientes")
 
-\# Crear DataFrame de clientes
-
+# Crear DataFrame de clientes
 dfProducts = spark.read.csv("/home/miguel/data/Model/Sales.csv", inferSchema=True, header=True)
-
-\# Registrar el DataFrame como una tabla temporal
-
+# Registrar el DataFrame como una tabla temporal
 dfProducts.createOrReplaceTempView("ventas")
 
-\#Combina solo las filas que tienen coincidencias en lass tres tablas.
+#Combina solo las filas que tienen coincidencias en lass tres tablas.
 
 query = ("SELECT v.SalesOrderNumber,c.Customer, v.OrderDate,p.Product, p.Category,"
-
-" v.UnitPrice,v.OrderQuantity "
-
-" FROM ventas v JOIN productos p on v.productkey = p.productkey"
-
-" JOIN clientes c on v.customerKey = c.customerKey"
-
-)
+         " v.UnitPrice,v.OrderQuantity "
+         " FROM ventas v JOIN productos p on v.productkey = p.productkey"
+         " JOIN clientes c on v.customerKey = c.customerKey"
+         )
 
 dfProducts= spark.sql(query)
 
 dfProducts.show()
+```
 
 <img src="./media/image13.png" style="width:3.50029in;height:2.40877in" />
 
@@ -352,63 +290,45 @@ dfProducts.show()
 
 Nótese que de la lista, hay empleados sin departamento y departamentos sin empleados (en base al campo común). En INNER JOIN no se mostrarán estos registros
 
+```
 from pyspark.sql import SparkSession
 
+# Crear una sesión de Spark
 spark = SparkSession.builder.appName("SQL relaciones").getOrCreate()
 
-\# Datos de empleados
+# Datos de empleados
+data_empleados = [
+    (1, "Alejandra", 101),
+    (2, "Berenice", 102),
+    (3, "Carlos", 101),
+    (4, "Daniela", 104),
+    (5, "Ernesto", 110)
+]
 
-data\_empleados = \[
+# Datos de departamentos
+data_departamentos = [
+    (101, "Ventas"),
+    (102, "Marketing"),
+    (103, "IT"),
+    (105, "RH"),
+    (106, "Operacione"),
+]
 
-(1, "Alejandra", 101),
+# Crear DataFrames
+df_empleados = spark.createDataFrame(data_empleados, ["id_empleado", "nombre", "id_departamento"])
+df_departamentos = spark.createDataFrame(data_departamentos, ["id_departamento", "nombre_departamento"])
 
-(2, "Berenice", 102),
-
-(3, "Carlos", 101),
-
-(4, "Daniela", 104),
-
-(5, "Ernesto", 110)
-
-\]
-
-\# Datos de departamentos
-
-data\_departamentos = \[
-
-(101, "Ventas"),
-
-(102, "Marketing"),
-
-(103, "IT"),
-
-(105, "RH"),
-
-(106, "Operacione"),
-
-\]
-
-\# Crear DataFrames
-
-df\_empleados = spark.createDataFrame(data\_empleados, \["id\_empleado", "nombre", "id\_departamento"\])
-
-df\_departamentos = spark.createDataFrame(data\_departamentos, \["id\_departamento", "nombre\_departamento"\])
-
-\# Registrar DataFrames como tablas temporales
-
-df\_empleados.createOrReplaceTempView("empleados")
-
-df\_departamentos.createOrReplaceTempView("departamentos")
+# Registrar DataFrames como tablas temporales
+df_empleados.createOrReplaceTempView("empleados")
+df_departamentos.createOrReplaceTempView("departamentos")
 
 query = ("SELECT e.id\_empleado, e.nombre, d.nombre\_departamento "
-
 "FROM empleados e "
-
 "INNER JOIN departamentos d "
-
-"ON e.id\_departamento = d.id\_departamento")
+"ON e.id_departamento = d.id_departamento")
 
 spark.sql(query).show()
+```
 
 <img src="./media/image15.png" style="width:4.28339in;height:3.29905in" />
 
@@ -418,65 +338,45 @@ spark.sql(query).show()
 
 Devuelve todos los empleados, incluso si no tienen un departamento asignado.
 
+```
 from pyspark.sql import SparkSession
 
-\# Crear una sesión de Spark
-
+# Crear una sesión de Spark
 spark = SparkSession.builder.appName("SQL relaciones").getOrCreate()
 
-\# Datos de empleados
+# Datos de empleados
+data_empleados = [
+    (1, "Alejandra", 101),
+    (2, "Berenice", 102),
+    (3, "Carlos", 101),
+    (4, "Daniela", 104),
+    (5, "Ernesto", 110)
+]
 
-data\_empleados = \[
+# Datos de departamentos
+data_departamentos = [
+    (101, "Ventas"),
+    (102, "Marketing"),
+    (103, "IT"),
+    (105, "RH"),
+    (106, "Operacione"),
+]
 
-(1, "Alejandra", 101),
+# Crear DataFrames
+df_empleados = spark.createDataFrame(data_empleados, ["id_empleado", "nombre", "id_departamento"])
+df_departamentos = spark.createDataFrame(data_departamentos, ["id_departamento", "nombre_departamento"])
 
-(2, "Berenice", 102),
+# Registrar DataFrames como tablas temporales
+df_empleados.createOrReplaceTempView("empleados")
+df_departamentos.createOrReplaceTempView("departamentos")
 
-(3, "Carlos", 101),
-
-(4, "Daniela", 104),
-
-(5, "Ernesto", 110)
-
-\]
-
-\# Datos de departamentos
-
-data\_departamentos = \[
-
-(101, "Ventas"),
-
-(102, "Marketing"),
-
-(103, "IT"),
-
-(105, "RH"),
-
-(106, "Operacione"),
-
-\]
-
-\# Crear DataFrames
-
-df\_empleados = spark.createDataFrame(data\_empleados, \["id\_empleado", "nombre", "id\_departamento"\])
-
-df\_departamentos = spark.createDataFrame(data\_departamentos, \["id\_departamento", "nombre\_departamento"\])
-
-\# Registrar DataFrames como tablas temporales
-
-df\_empleados.createOrReplaceTempView("empleados")
-
-df\_departamentos.createOrReplaceTempView("departamentos")
-
-query = ("SELECT e.id\_empleado, e.nombre, d.nombre\_departamento "
-
+query = ("SELECT e.id_empleado, e.nombre, d.nombre_departamento "
 "FROM empleados e "
-
 "LEFT JOIN departamentos d "
-
-"ON e.id\_departamento = d.id\_departamento")
+"ON e.id_departamento = d.id_departamento")
 
 spark.sql(query).show()
+```
 
 <img src="./media/image17.png" style="width:4.52605in;height:0.75026in" />
 
