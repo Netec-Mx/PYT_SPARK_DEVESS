@@ -525,25 +525,22 @@ print("RDD sin duplicados:", rdd_distinct.collect())
 
 En un RDD de tuplas, distinct() eliminará las tuplas duplicadas en su totalidad.
 
+```
 from pyspark import SparkContext
 
-\# Inicializar SparkContext
-
+# Inicializar SparkContext
 sc = SparkContext("local", "DistinctTuplesExample")
 
-\# Crear un RDD de tuplas con duplicados
+# Crear un RDD de tuplas con duplicados
+rdd = sc.parallelize([("Alice", 25), ("Bob", 30), ("Alice", 25), ("Cathy", 28)])
 
-rdd = sc.parallelize(\[("Alice", 25), ("Bob", 30), ("Alice", 25), ("Cathy", 28)\])
+# Aplicar distinct() para eliminar tuplas duplicadas
+rdd_distinct = rdd.distinct()
 
-\# Aplicar distinct() para eliminar tuplas duplicadas
-
-rdd\_distinct = rdd.distinct()
-
-\# Mostrar el RDD resultante
-
+# Mostrar el RDD resultante
 print("RDD original:", rdd.collect())
-
-print("RDD sin duplicados:", rdd\_distinct.collect())
+print("RDD sin duplicados:", rdd_distinct.collect())
+```
 
 <img src="./media/image30.png" style="width:6.1375in;height:2.82222in" />
 
@@ -553,75 +550,66 @@ print("RDD sin duplicados:", rdd\_distinct.collect())
 
 Si deseas eliminar duplicados basados en una "columna" específica (un elemento de la tupla), puedes usar **map** para seleccionar esa columna y luego aplicar **distinct**(). Después, puedes unir los datos originales con los elementos únicos.
 
+```
 from pyspark import SparkContext
-
 sc = SparkContext("local", "DistinctColumnExample")
 
-\# Crear un RDD de tuplas
+# Crear un RDD de tuplas
+rdd = sc.parallelize([("Alice", 25), ("Bob", 30), ("Alice", 25), ("Cathy", 28)])
 
-rdd = sc.parallelize(\[("Alice", 25), ("Bob", 30), ("Alice", 25), ("Cathy", 28)\])
+# Seleccionar la columna "nombre" (primer elemento de la tupla) y aplicar distinct()
+nombres_unicos = rdd.map(lambda x: x[0]).distinct()
 
-\# Seleccionar la columna "nombre" (primer elemento de la tupla) y aplicar distinct()
+# Mostrar los nombres únicos
+print("Nombres únicos:", nombres_unicos.collect())
 
-nombres\_unicos = rdd.map(lambda x: x\[0\]).distinct()
+# Filtrar el RDD original para mantener solo las filas con nombres únicos
+rdd_filtrado = rdd.map(lambda x: (x[0], x)).join(nombres_unicos.map(lambda x: (x, 1)))\
+    .map(lambda x: x[1][0])
 
-\# Mostrar los nombres únicos
+# Mostrar el RDD filtrado
+print("RDD filtrado:", rdd_filtrado.collect())
 
-print("Nombres únicos:", nombres\_unicos.collect())
-
-\# Filtrar el RDD original para mantener solo las filas con nombres únicos
-
-rdd\_filtrado = rdd.map(lambda x: (x\[0\], x)).join(nombres\_unicos.map(lambda x: (x, 1))).map(lambda x: x\[1\]\[0\])
-
-\# Mostrar el RDD filtrado
-
-print("RDD filtrado:", rdd\_filtrado.collect())
+```
 
 <img src="./media/image32.png" style="width:6.1375in;height:3.39722in" />
 
 **En este ejemplo:**
 
--   Usamos map(lambda x: x\[0\]) para seleccionar solo la primera columna (el nombre).
-
+-   Usamos map(lambda x: x[0]) para seleccionar solo la primera columna (el nombre).
 -   Eliminamos los duplicados en la columna seleccionada con **distinct**().
-
 -   Usamos **join** para combinar el RDD original con los nombres únicos.
-
 -   Finalmente, mapeamos el resultado para obtener solo las filas originales sin duplicados.
 
 ### Función union
 
 **union**: la función union se utiliza para combinar dos RDDs en uno solo. Esta función retorna un nuevo RDD que contiene todos los elementos de ambos RDDs originales. Es importante destacar que union no elimina duplicados; si los RDDs tienen elementos repetidos, estos se mantendrán en el RDD resultante.
 
-rdd\_resultante = rdd1.union(rdd2)
+`rdd\_resultante = rdd1.union(rdd2)`
 
--   rdd1: El primer RDD.
+-   **rdd1:** El primer RDD.
 
--   rdd2: El segundo RDD.
+-   **rdd2:** El segundo RDD.
 
--   rdd\_resultante: Un nuevo RDD que contiene todos los elementos de rdd1 y rdd2.
+-   **rdd\_resultante:** Un nuevo RDD que contiene todos los elementos de rdd1 y rdd2.
 
 **Unir dos listas.**
 
+```
 from pyspark import SparkContext
+sc = SparkContext("local",\
+  "Union de RDD")
 
-sc = SparkContext("local",\\
+rdd1 = sc.parallelize([1, 2, 3, 4])
+rdd2 = sc.parallelize([3, 4, 5, 6])
 
-"Union de RDD")
+# Combinar los RDDs usando union
+rdd_union = rdd1.union(rdd2)
 
-rdd1 = sc.parallelize(\[1, 2, 3, 4\])
-
-rdd2 = sc.parallelize(\[3, 4, 5, 6\])
-
-\# Combinar los RDDs usando union
-
-rdd\_union = rdd1.union(rdd2)
-
-\# Mostrar el resultado
-
+# Mostrar el resultado
 print("RDD combinado:")
-
-print(rdd\_union.collect())
+print(rdd_union.collect())
+```
 
 <img src="./media/image33.png" style="width:4.97082in;height:3.51369in" />
 
@@ -631,27 +619,22 @@ print(rdd\_union.collect())
 
 También puedes usar union con RDDs que contienen estructuras más complejas, como tuplas.
 
+```
 from pyspark import SparkContext
+sc = SparkContext("local",\
+  "Union de RDD")
 
-sc = SparkContext("local",\\
+# Crear dos RDDs de tuplas
+rdd1 = sc.parallelize([("Alice", 25), ("Bob", 30)])
+rdd2 = sc.parallelize([("Bob", 30), ("Cathy", 28)])
 
-"Union de RDD")
+# Combinar los RDDs usando union
+rdd_union = rdd1.union(rdd2)
 
-\# Crear dos RDDs de tuplas
-
-rdd1 = sc.parallelize(\[("Alice", 25), ("Bob", 30)\])
-
-rdd2 = sc.parallelize(\[("Bob", 30), ("Cathy", 28)\])
-
-\# Combinar los RDDs usando union
-
-rdd\_union = rdd1.union(rdd2)
-
-\# Mostrar el resultado
-
+# Mostrar el resultado
 print("RDD combinado:")
-
-print(rdd\_union.collect())
+print(rdd_union.collect())
+```
 
 <img src="./media/image35.png" style="width:6.1375in;height:4.20347in" />
 
@@ -670,32 +653,27 @@ union no garantiza un orden específico en el RDD resultante. Los elementos se c
 **intersection -** permite encontrar los elementos comunes entre dos RDDs. Devuelve un nuevo RDD que contiene solo los elementos que están presentes en ambos RDDs originales.
 
 -   Ambos RDDs deben contener elementos del mismo tipo para que la operación sea válida.
-
 -   intersection implica un **shuffle** (reorganización de datos entre particiones), lo que puede ser costoso en términos de rendimiento, especialmente con grandes volúmenes de datos.
-
 -   El RDD resultante no contendrá elementos duplicados, incluso si los RDDs originales los tenían.
 
-rdd1.intersection(rdd2)
+`rdd1.intersection(rdd2)`
 
--   rdd1: Primer RDD.
-
--   rdd2: Segundo RDD.
+-   **rdd1:** Primer RDD.
+-   **rdd2:** Segundo RDD.
 
 **Intersección de dos listas.**
 
+```
 from pyspark import SparkContext
+sc = SparkContext("local",\
+  "Transformaciones RDD")
 
-sc = SparkContext("local",\\
+rdd1 = sc.parallelize([1, 2, 3, 4, 5, 6])
+rdd2 = sc.parallelize([1, 3, 4, 5,7])
+rdd_interseccion = rdd1.intersection(rdd2)
 
-"Transformaciones RDD")
-
-rdd1 = sc.parallelize(\[1, 2, 3, 4, 5, 6\])
-
-rdd2 = sc.parallelize(\[1, 3, 4, 5,7\])
-
-rdd\_interseccion = rdd1.intersection(rdd2)
-
-print(rdd\_interseccion.collect())
+print(rdd_interseccion.collect())
+```
 
 <img src="./media/image37.png" style="width:4.07646in;height:2.24908in" />
 
@@ -705,27 +683,22 @@ print(rdd\_interseccion.collect())
 
 También puedes usar intersection con RDDs que contengan cadenas de texto.
 
+```
 from pyspark import SparkContext
 
-\# Inicializar SparkContext
-
+# Inicializar SparkContext
 sc = SparkContext("local", "Ejemplo intersection")
 
-\# Crear dos RDDs de ejemplo con cadenas de texto
+# Crear dos RDDs de ejemplo con cadenas de texto
+rdd1 = sc.parallelize(["Medellin", "Cali", "Pereira", "Cordoba"])
+rdd2 = sc.parallelize(["Barranquilla", "Medellin", "Cartagena", "Pereira"])
 
-rdd1 = sc.parallelize(\["Medellin", "Cali", "Pereira", "Cordoba"\])
-
-rdd2 = sc.parallelize(\["Barranquilla", "Medellin", "Cartagena", "Pereira"\])
-
-\# Encontrar la intersección entre los dos RDDs
-
-rdd\_intersection = rdd1.intersection(rdd2)
-
-\# Mostrar el resultado
-
+# Encontrar la intersección entre los dos RDDs
+rdd_intersection = rdd1.intersection(rdd2)
+# Mostrar el resultado
 print("Intersección de rdd1 y rdd2:")
-
-print(rdd\_intersection.collect())
+print(rdd_intersection.collect())
+```
 
 <img src="./media/image39.png" style="width:6.1375in;height:2.72778in" />
 
@@ -735,27 +708,23 @@ print(rdd\_intersection.collect())
 
 **subtract -** se utiliza para obtener los elementos que están en un RDD pero no en otro. Realiza una diferencia de conjuntos entre dos RDDs. El resultado es un nuevo RDD que contiene solo los elementos que están en el primer RDD y no en el segundo.
 
-resultado\_rdd = rdd1.subtract(rdd2)
+`resultado_rdd = rdd1.subtract(rdd2)`
 
--   rdd1: El RDD del cual se quieren extraer los elementos.
-
--   rdd2: El RDD cuyos elementos se quieren excluir del primer RDD.
-
--   resultado\_rdd: Un nuevo RDD que contiene los elementos de rdd1 que no están en rdd2.
+-   **rdd1:** El RDD del cual se quieren extraer los elementos.
+-   **rdd2:** El RDD cuyos elementos se quieren excluir del primer RDD.
+-   **resultado_rdd:** Un nuevo RDD que contiene los elementos de rdd1 que no están en rdd2.
 
 **Restar dos listas.**
 
+```
 from pyspark import SparkContext
-
 sc = SparkContext("local", "Substract con RDD")
+rdd1 = sc.parallelize([1, 2, 3, 4])
+rdd2 = sc.parallelize([3, 4, 5, 8])
+rdd_diferencia = rdd1.subtract(rdd2)
 
-rdd1 = sc.parallelize(\[1, 2, 3, 4\])
-
-rdd2 = sc.parallelize(\[3, 4, 5, 8\])
-
-rdd\_diferencia = rdd1.subtract(rdd2)
-
-print(rdd\_diferencia.collect())
+print(rdd_diferencia.collect())
+```
 
 <img src="./media/image41.png" style="width:6.1375in;height:2.22847in" />
 
@@ -765,27 +734,24 @@ print(rdd\_diferencia.collect())
 
 La función subtract también funciona con RDDs que contienen tuplas o estructuras más complejas.
 
+```
 from pyspark import SparkContext
 
 sc = SparkContext("local", "Subtract tuplas")
 
-\# Crear los RDDs con tuplas
+# Crear los RDDs con tuplas
+rdd1 = sc.parallelize([("Alice", 25), ("Bob", 30), ("Cathy", 28)])
+rdd2 = sc.parallelize([("Bob", 30), ("David", 40)])
 
-rdd1 = sc.parallelize(\[("Alice", 25), ("Bob", 30), ("Cathy", 28)\])
+# Usar subtract para obtener las tuplas de rdd1 que no están en rdd2
+resultado_rdd = rdd1.subtract(rdd2)
 
-rdd2 = sc.parallelize(\[("Bob", 30), ("David", 40)\])
-
-\# Usar subtract para obtener las tuplas de rdd1 que no están en rdd2
-
-resultado\_rdd = rdd1.subtract(rdd2)
-
-\# Mostrar el resultado
-
+# Mostrar el resultado
 print("Tuplas en rdd1 que no están en rdd2:")
+print(resultado_rdd.collect())
+```
 
-print(resultado\_rdd.collect())
-
-subtract compara los elementos de los RDDs de manera exacta. Para tuplas o estructuras complejas, todos los elementos de la tupla deben coincidir para que se considere un duplicado.
+**subtract -**  compara los elementos de los RDDs de manera exacta. Para tuplas o estructuras complejas, todos los elementos de la tupla deben coincidir para que se considere un duplicado.
 
 ### Función cartesian
 
@@ -797,27 +763,22 @@ Devuelve un nuevo RDD que contiene todas las combinaciones posibles de elementos
 
 El tamaño del RDD resultante es el producto de los tamaños de RDD1 y RDD2. Por ejemplo, si RDD1 tiene 3 elementos y RDD2 tiene 2 elementos, el RDD resultante tendrá 3×2=6 elementos.
 
+```
 from pyspark import SparkContext
 
-sc = SparkContext("local",\\
+sc = SparkContext("local", "Producto cartesiano RDD")
 
-"Producto cartesiano RDD")
+# Crear dos RDDs
+rdd1 = sc.parallelize([1, 2, 3])
+rdd2 = sc.parallelize(["A", "B"])
 
-\# Crear dos RDDs
+# Calcular el producto cartesiano
+cartesian_rdd = rdd1.cartesian(rdd2)
 
-rdd1 = sc.parallelize(\[1, 2, 3\])
-
-rdd2 = sc.parallelize(\["A", "B"\])
-
-\# Calcular el producto cartesiano
-
-cartesian\_rdd = rdd1.cartesian(rdd2)
-
-\# Mostrar el resultado
-
+# Mostrar el resultado
 print("Producto cartesiano:")
-
-print(cartesian\_rdd.collect())
+print(cartesian_rdd.collect())
+```
 
 El producto cartesiano puede generar un RDD muy grande, ya que su tamaño es el producto de los tamaños de los dos RDDs originales.
 
@@ -829,37 +790,28 @@ El producto cartesiano es útil en casos donde necesitas comparar o combinar tod
 
 **groupByKey** - es una transformación que se aplica a RDDs que contienen pares clave-valor. Su propósito es agrupar todos los valores que comparten la misma clave en una sola colección. El resultado es un nuevo RDD donde cada clave única está asociada a un iterable de todos los valores correspondientes a esa clave.
 
+```
 from pyspark import SparkContext
 
-sc = SparkContext("local", "groupByKey\_example")
+sc = SparkContext("local", "groupByKey_example")
 
-data = \[
-
-("Juan", "Matemáticas", 8),
-
-("María", "Ciencias", 9),
-
-("Juan", "Física", 7),
-
-("Pedro", "Matemáticas", 6),
-
-("María", "Química", 8),
-
-("Pedro", "Física", 9)
-
-\]
+data = [
+    ("Juan", "Matemáticas", 8),
+    ("María", "Ciencias", 9),
+    ("Juan", "Física", 7),
+    ("Pedro", "Matemáticas", 6),
+    ("María", "Química", 8),
+    ("Pedro", "Física", 9)
+]
 
 rdd = sc.parallelize(data)
-
-grouped\_rdd = rdd.map(lambda x: (x\[0\], (x\[1\], x\[2\]))).groupByKey()
+grouped_rdd = rdd.map(lambda x: (x[0], (x[1], x[2]))).groupByKey()
 
 for student, grades in grouped\_rdd.collect():
-
-print(f"Estudiante: {student}")
-
-for subject, grade in grades:
-
-print(f" {subject}: {grade}")
+    print(f"Estudiante: {student}")
+    for subject, grade in grades:
+        print(f" {subject}: {grade}")
+```
 
 <img src="./media/image43.png" style="width:4.97131in;height:3.46608in" />
 
@@ -875,7 +827,7 @@ print(f" {subject}: {grade}")
 
 ### Función reduceByKey
 
-**reduceByKey** - transformación que se aplica a RDDs que contienen pares clave-valor. Su objetivo es combinar los valores que comparten la misma clave, utilizando una función de reducción. Esta función debe ser asociativa y conmutativa para garantizar resultados consistentes.
+**reduceByKey -**  transformación que se aplica a RDDs que contienen pares clave-valor. Su objetivo es combinar los valores que comparten la misma clave, utilizando una función de reducción. Esta función debe ser asociativa y conmutativa para garantizar resultados consistentes.
 
 -   reduceByKey agrupa todos los pares clave-valor que tienen la misma clave.
 
@@ -885,33 +837,27 @@ print(f" {subject}: {grade}")
 
 **Información de ventas de diferentes productos**
 
+```
 from pyspark import SparkContext
 
 sc = SparkContext("local", "ReduceByKey\_Example")
 
-data = \[
-
-("ProductoA", 10),
-
-("ProductoB", 5),
-
-("ProductoA", 15),
-
-("ProductoC", 8),
-
-("ProductoB", 12)
-
-\]
+data = [
+    ("ProductoA", 10),
+    ("ProductoB", 5),
+    ("ProductoA", 15),
+    ("ProductoC", 8),
+    ("ProductoB", 12)
+]
 
 rdd = sc.parallelize(data)
 
-total\_ventas = rdd.reduceByKey(lambda a, b: a + b)
+total_ventas = rdd.reduceByKey(lambda a, b: a + b)
 
-\# Mostrar el resultado
-
-for producto, ventas in total\_ventas.collect():
-
+# Mostrar el resultado
+for producto, ventas in total_ventas.collect():
 print(f"Producto: {producto}, Ventas totales: {ventas}")
+```
 
 En este ejemplo:
 
@@ -943,33 +889,37 @@ sortByKey(ascending=True, numPartitions=None, keyfunc=lambda x: x)
 
 -   keyfunc: Función que se aplica a las claves antes de la ordenación.
 
+```
 from pyspark import SparkContext
 
 sc = SparkContext("local", "SortByKey")
 
-data = \[("manzana", 10), ("banana", 20), ("naranja", 5), ("uva", 15)\]
+data = [("manzana", 10), ("banana", 20), ("naranja", 5), ("uva", 15)]
 
 rdd = sc.parallelize(data)
 
-sorted\_rdd = rdd.sortByKey()
+sorted_rdd = rdd.sortByKey()
 
-for fruta, cantidad in sorted\_rdd.collect():
+for fruta, cantidad in sorted_rdd.collect():
 
 print(f"{fruta}: {cantidad}")
+```
 
+```
 from pyspark import SparkContext
 
 sc = SparkContext("local", "SortByKey")
 
-data = \[("manzana", 10), ("banana", 20), ("naranja", 5), ("uva", 15)\]
+data = [("manzana", 10), ("banana", 20), ("naranja", 5), ("uva", 15)]
 
 rdd = sc.parallelize(data)
 
-sorted\_rdd = rdd.sortByKey(ascending=False)
+sorted_rdd = rdd.sortByKey(ascending=False)
 
-for fruta, cantidad in sorted\_rdd.collect():
+for fruta, cantidad in sorted_rdd.collect():
 
 print(f"{fruta}: {cantidad}")
+```
 
 -   sortByKey solo funciona en RDDs de pares clave-valor.
 
@@ -991,29 +941,25 @@ Notemos la estructura del archivo Sales.csv
 
 Tenemos más de 10 campos. Y no requerimos en este momento trabajar con todos. Así que solo seleccionaremos los campos necesarios
 
+```
 from pyspark.sql import SparkSession
 
 spark = SparkSession.builder.appName("SeleccionarCamposRDD").getOrCreate()
 
-\# Leer el archivo de origen
-
+# Leer el archivo de origen
 df = spark.read.csv("/home/miguel/data/Sales.csv", header=True, inferSchema=True)
 
-\# Seleccionar solo los campos deseados
+# Seleccionar solo los campos deseados
+campos = ["SalesOrderNumber", "OrderDate", "Customer","Country"]
+nuevo_df = df.select(*campos)
 
-campos = \["SalesOrderNumber", "OrderDate", "Customer","Country"\]
+# Convertir el DataFrame resultante a RDD
+rdd = nuevo_df.rdd
 
-nuevo\_df = df.select(\*campos)
-
-\# Convertir el DataFrame resultante a RDD
-
-rdd = nuevo\_df.rdd
-
-\# Trabajar con el RDD
-
+# Trabajar con el RDD
 for row in rdd.collect():
-
-print(row)
+    print(row)
+```
 
 <img src="./media/image46.png" style="width:6.1375in;height:3.07222in" />
 
@@ -1023,59 +969,50 @@ print(row)
 
 Otra alternativa es utilizar la función **map** para transformar cada elemento del RDD.
 
+```
 from pyspark.sql import SparkSession
 
-spark = SparkSession.builder.appName("SeleccionarCamposRDD")\\
+spark = SparkSession.builder.appName("SeleccionarCamposRDD").getOrCreate()
 
-.getOrCreate()
+# Crear un RDD
+data = [("A", 1, "X", True), ("B", 2, "Y", False), ("C", 3, "Z", True)]
 
-\# Crear un RDD
+rdd_original = spark.sparkContext.parallelize(data)
 
-data = \[("A", 1, "X", True), ("B", 2, "Y", False), ("C", 3, "Z", True)\]
-
-rdd\_original = spark.sparkContext.parallelize(data)
-
-\# Seleccionar solo los campos deseados usando map
-
-indices\_deseados = \[0, 2\] \# Índices de los campos a seleccionar (0 = "A", 2 = "X")
+# Seleccionar solo los campos deseados usando map
+indices_deseados = [0, 2] # Índices de los campos a seleccionar (0 = "A", 2 = "X")
 
 rdd = rdd\_original.map(lambda row: tuple(row\[i\] for i in indices\_deseados))
 
-\# Trabajar con el RDD
-
+# Trabajar con el RDD
 for row in rdd.collect():
-
-print(row)
+    print(row)
+```
 
 ### Convertir tipos de datos en un RDD
 
 Los RDDs no tienen un esquema definido, por lo que no tienen columnas con tipos de datos específicos. Sin embargo, se puede manipular los datos dentro de un RDD para convertir tipos de datos durante el procesamiento.
 
+```
 from pyspark import SparkContext
 
-\# Inicializar SparkContext
-
+# Inicializar SparkContext
 sc = SparkContext("local", "ConvertirTiposRDD")
 
-\# Crear un RDD de ejemplo
+# Crear un RDD de ejemplo
+rdd = sc.parallelize([("Alejandro", "25"), ("Betriz", "30"), ("Carmen", "28")])
 
-rdd = sc.parallelize(\[("Alejandro", "25"), ("Betriz", "30"), ("Carmen", "28")\])
-
-\# Mostrar el RDD original
-
+# Mostrar el RDD original
 print("RDD original:")
-
 print(rdd.collect())
 
-\# Convertir la segunda columna (edad) de string a int
+# Convertir la segunda columna (edad) de string a int
+rdd_converted = rdd.map(lambda x: (x[0], int(x[1])))
 
-rdd\_converted = rdd.map(lambda x: (x\[0\], int(x\[1\])))
-
-\# Mostrar el RDD convertido
-
+# Mostrar el RDD convertido
 print("RDD convertido:")
-
-print(rdd\_converted.collect())
+print(rdd_converted.collect())
+```
 
 **En este ejemplo:**
 
@@ -1099,4 +1036,4 @@ print(rdd\_converted.collect())
 
 -   **Uso de DataFrames:** Si estás trabajando con datos estructurados y necesitas convertir tipos de datos con frecuencia, es recomendable usar DataFrames en lugar de RDDs. Los DataFrames tienen soporte integrado para esquemas y conversiones de tipos de datos.
 
-\*\*\*Fin del laboratorio
+***Fin del laboratorio***
