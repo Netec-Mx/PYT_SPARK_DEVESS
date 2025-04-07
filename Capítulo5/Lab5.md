@@ -1,18 +1,18 @@
-# Laboratorio 5: Aplicando aspectos avanzados
+# Práctica 5. Aplicando aspectos avanzados
 
-**Objetivo:**
-Se aplarán técnicas avanzadas a conjuntos de datos, como shuffling, accumulators, partitioning y brodcast de variables.
+**Objetivo de la práctica:**
 
-**Tiempo estimado:**
-60 minutos
+Al finalizar la práctica serás capaz de:
+- Aplicar técnicas avanzadas a conjuntos de datos, como shuffling, accumulators, partitioning y brodcast de variables.
+
+**Tiempo aproximado:**
+- 60 minutos.
 
 **Prerequisitos:**
 
-- Acceso a ambiente Linux (credenciales provistas en el curso) o Linux local con interfaz gráfica
-
-- Tener los archivos de datos
-
-- Completar el laboratorio 1
+- Acceso al ambiente Linux (credenciales provistas en el curso) o Linux local con interfaz gráfica.
+- Tener los archivos de datos.
+- Completar el laboratorio 1.
 
 **Contexto:**
 
@@ -26,27 +26,24 @@ Se aplarán técnicas avanzadas a conjuntos de datos, como shuffling, accumulato
 
 **Crear un RDD con un número específico de particiones**
 
+```
 from pyspark import SparkContext
 
-\# Inicializar SparkContext
-
+# Inicializar SparkContext
 sc = SparkContext("local", "Particionamiento")
 
-\# Crear un RDD con 4 particiones
-
+# Crear un RDD con 4 particiones
 rdd = sc.parallelize(range(10), 4)
 
-\# Ver el número de particiones
-
+# Ver el número de particiones
 print("Número de particiones:", rdd.getNumPartitions())
 
-\# Mostrar el contenido de cada partición
-
+# Mostrar el contenido de cada partición
 print(rdd.glom().collect())
 
-\# Cerrar SparkContext
-
+# Cerrar SparkContext
 sc.stop()
+```
 
 <img src="./media/image1.png" style="width:5.03525in;height:2.81559in" />
 
@@ -60,43 +57,34 @@ En este ejemplo:
 
 **Cargar un archivo csv con 4 particiones**
 
+```
 from pyspark import SparkContext
 
 sc = SparkContext("local", "Cargar CSV con 4 particiones")
+ruta_csv = "/home/miguel/data/Model/Products.csv"
 
-ruta\_csv = "/home/miguel/data/Model/Products.csv"
+# Cargar el archivo CSV en un RDD con 4 particiones
+rdd = sc.textFile(ruta_csv, minPartitions=4)
 
-\# Cargar el archivo CSV en un RDD con 4 particiones
+# Verificar el número de particiones
+print("Número de particiones:", rdd.getNumPartitions()) # Debería ser 4
 
-rdd = sc.textFile(ruta\_csv, minPartitions=4)
+# Transformación: Dividir cada línea en columnas
+rdd_columnas = rdd.map(lambda linea: linea.split(","))
 
-\# Verificar el número de particiones
+# Filtrar la cabecera (si existe)
+cabecera = rdd_columnas.first() # Obtener la primera línea (cabecera)
+rdd_datos = rdd_columnas.filter(lambda linea: linea != cabecera) # Filtrar la cabecera
 
-print("Número de particiones:", rdd.getNumPartitions()) \# Debería ser 4
-
-\# Transformación: Dividir cada línea en columnas
-
-rdd\_columnas = rdd.map(lambda linea: linea.split(","))
-
-\# Filtrar la cabecera (si existe)
-
-cabecera = rdd\_columnas.first() \# Obtener la primera línea (cabecera)
-
-rdd\_datos = rdd\_columnas.filter(lambda linea: linea != cabecera) \# Filtrar la cabecera
-
-\# Ver el contenido de cada partición
-
+# Ver el contenido de cada partición
 print("Contenido de las particiones:")
-
-particiones = rdd\_datos.glom().collect()
-
+particiones = rdd_datos.glom().collect()
 for i, particion in enumerate(particiones):
+    print(f"Partición {i}: {particion}")
 
-print(f"Partición {i}: {particion}")
-
-\# Cerrar SparkContext
-
+# Cerrar SparkContext
 sc.stop()
+```
 
 <img src="./media/image3.png" style="width:6.1375in;height:3.78542in" />
 
@@ -105,9 +93,7 @@ sc.stop()
 En este ejemplo:
 
 -   **sc.textFile(ruta\_csv, minPartitions=4)** para cargar el archivo CSV en un RDD con al menos 4 particiones.
-
 -   **getNumPartitions()** para verificar RDD el número de particiones.
-
 -   **glom()** para mostrar el contenido de cada partición.
 
 **Nota: El número real de particiones puede ser mayor que 4 si el archivo es grande, ya que minPartitions es un mínimo, no un máximo.**
@@ -119,38 +105,31 @@ El reparticionamiento permite ajustar el número de particiones de un RDD. Esto 
 Para reparticionar, se pueden usar **repartition()** o **coalesce()**
 
 -   **repartition():** Aumenta o reduce el número de particiones, pero siempre causa shuffling.
-
 -   **coalesce():** Reduce el número de particiones sin shuffling (más eficiente que repartition).
 
+```
 from pyspark import SparkContext
-
 sc = SparkContext("local\[4\]", "Particionamiento")
 
-rdd = sc.textFile("/home/miguel/data/Model/Customers.csv") \# Cargar el archivo CSV en un RDD
+rdd = sc.textFile("/home/miguel/data/Model/Customers.csv") # Cargar el archivo CSV en un RDD
 
-\# Mostrar el número de particiones
-
+# Mostrar el número de particiones
 print(rdd.getNumPartitions())
 
-\# Reparticionar el RDD
+# Reparticionar el RDD
+rdd_reparticionado1 = rdd.repartition(10) # Esto provocaría shuffling
+rdd_reparticionado2 = rdd.coalesce(10) # No provoca shuffling
 
-rdd\_reparticionado1 = rdd.repartition(10) \# Esto provocaría shuffling
+print(rdd_reparticionado1.getNumPartitions())
+# Mostrar el contenido de cada partición
+print(rdd_reparticionado1.glom().collect())
 
-rdd\_reparticionado2 = rdd.coalesce(10) \# No provoca shuffling
+print(rdd_reparticionado2.getNumPartitions())
+print(rdd_reparticionado1.glom().collect())
 
-print(rdd\_reparticionado1.getNumPartitions())
-
-\# Mostrar el contenido de cada partición
-
-print(rdd\_reparticionado1.glom().collect())
-
-print(rdd\_reparticionado2.getNumPartitions())
-
-print(rdd\_reparticionado1.glom().collect())
-
-\# Cerrar SparkContext
-
+# Cerrar SparkContext
 sc.stop()
+```
 
 <img src="./media/image5.png" style="width:6.1375in;height:3.20278in" />
 
@@ -170,55 +149,44 @@ El control de operaciones implica gestionar cómo se ejecutan las transformacion
 
 -   **Control del orden de ejecución:** Las transformaciones son perezosas (lazy), pero puedes forzar la ejecución con acciones como count() o collect().
 
+```
 from pyspark import SparkContext, StorageLevel
 
-\# Inicializar SparkContext
-
+# Inicializar SparkContext
 sc = SparkContext("local", "Optimización con Particionamiento")
 
-\# Cargar datos de ventas
-
+# Cargar datos de ventas
 rdd = sc.textFile("/home/miguel/data/Sales.csv")
 
-\# Eliminar cabecera
-
+# Eliminar cabecera
 cabecera = rdd.first()
+rdd_datos = rdd.filter(lambda linea: linea != cabecera)
 
-rdd\_datos = rdd.filter(lambda linea: linea != cabecera)
+# Transformación: Mapear a (producto, cantidad)
+rdd_productos = rdd_datos.map(lambda linea: (linea.split(",")[6], float(linea.split(",")[10])))
 
-\# Transformación: Mapear a (producto, cantidad)
+# Reparticionar por clave (producto)
+rdd_reparticionado = rdd_productos.partitionBy(4)
 
-rdd\_productos = rdd\_datos.map(lambda linea: (linea.split(",")\[6\], float(linea.split(",")\[10\])))
+# Persistir el RDD para reutilización
+rdd_reparticionado.persist(StorageLevel.MEMORY_AND_DISK)
 
-\# Reparticionar por clave (producto)
+# Reducción: Calcular total por producto
+rdd_total = rdd_reparticionado.reduceByKey(lambda x, y: x + y)
 
-rdd\_reparticionado = rdd\_productos.partitionBy(4)
+# Acción: Recopilar resultados
+resultados = rdd_total.collect()
 
-\# Persistir el RDD para reutilización
-
-rdd\_reparticionado.persist(StorageLevel.MEMORY\_AND\_DISK)
-
-\# Reducción: Calcular total por producto
-
-rdd\_total = rdd\_reparticionado.reduceByKey(lambda x, y: x + y)
-
-\# Acción: Recopilar resultados
-
-resultados = rdd\_total.collect()
-
-\# Mostrar resultados
-
+# Mostrar resultados
 for producto, total in resultados:
+    print(f"{producto}: {total}")
 
-print(f"{producto}: {total}")
+# Liberar persistencia
+rdd_reparticionado.unpersist()
 
-\# Liberar persistencia
-
-rdd\_reparticionado.unpersist()
-
-\# Cerrar SparkContext
-
+# Cerrar SparkContext
 sc.stop()
+```
 
 <img src="./media/image7.png" style="width:4.40243in;height:2.76808in" />
 
@@ -252,31 +220,26 @@ Durante el shuffling, los datos se escriben en disco y se transfieren a través 
 
 **Se tiene un RDD con pares clave-valor y se quiere agrupar los valores por clave.**
 
+```
 from pyspark import SparkContext
 
-\# Inicializar SparkContext
-
+# Inicializar SparkContext
 sc = SparkContext("local", "Ejemplo de Shuffling")
 
-\# Crear un RDD con pares clave-valor
+# Crear un RDD con pares clave-valor
+rdd = sc.parallelize([("a", 1), ("b", 2), ("a", 3), ("b", 4)\])
 
-rdd = sc.parallelize(\[("a", 1), ("b", 2), ("a", 3), ("b", 4)\])
+# Operación que causa shuffling: groupByKey
+rdd_agrupado = rdd.groupByKey()
 
-\# Operación que causa shuffling: groupByKey
-
-rdd\_agrupado = rdd.groupByKey()
-
-\# Mostrar los resultados
-
-resultados = rdd\_agrupado.collect()
-
+# Mostrar los resultados
+resultados = rdd_agrupado.collect()
 for clave, valores in resultados:
+    print(f"{clave}: {list(valores)}")
 
-print(f"{clave}: {list(valores)}")
-
-\# Cerrar SparkContext
-
+# Cerrar SparkContext
 sc.stop()
+```
 
 <img src="./media/image9.png" style="width:5.01252in;height:3.1738in" />
 
@@ -308,43 +271,38 @@ Minimizar el shuffling es clave para optimizar el rendimiento en PySpark.
 
 Se tiene un RDD con registros de ventas y queremos calcular el total de ventas por producto, minimizando el shuffling.
 
+```
 from pyspark import SparkContext
 
 sc = SparkContext("local", "CargaCSV")
 
-rdd = sc.textFile("/home/miguel/data/Sales.csv") \# Cargar el archivo CSV en un RDD
+rdd = sc.textFile("/home/miguel/data/Sales.csv") # Cargar el archivo CSV en un RDD
 
-header = rdd.first() \# Obtener la primera línea (encabezado)
+header = rdd.first() # Obtener la primera línea (encabezado)
+rdd_data = rdd.filter(lambda line: line != header) # Filtrar el encabezado
 
-rdd\_data = rdd.filter(lambda line: line != header) \# Filtrar el encabezado
+rdd_datos = rdd_data.map(lambda line: line.split(","))# Transformación: Parsear el CSV (dividir cada línea por comas)
 
-rdd\_datos = rdd\_data.map(lambda line: line.split(","))# Transformación: Parsear el CSV (dividir cada línea por comas)
+# Transformación: Obtener pais e importe
+rdd_ventas = rdd_datos.map(lambda x: (x[4], float(x[10]) * float(x[11])))
 
-\# Transformación: Obtener pais e importe
+for producto in rdd_ventas.collect():
+    print(producto)
 
-rdd\_ventas = rdd\_datos.map(lambda x: (x\[4\], float(x\[10\]) \* float(x\[11\])))
+# Reducción: Calcular total por producto (con reducción local)
+rdd_total = rdd_ventas.reduceByKey(lambda x, y: x + y)
 
-for producto in rdd\_ventas.collect():
+# Acción: Recopilar resultados
+resultados = rdd_total.collect()
 
-print(producto)
-
-\# Reducción: Calcular total por producto (con reducción local)
-
-rdd\_total = rdd\_ventas.reduceByKey(lambda x, y: x + y)
-
-\# Acción: Recopilar resultados
-
-resultados = rdd\_total.collect()
-
-\# Mostrar resultados
-
-print(" \*\*\* Total por país")
+# Mostrar resultados
+print(" *** Total por país")
 
 for producto, total in resultados:
-
-print(f"{producto}: {total}")
+    print(f"{producto}: {total}")
 
 sc.stop()
+```
 
 <img src="./media/image11.png" style="width:4.82969in;height:3.04055in" />
 
@@ -360,51 +318,41 @@ Cuando trabajamos con RDDs en un clúster de Spark, cualquier variable externa u
 
 Con broadcast, enviamos la variable una sola vez, y luego todas las tareas acceden a ella desde su caché local, evitando el reenvío repetido.
 
+```
 from pyspark import SparkContext
 
-\# Inicializar SparkContext
+# Inicializar SparkContext
 
 sc = SparkContext("local", "Broadcast Example")
 
-\# Diccionario de referencia (código de producto -&gt; nombre)
-
-diccionario\_productos = {
-
-101: "ProductoA",
-
-102: "ProductoB",
-
-103: "ProductoC"
-
+# Diccionario de referencia (código de producto -&gt; nombre)
+diccionario_productos = {
+    101: "ProductoA",
+    102: "ProductoB",
+    103: "ProductoC"
 }
 
-\# Crear la variable broadcast
+# Crear la variable broadcast
+broadcast_diccionario = sc.broadcast(diccionario_productos)
 
-broadcast\_diccionario = sc.broadcast(diccionario\_productos)
+# RDD de ventas (código de producto, cantidad)
+rdd_ventas = sc.parallelize([(101, 2), (102, 3), (103, 1), (101, 5)])
 
-\# RDD de ventas (código de producto, cantidad)
+# Transformación: Enriquecer el RDD con los nombres de los productos
+rdd_enriquecido = rdd_ventas.map(lambda venta: (venta[0], venta[1], broadcast_diccionario.value[venta[0]]))
 
-rdd\_ventas = sc.parallelize(\[(101, 2), (102, 3), (103, 1), (101, 5)\])
-
-\# Transformación: Enriquecer el RDD con los nombres de los productos
-
-rdd\_enriquecido = rdd\_ventas.map(lambda venta: (venta\[0\], venta\[1\], broadcast\_diccionario.value\[venta\[0\]\]))
-
-\# Acción: Recopilar y mostrar los resultados
-
-resultados = rdd\_enriquecido.collect()
-
+# Acción: Recopilar y mostrar los resultados
+resultados = rdd_enriquecido.collect()
 for resultado in resultados:
+    print(resultado) # Salida: (101, 2, 'ProductoA'), (102, 3, 'ProductoB'), etc.
 
-print(resultado) \# Salida: (101, 2, 'ProductoA'), (102, 3, 'ProductoB'), etc.
+# Liberar la variable broadcast
+broadcast_diccionario.unpersist()
 
-\# Liberar la variable broadcast
-
-broadcast\_diccionario.unpersist()
-
-\# Cerrar SparkContext
-
+# Cerrar SparkContext
 sc.stop()
+
+```
 
 <img src="./media/image13.png" style="width:6.1375in;height:3.59167in" />
 
@@ -424,43 +372,36 @@ En este ejemplo:
 
 Asumamos que se tiene una lista de códigos de productos en oferta y se quiere filtrar un RDD de ventas para incluir solo esos productos.
 
+```
 from pyspark import SparkContext
 
-\# Inicializar SparkContext
-
+# Inicializar SparkContext
 sc = SparkContext("local", "Broadcast Example")
 
-\# Lista de productos en oferta
+# Lista de productos en oferta
+productos_oferta = [101, 103]
 
-productos\_oferta = \[101, 103\]
+# Crear la variable broadcast
+broadcast_oferta = sc.broadcast(productos_oferta)
 
-\# Crear la variable broadcast
+# RDD de ventas (código de producto, cantidad)
+rdd_ventas = sc.parallelize([(101, 2), (102, 3), (103, 1), (101, 5)])
 
-broadcast\_oferta = sc.broadcast(productos\_oferta)
+# Transformación: Filtrar ventas de productos en oferta
+rdd_filtrado = rdd_ventas.filter(lambda venta: venta[0] in broadcast_oferta.value)
 
-\# RDD de ventas (código de producto, cantidad)
-
-rdd\_ventas = sc.parallelize(\[(101, 2), (102, 3), (103, 1), (101, 5)\])
-
-\# Transformación: Filtrar ventas de productos en oferta
-
-rdd\_filtrado = rdd\_ventas.filter(lambda venta: venta\[0\] in broadcast\_oferta.value)
-
-\# Acción: Recopilar y mostrar los resultados
-
-resultados = rdd\_filtrado.collect()
-
+# Acción: Recopilar y mostrar los resultados
+resultados = rdd_filtrado.collect()
 for resultado in resultados:
+print(resultado) # Salida: (101, 2), (103, 1), (101, 5)
 
-print(resultado) \# Salida: (101, 2), (103, 1), (101, 5)
+# Liberar la variable broadcast
+broadcast_oferta.unpersist()
 
-\# Liberar la variable broadcast
-
-broadcast\_oferta.unpersist()
-
-\# Cerrar SparkContext
-
+# Cerrar SparkContext
 sc.stop()
+
+```
 
 <img src="./media/image15.png" style="width:6.1375in;height:4.54167in" />
 
@@ -480,60 +421,47 @@ En este ejemplo:
 
 Ahora tenemos una tabla de parámetros que se requiere usar en múltiples operaciones.
 
+```
 from pyspark import SparkContext
 
-\# Inicializar SparkContext
+# Inicializar SparkContext
 
 sc = SparkContext("local", "Broadcast Example")
 
-\# Configuración (diccionario de parámetros)
-
+# Configuración (diccionario de parámetros)
 configuracion = {
-
-"tasa\_impuesto": 0.15,
-
-"descuento": 0.10
-
+    "tasa_impuesto": 0.15,
+    "descuento": 0.10
 }
 
-\# Crear la variable broadcast
+# Crear la variable broadcast
+broadcast_config = sc.broadcast(configuracion)
 
-broadcast\_config = sc.broadcast(configuracion)
+# RDD de ventas (producto, monto)
+rdd_ventas = sc.parallelize([("ProductoA", 100), ("ProductoB", 200), ("ProductoC", 150)])
 
-\# RDD de ventas (producto, monto)
-
-rdd\_ventas = sc.parallelize(\[("ProductoA", 100), ("ProductoB", 200), ("ProductoC", 150)\])
-
-\# Transformación: Calcular el monto total con impuestos y descuentos
-
-rdd\_calculado = rdd\_ventas.map(lambda venta: (
-
-venta\[0\],
-
-venta\[1\],
-
-venta\[1\] \* (1 + broadcast\_config.value\["tasa\_impuesto"\]), \# Monto con impuesto
-
-venta\[1\] \* (1 - broadcast\_config.value\["descuento"\]) \# Monto con descuento
-
+# Transformación: Calcular el monto total con impuestos y descuentos
+rdd_calculado = rdd_ventas.map(lambda venta: (
+venta[0],
+venta[1],
+venta[1] * (1 + broadcast_config.value["tasa_impuesto"]), # Monto con impuesto
+venta[1] * (1 - broadcast_config.value["descuento"]) # Monto con descuento
 ))
 
-\# Acción: Recopilar y mostrar los resultados
-
-resultados = rdd\_calculado.collect()
-
+# Acción: Recopilar y mostrar los resultados
+resultados = rdd_calculado.collect()
 for resultado in resultados:
+    print(resultado)
 
-print(resultado) \# Salida: ('ProductoA', 100, 115.0, 90.0), etc.
+# Salida: ('ProductoA', 100, 115.0, 90.0), etc.
 
-\# Liberar la variable broadcast
+# Liberar la variable broadcast
+broadcast_config.unpersist()
 
-broadcast\_config.unpersist()
-
-\# Cerrar SparkContext
-
+# Cerrar SparkContext
 sc.stop()
 
+```
 En este ejemplo:
 
 -   **sc.broadcast(configuracion):** Crea un objeto broadcast con la configuración.
@@ -556,29 +484,27 @@ Los acumuladores en PySpark son variables compartidas que permiten sumar valores
 
 **Contar elementos que cumplen una condición**
 
+```
 from pyspark import SparkContext
 
-\# Inicializar SparkContext
+# Inicializar SparkContext
 
 sc = SparkContext("local", "Ejemplo Acumulador")
 
-rdd = sc.parallelize(\[1, 2, 3, 6, 7, 8, 9, 10\])
+rdd = sc.parallelize([1, 2, 3, 6, 7, 8, 9, 10])
 
-\# Crear un acumulador para contar números mayores que 5
-
+# Crear un acumulador para contar números mayores que 5
 contador = sc.accumulator(0)
 
-\# Transformación: Incrementar el acumulador si el número es mayor que 5
-
+# Transformación: Incrementar el acumulador si el número es mayor que 5
 rdd.foreach(lambda x: contador.add(1) if x &gt; 5 else None)
 
-\# Acción: Mostrar el valor del acumulador
-
+# Acción: Mostrar el valor del acumulador
 print("Números mayores que 5:", contador.value) \# Salida: 5
 
-\# Cerrar SparkContext
-
+# Cerrar SparkContext
 sc.stop()
+```
 
 <img src="./media/image19.png" style="width:6.1375in;height:3.58125in" />
 
@@ -594,25 +520,25 @@ En este ejemplo:
 
 **Sumar valores de un RDD**
 
+```
 from pyspark import SparkContext
 
 sc = SparkContext("local", "Ejemplo Acumulador Suma")
 
 rdd = sc.parallelize(\[1, 2, 3, 4, 5\])
 
-\# Crear un acumulador para la suma
+# Crear un acumulador para la suma
+suma_acumulador = sc.accumulator(0)
 
-suma\_acumulador = sc.accumulator(0)
+# Transformación: Sumar todos los valores al acumulador
+rdd.foreach(lambda x: suma_acumulador.add(x))
 
-\# Transformación: Sumar todos los valores al acumulador
+# Acción: Mostrar el valor del acumulador
+print("Suma total:", suma_acumulador.value) # Salida: 15
 
-rdd.foreach(lambda x: suma\_acumulador.add(x))
-
-\# Acción: Mostrar el valor del acumulador
-
-print("Suma total:", suma\_acumulador.value) \# Salida: 15
-
+# Cerrar SparkContext
 sc.stop()
+```
 
 <img src="./media/image21.png" style="width:5.33253in;height:3.82351in" />
 
@@ -628,45 +554,31 @@ En este ejemplo:
 
 **Contabilizar inconsistencias de un RDD**
 
+```
 from pyspark.sql import SparkSession
 
-spark = SparkSession\\
-
-.builder\\
-
-.appName("Acumuladores")\\
-
-.getOrCreate()
+spark = SparkSession.builder.appName("Acumuladores").getOrCreate()
 
 sc = spark.sparkContext
 
-rdd\_usuarios = sc.parallelize(\[
+rdd_usuarios = sc.parallelize([
+    (1, "Ana", 25),
+    (2, "Carlos", -1), # Edad inválida
+    (3, "Luis", 30),
+    (4, None, 40), # Nombre nulo
+    (5, "Sofía", 0), # Edad inválida
+])
 
-(1, "Ana", 25),
+# Crear un acumulador
+acumulador_errores = sc.accumulator(0)
 
-(2, "Carlos", -1), \# Edad inválida
+# Filtrar los registros inválidos mientras se incrementa el acumulador
+rdd_usuarios_validos = rdd_usuarios.filter(lambda x: not (acumulador_errores.add(1) if x[1] is None or x[2] &lt;= 0 else False))
 
-(3, "Luis", 30),
-
-(4, None, 40), \# Nombre nulo
-
-(5, "Sofía", 0), \# Edad inválida
-
-\])
-
-\# Crear un acumulador
-
-acumulador\_errores = sc.accumulator(0)
-
-\# Filtrar los registros inválidos mientras se incrementa el acumulador
-
-rdd\_usuarios\_validos = rdd\_usuarios.filter(lambda x: not (acumulador\_errores.add(1) if x\[1\] is None or x\[2\] &lt;= 0 else False))
-
-\# Ejecutar la transformación y mostrar resultados
-
-print("Usuarios válidos:", rdd\_usuarios\_validos.collect())
-
-print("Total de registros inválidos:", acumulador\_errores.value)
+# Ejecutar la transformación y mostrar resultados
+print("Usuarios válidos:", rdd_usuarios_validos.collect())
+print("Total de registros inválidos:", acumulador_errores.value)
+```
 
 <img src="./media/image23.png" style="width:5.42202in;height:2.75702in" />
 
@@ -686,23 +598,19 @@ Los DataFrames se pueden crear a partir de varias fuentes de datos, como archivo
 
 **Crear un DataFrame desde una lista de datos**
 
+```
 from pyspark.sql import SparkSession
+spark = SparkSession\
+    .builder.appName("Crear DataFrame de lista")\
+    .getOrCreate()
 
-spark = SparkSession\\
+# Crear un DataFrame desde una lista de datos
+data = [("Enero", 34667), ("Febrero", 48795), ("Marzo", 87548)]
+df = spark.createDataFrame(data, ["Mes", "Ingreso"])
 
-.builder.appName("Crear DataFrame de lista")\\
-
-.getOrCreate()
-
-\# Crear un DataFrame desde una lista de datos
-
-data = \[("Enero", 34667), ("Febrero", 48795), ("Marzo", 87548)\]
-
-df = spark.createDataFrame(data, \["Mes", "Ingreso"\])
-
-\# Mostrar el DataFrame
-
+# Mostrar el DataFrame
 df.show()
+```
 
 <img src="./media/image25.png" style="width:5.87582in;height:2.67746in" />
 
@@ -716,35 +624,28 @@ df.show()
 
 **DataFrame creado a partir de un diccionario**
 
+```
 from pyspark.sql import SparkSession
 
-\# Crear una SparkSession
-
+# Crear una SparkSession
 spark = SparkSession.builder.appName("EjemploEsquema").getOrCreate()
 
-\# Crear datos como una lista de diccionarios
-
-data = \[
-
+# Crear datos como una lista de diccionarios
+data = [
 {"Nombre": "Alfonso", "Edad": 25, "Ciudad": "Abejorral"},
-
 {"Nombre": "Bernado", "Edad": 30, "Ciudad": "Bogota"},
-
 {"Nombre": "Celeste", "Edad": 35, "Ciudad": "Cartagena"}
+]
 
-\]
-
-\# Crear el DataFrame
-
+# Crear el DataFrame
 df = spark.createDataFrame(data)
 
-\# Mostrar la información
-
+# Mostrar la información
 df.show()
 
-\# Consultar el esquema del DataFrame
-
+# Consultar el esquema del DataFrame
 df.printSchema()
+```
 
 <img src="./media/image27.png" style="width:5.01145in;height:3.54in" />
 
@@ -758,30 +659,24 @@ df.printSchema()
 
 **Crear un DataFrame desde un archivo CSV**
 
+```
 from pyspark.sql import SparkSession
-
-spark = SparkSession\\
-
-.builder\\
-
-.appName("Ejemplo CSV")\\
-
+spark = SparkSession\
+.builder\
+.appName("Ejemplo CSV")\
 .getOrCreate()
 
-\# Crear un DataFrame desde un archivo CSV
-
+# Crear un DataFrame desde un archivo CSV
 df = spark.read.csv("/home/miguel/data/Sales.csv")
 
-\# Mostrar el DataFrame y el esquema
-
+# Mostrar el DataFrame y el esquema
 df.show(5)
-
 df.printSchema()
+```
 
 **En este ejemplo:**
 
 -   **spark.read.csv()** carga un archivo CSV.
-
 -   Nótese el primer registro, nombres de columnas y tipos de datos.
 
 <img src="./media/image29.png" style="width:5.66746in;height:2.65662in" />
@@ -790,25 +685,20 @@ df.printSchema()
 
 **Crear un DataFrame desde un archivo CSV infiriendo esquema e identificando encabezados**
 
+```
 from pyspark.sql import SparkSession
-
-spark = SparkSession\\
-
-.builder\\
-
-.appName("Ejemplo CSV")\\
-
+spark = SparkSession\
+.builder\
+.appName("Ejemplo CSV")\
 .getOrCreate()
 
-\# Crear un DataFrame desde un archivo CSV
-
+# Crear un DataFrame desde un archivo CSV
 df = spark.read.csv("/home/miguel/data/Sales.csv",header=True, inferSchema=True)
 
-\# Mostrar el DataFrame y el esquema
-
+# Mostrar el DataFrame y el esquema
 df.show(5)
-
 df.printSchema()
+```
 
 **En este ejemplo:**
 
@@ -824,25 +714,20 @@ df.printSchema()
 
 **Crear un DataFrame desde un archivo parquet**
 
-**from pyspark.sql import SparkSession**
+```
+from pyspark.sql import SparkSession
+spark = SparkSession\
+.builder\
+.appName("Ejemplo CSV")\
+.getOrCreate()
 
-**spark = SparkSession\\**
+# Crear un DataFrame desde un archivo CSV
+df = spark.read.parquet("/home/miguel/data/house-price.parquet")
 
-**.builder\\**
-
-**.appName("Ejemplo CSV")\\**
-
-**.getOrCreate()**
-
-**\# Crear un DataFrame desde un archivo CSV**
-
-**df = spark.read.parquet("/home/miguel/data/house-price.parquet")**
-
-**\# Mostrar el DataFrame y el esquema**
-
-**df.show(10)**
-
-**df.printSchema()**
+# Mostrar el DataFrame y el esquema
+df.show(10)
+df.printSchema()
+```
 
 <img src="./media/image33.png" style="width:4.49005in;height:1.95957in" />
 
@@ -850,29 +735,24 @@ df.printSchema()
 
 **DataFrame desde un archivo JSON**
 
+```
 from pyspark.sql import SparkSession
 
-\# Crear una SparkSession
+# Crear una SparkSession
+spark = SparkSession\
+    .builder\
+    .appName("Ejemplo dataframe con JSON")\
+    .getOrCreate()
 
-spark = SparkSession\\
-
-.builder\\
-
-.appName("Ejemplo dataframe con JSON")\\
-
-.getOrCreate()
-
-\# Cargar el DataFrame desde un archivo JSON
-
+# Cargar el DataFrame desde un archivo JSON
 df = spark.read.json("/home/miguel/data/users.json", multiLine=True)
 
-\# Consultar el esquema del DataFrame
-
+# Consultar el esquema del DataFrame
 df.printSchema()
 
-\# Mostrar los primeros 10 registros del DataFrame
-
+# Mostrar los primeros 10 registros del DataFrame
 df.show(10)
+```
 
 <img src="./media/image35.png" style="width:6.1375in;height:2.34306in" />
 
@@ -886,39 +766,30 @@ Los DataFrames permiten realizar operaciones similares a las de SQL, como selecc
 
 **Seleccionar columnas desde colección**
 
+```
 from pyspark.sql import SparkSession
-
 from pyspark.sql.functions import col
 
-spark = SparkSession\\
-
-.builder\\
-
-.appName("Selecion de columnas DataFrame")\\
-
+spark = SparkSession\
+.builder\
+.appName("Selecion de columnas DataFrame")\
 .getOrCreate()
 
-\# Datos de ejemplo
+# Datos de ejemplo
+data = [
+  (1, "Alicia", 48, 10000),
+  (2, "Bernardo", 27, 20000),
+  (3, "Cesar", 32, 300000)
+]
 
-data = \[
+columns = ["id", "nombre", "edad", "salario"]
 
-(1, "Alicia", 48, 10000),
-
-(2, "Bernardo", 27, 20000),
-
-(3, "Cesar", 32, 300000)
-
-\]
-
-columns = \["id", "nombre", "edad", "salario"\]
-
-\# Crear DataFrame
-
+# Crear DataFrame
 df = spark.createDataFrame(data, columns)
 
-\# Mostrar el DataFrame
-
+# Mostrar el DataFrame
 df.show()
+```
 
 **En este ejemplo:**
 
@@ -934,27 +805,22 @@ df.show()
 
 **Seleccionar columnas con select()**
 
+```
 from pyspark.sql import SparkSession
-
 from pyspark.sql.functions import col
 
-spark = SparkSession\\
-
-.builder\\
-
-.appName("Selecion de columnas DataFrame")\\
-
+spark = SparkSession\
+.builder\
+.appName("Selecion de columnas DataFrame")\
 .getOrCreate()
 
-\# Crear DataFrame
-
+# Crear DataFrame
 df = spark.read.csv("/home/miguel/data/Model/Products.csv", inferSchema=True, header=True)
 
 df.printSchema()
-
-\# Mostrar el DataFrame
-
+# Mostrar el DataFrame
 df.select("Product","Cost","Price").show(10)
+```
 
 <img src="./media/image39.png" style="width:5.23808in;height:2.21187in" />
 
@@ -962,27 +828,23 @@ df.select("Product","Cost","Price").show(10)
 
 **Seleccionar columnas con la función col()**
 
+```
 from pyspark.sql import SparkSession
-
 from pyspark.sql.functions import col
 
-spark = SparkSession\\
+spark = SparkSession\
+    .builder\
+    .appName("Selecion de columnas DataFrame")\
+    .getOrCreate()
 
-.builder\\
-
-.appName("Selecion de columnas DataFrame")\\
-
-.getOrCreate()
-
-\# Crear DataFrame
-
+# Crear DataFrame
 df = spark.read.csv("/home/miguel/data/Model/Products.csv", inferSchema=True, header=True)
 
 df.printSchema()
 
-\# Mostrar el DataFrame
-
+# Mostrar el DataFrame
 df.select(col("Product"),col("Cost"),col("Price")).show(10)
+```
 
 <img src="./media/image41.png" style="width:6.1375in;height:2.58333in" />
 
@@ -992,25 +854,22 @@ df.select(col("Product"),col("Cost"),col("Price")).show(10)
 
 Con el objeto **col(),** es posible cambiar el nombre de las columnas recuperadas con su atributo **alias()**
 
-**from pyspark.sql import SparkSession**
+```
+from pyspark.sql import SparkSession
+from pyspark.sql.functions import col
 
-**from pyspark.sql.functions import col**
+spark = SparkSession\
+    .builder\
+    .appName("Selecion de columnas DataFrame")\
+    .getOrCreate()
 
-**spark = SparkSession\\**
+# Crear DataFrame
+df = spark.read.csv("/home/miguel/data/Sales.csv", inferSchema=True, header=True)
 
-**.builder\\**
-
-**.appName("Selecion de columnas DataFrame")\\**
-
-**.getOrCreate()**
-
-**\# Crear DataFrame**
-
-**df = spark.read.csv("/home/miguel/data/Sales.csv", inferSchema=True, header=True)**
-
-**\# Mostrar el DataFrame**
-
-**df.select(col("SalesOrderNumber").alias("Order"),col("Product").alias("Producto") ,col("Quantity").alias("Cantidad"),col("Sales").alias("Importe")).show(10)**
+# Mostrar el DataFrame
+df.select(col("SalesOrderNumber").alias("Order"),col("Product").alias("Producto")
+          ,col("Quantity").alias("Cantidad"),col("Sales").alias("Importe")).show(10)**
+```
 
 <img src="./media/image43.png" style="width:6.1375in;height:2.59931in" />
 
@@ -1020,29 +879,24 @@ Con el objeto **col(),** es posible cambiar el nombre de las columnas recuperada
 
 Para adicionar una columna con valor fijo, la función **lit()** permite asignar un valor constante a una nueva columna.
 
+```
 from pyspark.sql import SparkSession
-
 from pyspark.sql.functions import col, lit
 
-spark = SparkSession\\
+spark = SparkSession\
+    .builder\
+    .appName("Calculo de columnas DataFrame")\
+    .getOrCreate()
 
-.builder\\
-
-.appName("Calculo de columnas DataFrame")\\
-
-.getOrCreate()
-
-\# Crear DataFrame
-
+# Crear DataFrame
 df = spark.read.json("/home/miguel/data/users.json", multiLine=True)
 
-\# Adicinar la coluna Status con un valor fijo
+# MAdicinar la coluna Status con un valor fijo
+df_empleados = df.withColumn("Status",lit("Active"))
 
-df\_empleados = df.withColumn("Status",lit("Active"))
-
-\#Mostrar el DataFrame
-
-df\_empleados.show()
+#Mostrar el DataFrame
+df_empleados.show()
+```
 
 <img src="./media/image45.png" style="width:4.54117in;height:2.66366in" />
 
@@ -1057,28 +911,20 @@ Se pueden manejar expresiones más complejas, como cálculos matemáticos o conc
 Una forma de adicionar columnas calculadas es a través de la función expr(). El cálculo se puede basar en el nombre de la columna original o en el alias.
 
 from pyspark.sql import SparkSession
-
 from pyspark.sql.functions import col
-
 from pyspark.sql.functions import expr
 
-spark = SparkSession\\
+spark = SparkSession\
+    .builder\
+    .appName("Selecion de columnas DataFrame")\
+    .getOrCreate()
 
-.builder\\
-
-.appName("Selecion de columnas DataFrame")\\
-
-.getOrCreate()
-
-\# Crear DataFrame
-
+# Crear DataFrame
 df = spark.read.csv("/home/miguel/data/Sales.csv", inferSchema=True, header=True)
 
-\# Mostrar el DataFrame
-
+# Mostrar el DataFrame
 df.select(col("SalesOrderNumber").alias("Order"),col("Product").alias("Producto")
-
-,col("Quantity").alias("Cantidad"),col("Sales").alias("Importe"),
+            ,col("Quantity").alias("Cantidad"),col("Sales").alias("Importe"),
 
 expr("Sales \* Quantity").alias("Subtotal")).show(10)
 
@@ -1092,33 +938,27 @@ expr("Sales \* Quantity").alias("Subtotal")).show(10)
 
 La función **withColumn()** devuelve un nuevo DataFrame agregando una columna o reemplazando la columna existente que tiene el mismo nombre
 
+```
 from pyspark.sql import SparkSession
-
 from pyspark.sql.functions import col
-
 from pyspark.sql.functions import expr
 
-spark = SparkSession\\
+spark = SparkSession\
+    .builder\
+    .appName("Selecion de columnas DataFrame")\
+    .getOrCreate()
 
-.builder\\
-
-.appName("Selecion de columnas DataFrame")\\
-
-.getOrCreate()
-
-\# Crear DataFrame
-
+# Crear DataFrame
 df = spark.read.csv("/home/miguel/data/Sales.csv", inferSchema=True, header=True)
 
-\# Mostrar el DataFrame
+# Mostrar el DataFrame
+df_productos = df.select(col("SalesOrderNumber").alias("Order"),col("Product").alias("Producto")
+          ,col("Quantity").alias("Cantidad"),col("Sales").alias("Importe"))
 
-df\_productos = df.select(col("SalesOrderNumber").alias("Order"),col("Product").alias("Producto")
+df_productos = df_productos.withColumn("Total", df_productos.Cantidad * df_productos.Importe)
 
-,col("Quantity").alias("Cantidad"),col("Sales").alias("Importe"))
-
-df\_productos = df\_productos.withColumn("Total", df\_productos.Cantidad \* df\_productos.Importe)
-
-df\_productos.show(3)
+df_productos.show(3)
+```
 
 <img src="./media/image47.png" style="width:5.18062in;height:2.57976in" />
 
@@ -1128,35 +968,27 @@ Adicionar varias columnas a un DataFrame existente.
 
 La función **withColumns()** permite adicionar varias columnas a un DataFrame existente
 
+```
 from pyspark.sql import SparkSession
-
 from pyspark.sql.functions import col
-
 from pyspark.sql.functions import expr
 
-spark = SparkSession\\
-
-.builder\\
-
-.appName("Calculo de columnas DataFrame")\\
-
+spark = SparkSession\
+.builder\
+.appName("Calculo de columnas DataFrame")\
 .getOrCreate()
 
-\# Crear DataFrame
-
+# Crear DataFrame
 df = spark.read.csv("/home/miguel/data/Sales.csv", inferSchema=True, header=True)
 
-\# Mostrar el DataFrame
-
-df\_productos = df.select(col("SalesOrderNumber").alias("Order"),col("Product").alias("Producto")
-
+# Mostrar el DataFrame
+df_productos = df.select(col("SalesOrderNumber").alias("Order"),col("Product").alias("Producto")
 ,col("Quantity").alias("Cantidad"),col("Sales").alias("Importe"))
 
-df\_productos = df\_productos.withColumns({"Total": df\_productos.Cantidad \* df\_productos.Importe,
-
-"Impuesto": df\_productos.Importe\*.16})
-
-df\_productos.show(3)
+df_productos = df_productos.withColumns({"Total": df_productos.Cantidad * df_productos.Importe,
+"Impuesto": df_productos.Importe*.16})
+df_productos.show(3)
+```
 
 **En este ejemplo:**
 
@@ -1172,39 +1004,31 @@ Se pueden salvar DataFrames en diferentes formatos de archivo: CSV, Parquet y JS
 
 **Salvar en archivo csv**
 
+```
 from pyspark.sql import SparkSession
-
 from pyspark.sql.functions import col
-
 from pyspark.sql.functions import expr
 
-spark = SparkSession\\
+spark = SparkSession\
+    .builder\
+    .appName("Salvar DataFrame csv")\
+    .getOrCreate()
 
-.builder\\
-
-.appName("Salvar DataFrame csv")\\
-
-.getOrCreate()
-
-\# Crear DataFrame
-
+# Crear DataFrame
 df = spark.read.csv("/home/miguel/data/Sales.csv", inferSchema=True, header=True)
 
-\# Mostrar el DataFrame
+# Mostrar el DataFrame
+df_productos = df.select(col("SalesOrderNumber").alias("Order"),col("Product").alias("Producto")
+          ,col("Quantity").alias("Cantidad"),col("Sales").alias("Importe"))
 
-df\_productos = df.select(col("SalesOrderNumber").alias("Order"),col("Product").alias("Producto")
+df_productos = df_productos.withColumns({"Total": df_productos.Cantidad * df_productos.Importe,
+"Impuesto": df_productos.Importe*.16})
+df_productos.show(3)
 
-,col("Quantity").alias("Cantidad"),col("Sales").alias("Importe"))
+# Guardar el DataFrame en un archivo CSV
 
-df\_productos = df\_productos.withColumns({"Total": df\_productos.Cantidad \* df\_productos.Importe,
-
-"Impuesto": df\_productos.Importe\*.16})
-
-df\_productos.show(3)
-
-\# Guardar el DataFrame en un archivo CSV
-
-df\_productos.write.csv("/home/miguel/data/salida/reporte1.csv", header=True, mode="overwrite")
+df_productos.write.csv("/home/miguel/data/salida/reporte1.csv", header=True, mode="overwrite")
+```
 
 <img src="./media/image51.png" style="width:4.8552in;height:2.96047in" />
 
@@ -1214,39 +1038,30 @@ El parámetro **mode** controla el comportamiento si el archivo ya existe. Los v
 
 **Salvar el archivo como parquet**
 
+```
 from pyspark.sql import SparkSession
-
 from pyspark.sql.functions import col
-
 from pyspark.sql.functions import expr
 
-spark = SparkSession\\
+spark = SparkSession\
+    .builder\
+    .appName("Salvar DataFrame csv")\
+    .getOrCreate()
 
-.builder\\
-
-.appName("Salvar DataFrame csv")\\
-
-.getOrCreate()
-
-\# Crear DataFrame
-
+# Crear DataFrame
 df = spark.read.csv("/home/miguel/data/Sales.csv", inferSchema=True, header=True)
 
-\# Mostrar el DataFrame
+# Mostrar el DataFrame
+df_productos = df.select(col("SalesOrderNumber").alias("Order"),col("Product").alias("Producto")
+              ,col("Quantity").alias("Cantidad"),col("Sales").alias("Importe"))
 
-df\_productos = df.select(col("SalesOrderNumber").alias("Order"),col("Product").alias("Producto")
+df_productos = df_productos.withColumns({"Total": df_productos.Cantidad * df_productos.Importe,
+"Impuesto": df_productos.Importe*.16})
+df_productos.show(3)
 
-,col("Quantity").alias("Cantidad"),col("Sales").alias("Importe"))
-
-df\_productos = df\_productos.withColumns({"Total": df\_productos.Cantidad \* df\_productos.Importe,
-
-"Impuesto": df\_productos.Importe\*.16})
-
-df\_productos.show(3)
-
-\# Guardar el DataFrame en un archivo Parquet
-
-df\_productos.write.parquet("/home/miguel/data/salida/reporte2.parquet", mode=”overwrite”)
+# Guardar el DataFrame en un archivo Parquet
+df_productos.write.parquet("/home/miguel/data/salida/reporte2.parquet", mode=”overwrite”)
+```
 
 <img src="./media/image53.png" style="width:4.17626in;height:2.80261in" />
 
@@ -1260,58 +1075,48 @@ Al mostrar el contenido del directorio, se muestran archivos por partición. Est
 
 Hay que reducir las particiones antes de salvar el archivo. Esto se logra con la función coalesce():
 
+```
 from pyspark.sql import SparkSession
-
 from pyspark.sql.functions import col
-
 from pyspark.sql.functions import expr
-
 import os
 
-spark = SparkSession\\
+spark = SparkSession\
+    .builder\
+    .appName("Salvar DataFrame csv")\
+    .getOrCreate()
 
-.builder\\
-
-.appName("Salvar DataFrame csv")\\
-
-.getOrCreate()
-
-\# Crear DataFrame
-
+# Crear DataFrame
 df = spark.read.csv("/home/miguel/data/Sales.csv", inferSchema=True, header=True)
 
-\# Mostrar el DataFrame
+# Mostrar el DataFrame
+df_productos = df.select(col("SalesOrderNumber").alias("Order"),col("Product").alias("Producto")
+              ,col("Quantity").alias("Cantidad"),col("Sales").alias("Importe"))
 
-df\_productos = df.select(col("SalesOrderNumber").alias("Order"),col("Product").alias("Producto")
+df_productos = df_productos.withColumns({"Total": df_productos.Cantidad * df_productos.Importe,
+"Impuesto": df_productos.Importe*.16})
 
-,col("Quantity").alias("Cantidad"),col("Sales").alias("Importe"))
+df_productos.show(3)
 
-df\_productos = df\_productos.withColumns({"Total": df\_productos.Cantidad \* df\_productos.Importe,
-
-"Impuesto": df\_productos.Importe\*.16})
-
-df\_productos.show(3)
-
-dfx = df\_productos.withColumnRenamed("Impuesto","Tax")
+dfx = df_productos.withColumnRenamed("Impuesto","Tax")
 
 dfx.printSchema()
-
 dfx.show(10)
+```
 
 <span class="mark">df\_productos =df\_productos.coalesce(1)</span>
 
-\# Guardar el DataFrame en un archivo CSV
+```
+# Guardar el DataFrame en un archivo CSV
+df_productos.write.csv("/home/netec/data/salida", header=True, mode="overwrite")
 
-df\_productos.write.csv("/home/netec/data/salida", header=True, mode="overwrite")
-
-\# Renombrar el archivo
-
+# Renombrar el archivo
 archivos = os.listdir("/home/miguel/data/salida/")
-
-archivo\_csv = \[f for f in archivos if f.endswith(".csv")\]\[0\]
+archivo_csv = [f for f in archivos if f.endswith(".csv")][0]
 
 os.rename(f"/home/netec/data/salida/{archivo\_csv}", "/home/netec/data/salida/reporte.csv")
+```
 
 <img src="./media/image56.png" style="width:3.45882in;height:0.63551in" />
 
-\*\*\* Fin del laboratorio
+***Fin del laboratorio***
