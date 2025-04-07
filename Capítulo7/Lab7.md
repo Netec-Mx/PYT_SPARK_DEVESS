@@ -322,7 +322,7 @@ df_departamentos = spark.createDataFrame(data_departamentos, ["id_departamento",
 df_empleados.createOrReplaceTempView("empleados")
 df_departamentos.createOrReplaceTempView("departamentos")
 
-query = ("SELECT e.id\_empleado, e.nombre, d.nombre\_departamento "
+query = ("SELECT e.id_empleado, e.nombre, d.nombre_departamento "
 "FROM empleados e "
 "INNER JOIN departamentos d "
 "ON e.id_departamento = d.id_departamento")
@@ -386,65 +386,45 @@ spark.sql(query).show()
 
 Devuelve todos los departamentos, incluso si no tienen empleados asignados.
 
+```
 from pyspark.sql import SparkSession
 
-\# Crear una sesión de Spark
-
+# Crear una sesión de Spark
 spark = SparkSession.builder.appName("SQL relaciones").getOrCreate()
 
-\# Datos de empleados
+# Datos de empleados
+data_empleados = [
+    (1, "Alejandra", 101),
+    (2, "Berenice", 102),
+    (3, "Carlos", 101),
+    (4, "Daniela", 104),
+    (5, "Ernesto", 110)
+]
 
-data\_empleados = \[
+# Datos de departamentos
+data_departamentos = [
+    (101, "Ventas"),
+    (102, "Marketing"),
+    (103, "IT"),
+    (105, "RH"),
+    (106, "Operacione"),
+]
 
-(1, "Alejandra", 101),
+# Crear DataFrames
+df_empleados = spark.createDataFrame(data_empleados, ["id_empleado", "nombre", "id_departamento"])
+df_departamentos = spark.createDataFrame(data_departamentos, ["id_departamento", "nombre_departamento"])
 
-(2, "Berenice", 102),
+# Registrar DataFrames como tablas temporales
+df_empleados.createOrReplaceTempView("empleados")
+df_departamentos.createOrReplaceTempView("departamentos")
 
-(3, "Carlos", 101),
-
-(4, "Daniela", 104),
-
-(5, "Ernesto", 110)
-
-\]
-
-\# Datos de departamentos
-
-data\_departamentos = \[
-
-(101, "Ventas"),
-
-(102, "Marketing"),
-
-(103, "IT"),
-
-(105, "RH"),
-
-(106, "Operacione"),
-
-\]
-
-\# Crear DataFrames
-
-df\_empleados = spark.createDataFrame(data\_empleados, \["id\_empleado", "nombre", "id\_departamento"\])
-
-df\_departamentos = spark.createDataFrame(data\_departamentos, \["id\_departamento", "nombre\_departamento"\])
-
-\# Registrar DataFrames como tablas temporales
-
-df\_empleados.createOrReplaceTempView("empleados")
-
-df\_departamentos.createOrReplaceTempView("departamentos")
-
-query = ("SELECT e.id\_empleado, e.nombre, d.nombre\_departamento "
-
+query = ("SELECT e.id_empleado, e.nombre, d.nombre_departamento "
 "FROM empleados e "
-
 "RIGHT JOIN departamentos d "
-
-"ON e.id\_departamento = d.id\_departamento")
+"ON e.id_departamento = d.id_departamento")
 
 spark.sql(query).show()
+```
 
 <img src="./media/image19.png" style="width:4.6136in;height:0.94825in" />
 
@@ -520,55 +500,42 @@ spark.sql(query).show()
 
 El UNION combina los resultados de dos consultas en un solo conjunto de resultados. Las filas duplicadas se eliminan a menos que se use UNION ALL.
 
+```
 from pyspark.sql import SparkSession
 
-spark = SparkSession\\
-
-.builder\\
-
-.appName("Usar UNION")\\
-
+spark = SparkSession\
+.builder\
+.appName("Usar UNION")\
 .getOrCreate()
 
-\# Crear DataFrame de ventas del año 2018
-
+# Crear DataFrame de ventas del año 2018
 df2018 = spark.read.csv("/home/miguel/data/TotalSales/Sales2018.csv", inferSchema=True, header=True)
 
-\# Registrar el DataFrame como una tabla temporal
-
+# Registrar el DataFrame como una tabla temporal
 df2018.createOrReplaceTempView("y2018")
 
-\# Crear DataFrame de ventas del año 2018
-
+# Crear DataFrame de ventas del año 2018
 df2019 = spark.read.csv("/home/miguel/data/TotalSales/Sales2019.csv", inferSchema=True, header=True)
 
-\# Registrar el DataFrame como una tabla temporal
-
+# Registrar el DataFrame como una tabla temporal
 df2019.createOrReplaceTempView("y2019")
 
-\# Crear DataFrame de ventas del año 2018
-
+# Crear DataFrame de ventas del año 2018
 df2020 = spark.read.csv("/home/miguel/data/TotalSales/Sales2020.csv", inferSchema=True, header=True)
 
-\# Registrar el DataFrame como una tabla temporal
-
+# Registrar el DataFrame como una tabla temporal
 df2020.createOrReplaceTempView("y2020")
 
-\# Sumando los registros de las 3 tablas
-
+# Sumando los registros de las 3 tablas
 query = ("SELECT \* FROM y2018 "
-
 "UNION "
-
 "SELECT \* FROM y2019 "
-
 "UNION "
-
 "SELECT \* FROM y2020 "
-
 )
 
 spark.sql(query).show()
+```
 
 <img src="./media/image23.png" style="width:4.94921in;height:3.00548in" />
 
