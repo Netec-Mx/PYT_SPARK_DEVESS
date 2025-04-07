@@ -6,7 +6,7 @@ Al finalizar la práctica serás capaz de:
 - Aplicar consultas utilizando el lenguaje SQL.
 
 **Tiempo aproximado:**
-- 60 minutos-
+- 60 minutos.
 
 **Prerequisitos:**
 
