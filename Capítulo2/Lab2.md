@@ -43,7 +43,7 @@ Crear un proyecto y editar el archivo .py
 Para acceder a la sesión de Spark y tener acceso a RDDs, vamos a crear un SparkSession. Este puede tomar diferentes parámetros para tomar el control de las características de la conexión desde Python. La manera más simple es:
 
 ```
-spark = SparkSession.builder \\
+spark = SparkSession.builder \
 .getOrCreate()
 ```
 
@@ -79,7 +79,7 @@ En el parámetro master, es posible indicar en cuántos núcleos queremos lanzar
 from pyspark.sql import SparkSession
 
 spark = SparkSession.builder \
-  .master(‘local\[2\]’) \
+  .master(‘local[2]’) \
   .appName("MiPrimeraAplicacionSpark") \
   .getOrCreate()
 
@@ -115,7 +115,7 @@ from pyspark import SparkContext, SparkConf
 # Configuración básica
 conf = SparkConf() \
   .setAppName("MiApp")\
-  .setMaster("local\[*]")
+  .setMaster("local[*]")
 
 # Crear el SparkContext
 sc = SparkContext(conf=conf)
@@ -140,7 +140,7 @@ from pyspark import SparkContext, SparkConf
 # Configuración avanzada
 conf = SparkConf() \
   .setAppName("MiAppAvanzada") \
-  .setMaster("local\[*]") \
+  .setMaster("local[*]") \
   .set("spark.executor.memory", "2g") \
   .set("spark.driver.memory", "1g") \
   .set("spark.cores.max", "4")
@@ -165,7 +165,7 @@ Aunque está disponible, la recomendación es no utilizar el objeto SparkContext
 # Crear una SparkSession
 spark = SparkSession.builder \
   .appName("MiAppAvanzada") \
-  .master("local\[*]") \
+  .master("local[*]") \
   .config("spark.executor.memory", "2g") \
   .config("spark.driver.memory", "1g") \
   .config("spark.cores.max", "4") \
@@ -223,7 +223,7 @@ from pyspark import SparkContext, SparkConf
 # Configuración de la sesión
 conf = SparkConf() \
 .setAppName("Ejemplo con rango") \
-.setMaster("local\[*]") \
+.setMaster("local[*]") \
 
 # Crear el SparkContext
 sc = SparkContext(conf=conf)
@@ -491,4 +491,4 @@ df.write.csv("ruta/del/archivo")
 
 ```
 
-**Fin del laboratorio**
+## ***Fin del laboratorio***
