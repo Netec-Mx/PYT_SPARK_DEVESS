@@ -247,7 +247,7 @@ sc = SparkContext("local",\
 "Transformar tuplas RDD")
 
 # Crear un RDD de tuplas
-rdd = sc.parallelize(\[("Alicia", 25), ("Bernardo", 30), ("Carolina", 28)\])
+rdd = sc.parallelize([("Alicia", 25), ("Bernardo", 30), ("Carolina", 28)])
 
 # Aplicar la función map para incrementar la edad en 2
 rdd_transformado = rdd.map(lambda x: (x[0], x[1] + 2))
