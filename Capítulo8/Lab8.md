@@ -63,7 +63,7 @@ spark “sparkContext.setLogLevel("INFO") \# Niveles: ALL, DEBUG, INFO, WARN, ER
 
 Para escribir código eficiente en PySpark, es importante seguir mejores prácticas. Aquí algunas de las más importantes:
 
-**Evitar operaciones costosas:**
+## **Evitar operaciones costosas:**
 
 **1. Evitar collect()** 
 Traer todos los datos al driver puede causar problemas de memoria. En su lugar, usa take() o show().
@@ -115,7 +115,7 @@ Asegúrate de que los datos estén bien particionados para paralelizar el proces
 
 `df = df.repartition(100) \# Reparticion el DataFrame en 100 particiones`
 
-**5. Uso del Catalyst Optimizer**
+## **Uso del Catalyst Optimizer**
 
 **Catalyst Optimizer** es el motor de optimización de Spark SQL. Transforma las consultas SQL o las operaciones de DataFrames en un plan de ejecución optimizado.
 
