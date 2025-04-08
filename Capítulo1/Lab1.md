@@ -121,6 +121,7 @@ nano ~/.bashrc
 
 export SPARK_HOME=/usr/local/spark
 export PATH=$PATH:$SPARK_HOME/bin
+
 export PYTHONPATH=$SPARK_HOME/python:$SPARK_HOME/python/lib/py4j-0.10.9.7-src.zip:$PYTHONPATH
 export PYSPARK_PYTHON=python3
 ```
