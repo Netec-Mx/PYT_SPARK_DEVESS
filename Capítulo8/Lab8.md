@@ -25,11 +25,11 @@ El monitoreo del código en PySpark implica supervisar el rendimiento de las apl
 
 El monitoreo del código en PySpark implica supervisar el rendimiento de las aplicaciones, identificar cuellos de botella y asegurarte de que los recursos se utilicen de manera eficiente. PySpark proporciona varias herramientas para monitorear el rendimiento:
 
-**Herramientas de Monitoreo**
+**Herramientas de monitoreo**
 
 **a) Spark UI**
 
-La interfaz de usuario de Spark (Spark UI) es una herramienta visual que te permite monitorear el progreso de las tareas, el uso de recursos y el rendimiento de las consultas. Puedes acceder a ella a través de la URL proporcionada en los logs de Spark (normalmente en http://&lt;driver-node&gt;:4040).
+La interfaz de usuario de Spark (Spark UI) es una herramienta visual que te permite monitorear el progreso de las tareas, el uso de recursos y el rendimiento de las consultas. Puedes acceder a ella a través de la URL proporcionada en los logs de Spark (normalmente en ***http://&lt;driver-node&gt;:4040***).
 
 **Ejemplo**: Después de ejecutar un trabajo en PySpark, abre la Spark UI para ver:
 
@@ -37,15 +37,17 @@ La interfaz de usuario de Spark (Spark UI) es una herramienta visual que te perm
 -   El tiempo de ejecución de cada etapa.
 -   El uso de memoria y CPU.
 
+
 **b) Logs de Spark**
 
 Los logs de Spark proporcionan información detallada sobre el progreso de las tareas, errores y advertencias. Puedes configurar el nivel de logging para obtener más o menos detalle.
 
+```
 from pyspark.sql import SparkSession
 
 spark = SparkSession.builder.appName("MonitoringExample").getOrCreate()
-
 spark “sparkContext.setLogLevel("INFO") \# Niveles: ALL, DEBUG, INFO, WARN, ERROR, FATAL, OFF
+```
 
 **c) Métricas de Spark**
 
@@ -57,13 +59,14 @@ spark “sparkContext.setLogLevel("INFO") \# Niveles: ALL, DEBUG, INFO, WARN, ER
 
 **Ejemplo:** Configura Spark para enviar métricas a un sistema externo:
 
-2. Aplicación de Mejores Prácticas en PySpark
+2. Aplicación de mejores prácticas en PySpark
 
 Para escribir código eficiente en PySpark, es importante seguir mejores prácticas. Aquí algunas de las más importantes:
 
-**Evitar operaciones costosas**
+**Evitar operaciones costosas:**
 
--  **Evitar collect()**: Traer todos los datos al driver puede causar problemas de memoria. En su lugar, usa take() o show().
+**1. Evitar collect()** 
+Traer todos los datos al driver puede causar problemas de memoria. En su lugar, usa take() o show().
 
 ```
 # Incorrecto
@@ -73,7 +76,7 @@ data = df.collect() # Trae todos los datos al driver
 data = df.take(10) # Trae solo 10 filas
 ```
 
--   **Evitar shuffle innecesario:** Operaciones como groupBy, join o distinct pueden causar un shuffle, que es costoso. Minimiza su uso.
+2. **Evitar shuffle innecesario:** Operaciones como groupBy, join o distinct pueden causar un shuffle, que es costoso. Minimiza su uso.
 
 ```
 # Incorrecto
@@ -83,9 +86,8 @@ df.groupBy("columna").count().show()
 df.select("columna").distinct().count()
 ```
 
-1.  **Usar el esquema correcto**
-
--   Define el esquema de tus DataFrames explícitamente para evitar inferencias costosas.
+3. **Usar el esquema correcto**
+Define el esquema de tus DataFrames explícitamente para evitar inferencias costosas.
 
 ```
 from pyspark.sql.types import StructType, StructField, StringType, IntegerType
@@ -98,24 +100,22 @@ schema = StructType([
 df = spark.read.schema(schema).csv("data.csv")
 ```
 
-1.  **Subir a cache DataFrames cuando sea ”ecsario**
-
--   Mantener en cache DataFrames si se reutilizan en múltiples operaciones.
+**4. Subir a cache DataFrames cuando sea necesario**
+Mantener en cache DataFrames si se reutilizan en múltiples operaciones.
 
 ```
 df.cache() # Almacena el DataFrame en memoria
 df.count() # Forzar caché
 ```
 
-1.  **Particionar datos adecuadamente**
-
--   Asegúrate de que los datos estén bien particionados para paralelizar el procesamiento.
+**5. Particionar datos adecuadamente**
+Asegúrate de que los datos estén bien particionados para paralelizar el procesamiento.
 
 <!-- -->
 
--   df = df.repartition(100) \# Reparticion el DataFrame en 100 particiones
+`df = df.repartition(100) \# Reparticion el DataFrame en 100 particiones`
 
-## 3. Uso del Catalyst Optimizer
+**5. Uso del Catalyst Optimizer**
 
 **Catalyst Optimizer** es el motor de optimización de Spark SQL. Transforma las consultas SQL o las operaciones de DataFrames en un plan de ejecución optimizado.
 
@@ -126,13 +126,15 @@ df.count() # Forzar caché
 -   **Planificación física**: Genera un plan de ejecución eficiente (por ejemplo, selecciona el tipo de join más adecuado).
 -   **Generación de código**: Convierte el plan en código ejecutable.
 
-**Ejemplo de Optimización**
+**Ejemplo de optimización**
 
-**df = spark.read.csv("data.csv")**
+```
+df = spark.read.csv("data.csv")
 
 df_filtered = df.filter(df["“dad"] &gt; ”0)
 df_grouped = df_filtered.g”oupB”("ciudad").count()
 df_grouped.show()
+```
 
 **Catalyst Optimizer:**
 
@@ -140,8 +142,7 @@ df_grouped.show()
 - Selecciona el algoritmo de **join** más eficiente.
 - Genera código optimizado para ejecutar la consulta.
 
-**Ver el Plan de Ejecución**
-
+**Ver el plan de ejecución**
 Puedes ver el plan de ejecución generado por Catalyst usando explain():
 
 ```
@@ -160,14 +161,16 @@ df_grouped.explain()
 FileScan csv [ciudad,edad] Balse, Format: CSV, ...
 ```
 
-**Optimización Manual**
+**Optimización manual**
 
 Puedes guiar al optimizador con acciones como:
 
 - Broadcast Join: Para unir un DataFrame pequeño con uno grande.
 
+```
 from pyspark.sql.functions import broadcast
 df_joined = df1.join(broadcast(df2), "id")
+```
 
 - **Evitar operaciones costosas**: Como shuffle o full scans.
 
