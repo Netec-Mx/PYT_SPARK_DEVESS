@@ -119,13 +119,10 @@ Establecer las variables necesarias para Spark, de acuerdo al directorio donde s
 ```
 nano ~/.bashrc
 
-export SPARK\_HOME=/usr/local/spark
-
-export PATH=$PATH:$SPARK\_HOME/bin
-
-export PYTHONPATH=$SPARK\_HOME/python:$SPARK\_HOME/python/lib/py4j-0.10.9.7-src.zip:$PYTHONPATH
-
-export PYSPARK\_PYTHON=python3
+export SPARK_HOME=/usr/local/spark
+export PATH=$PATH:$SPARK_HOME/bin
+export PYTHONPATH=$SPARK_HOME/python:$SPARK_HOME/python/lib/py4j-0.10.9.7-src.zip:$PYTHONPATH
+export PYSPARK_PYTHON=python3
 ```
 
 >***Importante: El nombre del archivo py4j dependerá de la versión que se tenga instalada***
@@ -143,9 +140,7 @@ source: ~/.bashrc
 
 Una vez instalado, hacemos la prueba desde línea a terminal:
 
-```
-pyspark
-```
+`pyspark`
 
 <img src="./media/image12.png" style="width:5.92021in;height:1.91667in" />
 
