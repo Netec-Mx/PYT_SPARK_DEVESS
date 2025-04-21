@@ -13,7 +13,7 @@ Cada uno de estos laboratorios está diseñado para ofrecerte una experiencia pr
 ---
  
 ## Índice:
- - [Práctica 1. Instalación de ambiente (Spark, Python y bibliotecas).](./Capítulo1/README.md)
+ - [Práctica 1. Instalación de ambiente (Spark, Python y bibliotecas).](./Capítulo1/Lab1.md)
    - **Descripción**:
      A través de la siguiente práctica aprenderás a instalar el ambiente de PySpark, incluyendo un IDE.
    - ⏱️ **Duración estimada**:  60 minutos.
