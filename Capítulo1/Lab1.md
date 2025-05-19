@@ -1,14 +1,14 @@
 # Práctica 1. Instalación de ambiente (Spark, Python y bibliotecas)
 
-**Objetivo de la práctica:**
+## **Objetivo de la práctica:**
 
 Al finalizar la práctica serás capaz de:
 - Configurar el servidor de PySpark en Linux y el IDE PyCharm.
 
-**Duración aproximada:**
+## **Duración aproximada:**
 - 60 minutos.
 
-**Prerequisitos:**
+## **Prerequisitos:**
 
 - Acceso al ambiente Linux (credenciales provistas en el curso) o Linux local con interfaz gráfica.
 - Conexión a internet.
