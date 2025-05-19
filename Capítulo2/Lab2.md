@@ -1,19 +1,19 @@
 # Práctica 2. Creación de RDD en PySpark
 
-**Objetivo de la práctica:** 
+## **Objetivo de la práctica:** 
 
 Al finalizar la práctica serás capaz de:
 - Iniciar la carga de datos en RDD a partir de diferentes fuentes de información.
 
-**Duración aproximada:** 
+## **Duración aproximada:** 
 - 45 minutos.
 
-**Prerequisitos:**
+## **Prerequisitos:**
 
 • Acceso al ambiente Linux (credenciales provistas en el curso) o Linux local con interfaz gráfica.
 • Haber completado la instalación del ambiente (Práctica 1).
 
-**Contexto:**
+## **Contexto:**
 
 Un RDD (Resilient Distributed Dataset) es la unidad básica de datos en Spark. Podemos conceptualizarlos como una colección inmutable de elementos que pueden ser procesados en paralelo a través de un clúster.
 
@@ -40,7 +40,7 @@ Crear un proyecto y editar el archivo .py
 
 <img src="./media/image3.png" style="width:3.34484in;height:2.81121in" />
 
-Para acceder a la sesión de Spark y tener acceso a RDDs, vamos a crear un SparkSession. Este puede tomar diferentes parámetros para tomar el control de las características de la conexión desde Python. La manera más simple es:
+Para acceder a la sesión de Spark y tener acceso a RDDs, hay que crear un SparkSession. Este puede tomar diferentes parámetros para tomar el control de las características de la conexión desde Python. La manera más simple es:
 
 ```
 spark = SparkSession.builder \
@@ -49,7 +49,7 @@ spark = SparkSession.builder \
 
 <img src="./media/image4.png" style="width:5.29533in;height:2.30735in" />
 
-La función **SparkSession.builder.getOrCreate()** obtiene una SparkSession existente o, si no hay ninguna, crea una nueva en función de las opciones establecidas en este builder.
+La función **SparkSession.builder.getOrCreate()** obtiene una SparkSession existente o, si no hay ninguna, crear una nueva en función de las opciones establecidas en este builder.
 
 Pero encontramos otras funciones muy importantes para configurar la sesión:
 
@@ -132,7 +132,7 @@ sc.stop()
 
 <img src="./media/image8.png" style="width:4.25406in;height:2.48803in" />
 
-Los mismos parámetros de configuración que se utilizaron anteriormente, se pueden aplicar al objeto SparkConfig:
+Los mismos parámetros de configuración que se utilizaron anteriormente se pueden aplicar al objeto SparkConfig:
 
 ```
 from pyspark import SparkContext, SparkConf
@@ -350,10 +350,10 @@ for line in multi_rdd.take(5):
 
 **Notas importantes:**
 
--   collect() trae todos los datos al driver, solo úsalo con conjuntos pequeños
--   Para conjuntos grandes, utilizar take(n) o first()
--   Los RDDs son inmutables (no se pueden modificar después de creados)
--   Es mejor usar DataFrames para datos estructurados en la mayoría de casos
+-   collect() trae todos los datos al driver, solo úsalo con conjuntos pequeños.
+-   Para conjuntos grandes, utilizar take(n) o first().
+-   Los RDDs son inmutables (no se pueden modificar después de creados).
+-   Es mejor usar DataFrames para datos estructurados en la mayoría de casos.
 
 ## Tarea 4: Obtener Información de un RDD
 
@@ -404,7 +404,7 @@ print(rdd_split.take(5))
 
 ## Tarea 5: Salvar RDDs
 
-En PySpark, se pueden guardar RDD en diferentes tipos de archivos utilizando varios métodos. Para estos ejemplos, usaremos un directorio llamado salidas
+En PySpark se pueden guardar RDD en diferentes tipos de archivos utilizando varios métodos. Para estos ejemplos usaremos un directorio llamado salidas.
 
 ```
 mkdir ~/salidas
