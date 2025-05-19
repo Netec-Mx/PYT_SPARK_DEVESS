@@ -1,20 +1,20 @@
 # Práctica 3. Uso de funciones de transformación
 
-**Objetivo de la práctica:**
+## **Objetivo de la práctica:**
 
 Al finalizar la práctica serás capaz de:
 - Entender y aplicar funciones de transformación sobre RDD.
 
-**Duración aproximada:**
+## **Duración aproximada:**
 - 60 minutos.
 
-**Prerequisitos:**
+## **Prerequisitos:**
 
 - Acceso a ambiente Linux (credenciales provistas en el curso) o Linux local con interfaz gráfica.
 - Haber completado el laboratorio 1.
 - Haber descargado los archivos de datos.
 
-**Contexto:**
+## **Contexto:**
 
 Los RDD admiten dos tipos de operaciones: 
 - Transformaciones, crean un nuevo conjunto de datos a partir de uno existente.
@@ -60,7 +60,7 @@ Instrucciones:
 
 Iniciamos la sesión de PyCharm:
 
-```pycharm-community```
+`pycharm-community`
 
 Creamos un archivo Python e introducimos el siguiente código. 
 Se ajusta la ruta al archivo `Customers.cvs`
