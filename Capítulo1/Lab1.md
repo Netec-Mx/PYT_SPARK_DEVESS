@@ -139,7 +139,7 @@ source: ~/.bashrc
 
 **Probar al acceso a pyspark**
 
-Una vez instalado, hacemos la prueba desde línea a terminal:
+Una vez instalado, hacemos la prueba desde la línea a terminal:
 
 `pyspark`
 
@@ -199,7 +199,7 @@ sudo snap install pycharm-community --classic
 
 <img src="./media/image15.png" style="width:4.03892in;height:2.66428in" />
 
-Iniciar con
+Iniciar con:
 
 ```
 pycharm-community
@@ -217,4 +217,4 @@ Finalmente, tenemos la pantalla de inicio.
 
 <img src="./media/image19.png" style="width:4.32608in;height:3.50374in" />
 
-**Fin del laboratorio**
+## ***Fin del laboratorio***
