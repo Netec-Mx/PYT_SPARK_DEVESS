@@ -1,26 +1,26 @@
 # Laboratorio 7: Uso de agregaciones, agrupaciones y relaciones
 
-**Objetivo de la práctica:**
+## **Objetivo de la práctica:**
 
 Al finalizar la práctica serás capaz de:
 - Aplicar agregaciones, agrupaciones y relaciones.
 
-**Tiempo aproximado:**
+## **Tiempo aproximado:**
 - 60 minutos.
 
-**Prerequisitos:**
+## **Prerequisitos:**
 
 - Acceso al ambiente Linux (credenciales provistas en el curso) o Linux local con interfaz gráfica.
 - Tener los archivos de datos.
 - Completar el laboratorio 1.
 
-**Contexto:**
+## **Contexto:**
 
 Como parte de las consultas y análisis, el vincular tablas de diferentes fuentes es una necesidad regular, así como obtener agregaciones para analizar la información.
 
 En PySpark, se puede realizar agregaciones y agrupaciones utilizando tanto DataFrames como SQL.
 
-Funciones de Agregación Comunes en SQL
+**Funciones de agregación comunes en SQL**
 
 Las funciones de agregación más comunes en SQL son:
 
@@ -165,7 +165,7 @@ dfProducts.show()
 
 ¿Cómo obtener las categorías cuyo total es superior a 100?
 
-La cláusula WHERE no puede ser aplicable porque esta se aplica a nivel registro y no a nivel agrupación. Para aplicar condiciones por grupo se tiene a la cláusula HAVING
+La cláusula WHERE no puede ser aplicable porque esta se aplica a nivel registro y no a nivel agrupación. Para aplicar condiciones por grupo se tiene que utiliar la cláusula HAVING.
 
 ```
 from pyspark.sql import SparkSession
@@ -230,8 +230,6 @@ dfProducts.show()
 
 <img src="./media/image12.png" style="width:4.34545in;height:0.94795in" />
 
-##
-
 ## Tarea 2: Manejando relaciones
 
 Se puede utilizar SQL para trabajar con relaciones entre tablas (DataFrames) utilizando operaciones como JOIN, UNION, INTERSECT, y EXCEPT. Estas operaciones permiten combinar o comparar datos de múltiples tablas basadas en condiciones específicas.
@@ -288,7 +286,7 @@ dfProducts.show()
 
 **Aplicando diferentes tipos de relación**
 
-Nótese que de la lista, hay empleados sin departamento y departamentos sin empleados (en base al campo común). En INNER JOIN no se mostrarán estos registros
+Nótese que de la lista, hay empleados sin departamento y departamentos sin empleados (en base al campo común). En INNER JOIN no se mostrarán estos registros.
 
 ```
 from pyspark.sql import SparkSession
@@ -434,6 +432,7 @@ spark.sql(query).show()
 
 Devuelve todas las filas de ambas tablas, con NULL donde no hay coincidencias.
 
+```
 from pyspark.sql import SparkSession
 
 spark = SparkSession.builder.appName("SQL relaciones").getOrCreate()
@@ -441,45 +440,31 @@ spark = SparkSession.builder.appName("SQL relaciones").getOrCreate()
 \# Datos de empleados
 
 data\_empleados = \[
-
 (1, "Alejandra", 101),
-
 (2, "Berenice", 102),
-
 (3, "Carlos", 101),
-
 (4, "Daniela", 104),
-
 (5, "Ernesto", 110)
-
 \]
 
 \# Datos de departamentos
 
 data\_departamentos = \[
-
 (101, "Ventas"),
-
 (102, "Marketing"),
-
 (103, "IT"),
-
 (105, "RH"),
-
 (106, "Operacione"),
-
 \]
 
 \# Crear DataFrames
 
 df\_empleados = spark.createDataFrame(data\_empleados, \["id\_empleado", "nombre", "id\_departamento"\])
-
 df\_departamentos = spark.createDataFrame(data\_departamentos, \["id\_departamento", "nombre\_departamento"\])
 
 \# Registrar DataFrames como tablas temporales
 
 df\_empleados.createOrReplaceTempView("empleados")
-
 df\_departamentos.createOrReplaceTempView("departamentos")
 
 query = ("SELECT e.id\_empleado, e.nombre, d.nombre\_departamento "
@@ -491,6 +476,7 @@ query = ("SELECT e.id\_empleado, e.nombre, d.nombre\_departamento "
 "ON e.id\_departamento = d.id\_departamento")
 
 spark.sql(query).show()
+```
 
 <img src="./media/image21.png" style="width:5.24724in;height:0.82997in" />
 
@@ -498,7 +484,7 @@ spark.sql(query).show()
 
 **Relaciones con UNION**
 
-El UNION combina los resultados de dos consultas en un solo conjunto de resultados. Las filas duplicadas se eliminan a menos que se use UNION ALL.
+La operación UNION combina los resultados de dos consultas en un solo conjunto de resultados. Las filas duplicadas se eliminan a menos que se use UNION ALL.
 
 ```
 from pyspark.sql import SparkSession
@@ -541,4 +527,4 @@ spark.sql(query).show()
 
 <img src="./media/image24.png" style="width:6.1375in;height:1.72292in" />
 
-\*\*\* Fin del laboratorio
+## ***Fin del laboratorio***
