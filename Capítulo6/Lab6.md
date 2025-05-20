@@ -1,30 +1,30 @@
 # Práctica 6. Spark SQL
 
-**Objetivo de la práctica:**
+## **Objetivo de la práctica:**
 
 Al finalizar la práctica serás capaz de:
 - Aplicar consultas utilizando el lenguaje SQL.
 
-**Tiempo aproximado:**
+## **Tiempo aproximado:**
 - 60 minutos.
 
-**Prerequisitos:**
+## **Prerequisitos:**
 
 - Acceso al ambiente Linux (credenciales provistas en el curso) o Linux local con interfaz gráfica.
 - Tener los archivos de datos.
 - Completar el laboratorio 1.
 
-**Contexto:**
+## **Contexto:**
 
 En PySpark, se pueden ejecutar consultas SQL directamente sobre DataFrames utilizando el módulo sql. Esto es especialmente útil si ya se está familiarizado con SQL o si se prefiere trabajar con consultas SQL en lugar de usar las API de PySpark.
 
-**Instrucciones:**
+## **Instrucciones:**
 
 Tarea 1: Crear un DataFrame desde fuentes de datos y crear vistas temporales
 
 Registrar un DataFrame como una vista temporal en PySpark es una operación común que permite realizar consultas SQL sobre los datos del DataFrame. Esto es útil porque combina la flexibilidad de SQL con la potencia de las operaciones de DataFrame en PySpark.
 
-**¿Qué es una Vista Temporal?**
+**¿Qué es una vista temporal?**
 
 Una vista temporal es una representación de un DataFrame que puede ser consultada usando SQL. Al registrar un DataFrame como una vista temporal, se pueden ejecutar consultas SQL directamente sobre él, sin necesidad de convertirlo a otro formato.
 
