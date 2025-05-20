@@ -58,11 +58,11 @@ Instrucciones:
 
 ### Tarea 1: Creando RDD con esquema a partir de un archivo CSV
 
-Iniciamos la sesión de PyCharm:
+Iniciar la sesión de PyCharm:
 
 `pycharm-community`
 
-Creamos un archivo Python e introducimos el siguiente código. 
+Crear un archivo Python e introducir el siguiente código. 
 Se ajusta la ruta al archivo `Customers.cvs`
 
 ```
@@ -485,18 +485,16 @@ print(rdd_filtrado.collect())
 
 <img src="./media/image27.png" style="width:5.65515in;height:1.40404in" />
 
-### 
-
 ### Función distinct
 
-**distinct** - se utiliza para eliminar duplicados en un RDD. Esta función devuelve un nuevo RDD que contiene solo los elementos únicos del RDD original. Es una operación útil cuando necesitas eliminar filas o registros repetidos en un conjunto de datos.
+**distinct:** Se utiliza para eliminar duplicados en un RDD. Esta función devuelve un nuevo RDD que contiene solo los elementos únicos del RDD original. Es una operación útil cuando necesitas eliminar filas o registros repetidos en un conjunto de datos.
 
 salida = entrada.distinct()
 
 -   entrada: Un RDD con elementos que pueden contener duplicados.
 -   salida: Un nuevo RDD donde cada elemento aparece solo una vez (sin duplicados).
 
-La función distinct() realiza un **shuffle** internamente para agrupar y eliminar los duplicados. Esto puede ser costoso en términos de rendimiento, especialmente con grandes volúmenes de datos
+La función **distinct()** realiza un **shuffle** internamente para agrupar y eliminar los duplicados. Esto puede ser costoso en términos de rendimiento, especialmente con grandes volúmenes de datos.
 
 **Obtener elementos únicos.**
 
@@ -546,7 +544,7 @@ print("RDD sin duplicados:", rdd_distinct.collect())
 
 <img src="./media/image31.png" style="width:5.60559in;height:0.87149in" />
 
-**Eliminar duplicados basados en una "columna"**
+### **Eliminar duplicados basados en una "columna"**
 
 Si deseas eliminar duplicados basados en una "columna" específica (un elemento de la tupla), puedes usar **map** para seleccionar esa columna y luego aplicar **distinct**(). Después, puedes unir los datos originales con los elementos únicos.
 
@@ -583,7 +581,7 @@ print("RDD filtrado:", rdd_filtrado.collect())
 
 ### Función union
 
-**union**: la función union se utiliza para combinar dos RDDs en uno solo. Esta función retorna un nuevo RDD que contiene todos los elementos de ambos RDDs originales. Es importante destacar que union no elimina duplicados; si los RDDs tienen elementos repetidos, estos se mantendrán en el RDD resultante.
+**union**: La función union se utiliza para combinar dos RDDs en uno solo. Esta función retorna un nuevo RDD que contiene todos los elementos de ambos RDDs originales. Es importante destacar que union no elimina duplicados; si los RDDs tienen elementos repetidos, estos se mantendrán en el RDD resultante.
 
 `rdd\_resultante = rdd1.union(rdd2)`
 
@@ -617,7 +615,7 @@ print(rdd_union.collect())
 
 **RDDs de tuplas**
 
-También puedes usar union con RDDs que contienen estructuras más complejas, como tuplas.
+También puedes usar **union** con RDDs que contienen estructuras más complejas, como tuplas.
 
 ```
 from pyspark import SparkContext
@@ -640,20 +638,20 @@ print(rdd_union.collect())
 
 <img src="./media/image36.png" style="width:5.14737in;height:1.02277in" />
 
-union no elimina duplicados. Si necesitas eliminar elementos repetidos, puedes usar la función distinct después de aplicar union.
+La función **union** no elimina duplicados. Si necesitas eliminar elementos repetidos, puedes usar la función **distinct** después de aplicar **union**.
 
 rdd\_sin\_duplicados = rdd\_union.distinct()
 
 print(rdd\_sin\_duplicados.collect())
 
-union no garantiza un orden específico en el RDD resultante. Los elementos se combinan en el orden en que se encuentran en los RDDs originales.
+De igual manera, no garantiza un orden específico en el RDD resultante. Los elementos se combinan en el orden en que se encuentran en los RDDs originales.
 
 ### Función intersection
 
-**intersection -** permite encontrar los elementos comunes entre dos RDDs. Devuelve un nuevo RDD que contiene solo los elementos que están presentes en ambos RDDs originales.
+**intersection:** Permite encontrar los elementos comunes entre dos RDDs. Devuelve un nuevo RDD que contiene solo los elementos que están presentes en ambos RDDs originales.
 
 -   Ambos RDDs deben contener elementos del mismo tipo para que la operación sea válida.
--   intersection implica un **shuffle** (reorganización de datos entre particiones), lo que puede ser costoso en términos de rendimiento, especialmente con grandes volúmenes de datos.
+-   **intersection** implica un *shuffle* (reorganización de datos entre particiones), lo que puede ser costoso en términos de rendimiento, especialmente con grandes volúmenes de datos.
 -   El RDD resultante no contendrá elementos duplicados, incluso si los RDDs originales los tenían.
 
 `rdd1.intersection(rdd2)`
@@ -706,7 +704,7 @@ print(rdd_intersection.collect())
 
 ### Función substract
 
-**subtract -** se utiliza para obtener los elementos que están en un RDD pero no en otro. Realiza una diferencia de conjuntos entre dos RDDs. El resultado es un nuevo RDD que contiene solo los elementos que están en el primer RDD y no en el segundo.
+**subtract:** Se utiliza para obtener los elementos que están en un RDD pero no en otro. Realiza una diferencia de conjuntos entre dos RDDs. El resultado es un nuevo RDD que contiene solo los elementos que están en el primer RDD y no en el segundo.
 
 `resultado_rdd = rdd1.subtract(rdd2)`
 
@@ -732,7 +730,7 @@ print(rdd_diferencia.collect())
 
 **Usando tuplas**
 
-La función subtract también funciona con RDDs que contienen tuplas o estructuras más complejas.
+La función **subtract** también funciona con RDDs que contienen tuplas o estructuras más complejas.
 
 ```
 from pyspark import SparkContext
@@ -751,11 +749,11 @@ print("Tuplas en rdd1 que no están en rdd2:")
 print(resultado_rdd.collect())
 ```
 
-**subtract -**  compara los elementos de los RDDs de manera exacta. Para tuplas o estructuras complejas, todos los elementos de la tupla deben coincidir para que se considere un duplicado.
+La función **subtract** compara los elementos de los RDDs de manera exacta. Para tuplas o estructuras complejas, todos los elementos de la tupla deben coincidir para que se considere un duplicado.
 
 ### Función cartesian
 
-**cartesian -** se utiliza para calcular el producto cartesiano entre dos RDDs. El producto cartesiano de dos conjuntos (o RDDs) es un conjunto de pares ordenados donde el primer elemento pertenece al primer RDD y el segundo elemento pertenece al segundo RDD.Ejemplo: Producto cartesiano de dos listas.
+**cartesian:** Se utiliza para calcular el producto cartesiano entre dos RDDs. El producto cartesiano de dos conjuntos (o RDDs) es un conjunto de pares ordenados donde el primer elemento pertenece al primer RDD y el segundo elemento pertenece al segundo RDD. Ejemplo: Producto cartesiano de dos listas.
 
 Toma dos RDDs, RDD1 y RDD2.
 
@@ -782,13 +780,13 @@ print(cartesian_rdd.collect())
 
 El producto cartesiano puede generar un RDD muy grande, ya que su tamaño es el producto de los tamaños de los dos RDDs originales.
 
-Por ejemplo, si rdd1 tiene 1,000 elementos y rdd2 tiene 1,000 elementos, el RDD resultante tendrá 1,000,000 de elementos. Esto puede consumir mucha memoria y tiempo de procesamiento.
+Por ejemplo, si RDD1 tiene 1,000 elementos y RDD2 tiene 1,000 elementos, el RDD resultante tendrá 1,000,000 de elementos. Esto puede consumir mucha memoria y tiempo de procesamiento.
 
 El producto cartesiano es útil en casos donde necesitas comparar o combinar todos los elementos de un conjunto con todos los elementos de otro conjunto.
 
 ### Función groupByKey
 
-**groupByKey** - es una transformación que se aplica a RDDs que contienen pares clave-valor. Su propósito es agrupar todos los valores que comparten la misma clave en una sola colección. El resultado es un nuevo RDD donde cada clave única está asociada a un iterable de todos los valores correspondientes a esa clave.
+**groupByKey:** Es una transformación que se aplica a RDDs que contienen pares clave-valor. Su propósito es agrupar todos los valores que comparten la misma clave en una sola colección. El resultado es un nuevo RDD donde cada clave única está asociada a un iterable de todos los valores correspondientes a esa clave.
 
 ```
 from pyspark import SparkContext
@@ -827,7 +825,7 @@ for student, grades in grouped\_rdd.collect():
 
 ### Función reduceByKey
 
-**reduceByKey -**  transformación que se aplica a RDDs que contienen pares clave-valor. Su objetivo es combinar los valores que comparten la misma clave, utilizando una función de reducción. Esta función debe ser asociativa y conmutativa para garantizar resultados consistentes.
+**reduceByKey:**  Transformación que se aplica a RDDs que contienen pares clave-valor. Su objetivo es combinar los valores que comparten la misma clave, utilizando una función de reducción. Esta función debe ser asociativa y conmutativa para garantizar resultados consistentes.
 
 -   reduceByKey agrupa todos los pares clave-valor que tienen la misma clave.
 
@@ -879,7 +877,7 @@ En este ejemplo:
 
 ### Función sortByKey
 
-**sortByKey -** se utiliza en RDDs que contienen pares clave-valor. Su propósito es ordenar los elementos del RDD basándose en las claves. Por defecto, ordena de forma ascendente, pero esto se puede cambiar.
+**sortByKey:** Se utiliza en RDDs que contienen pares clave-valor. Su propósito es ordenar los elementos del RDD basándose en las claves. Por defecto, ordena de forma ascendente, pero esto se puede cambiar.
 
 sortByKey(ascending=True, numPartitions=None, keyfunc=lambda x: x)
 
@@ -1036,4 +1034,4 @@ print(rdd_converted.collect())
 
 -   **Uso de DataFrames:** Si estás trabajando con datos estructurados y necesitas convertir tipos de datos con frecuencia, es recomendable usar DataFrames en lugar de RDDs. Los DataFrames tienen soporte integrado para esquemas y conversiones de tipos de datos.
 
-***Fin del laboratorio***
+## ***Fin del laboratorio***
