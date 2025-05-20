@@ -1,19 +1,19 @@
 # Práctica 4. Acciones sobre RDD
 
-##**Objetivo de la práctica:**
+## **Objetivo de la práctica:**
 
 Al finalizar la práctica serás capaz de:
 - Entender la función de las acciones y aplicarlas sobre RDD.
 
-##**Tiempo aproximado:**
+## **Tiempo aproximado:**
 - 45 minutos.
 
-##**Prerrequisitos:**
+## **Prerrequisitos:**
 
 - Acceso al ambiente Linux (credenciales provistas en el curso) o Linux local con interfaz gráfica.
 - Conexión a internet.
 
-##**Contexto:**
+## **Contexto:**
 
 Las acciones en PySpark son operaciones que disparan la ejecución de las transformaciones acumuladas en un RDD.
 
