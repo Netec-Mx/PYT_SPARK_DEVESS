@@ -24,7 +24,7 @@ Al finalizar la práctica serás capaz de:
 
 ### Tarea 1: Crear y ajustar el número de particiones:
 
-### **Crear un RDD con un número específico de particiones**
+**Crear un RDD con un número específico de particiones**
 
 ```
 from pyspark import SparkContext
@@ -55,7 +55,7 @@ En este ejemplo:
 
 -   **glom()** muestra el contenido de cada partición.
 
-### **Cargar un archivo csv con 4 particiones**
+**Cargar un archivo csv con 4 particiones**
 
 ```
 from pyspark import SparkContext
@@ -478,7 +478,7 @@ En este ejemplo:
 
 Los acumuladores en PySpark son variables compartidas que permiten sumar valores de manera eficiente en un clúster distribuido. Son útiles cuando necesitamos contar eventos, sumar valores o rastrear estadísticas sin comunicación constante entre los nodos.
 
-### **Contar elementos que cumplen una condición**
+**Contar elementos que cumplen una condición**
 
 ```
 from pyspark import SparkContext
@@ -514,7 +514,7 @@ En este ejemplo:
 
 -   El valor final del acumulador se imprime en el driver.
 
-### **Sumar valores de un RDD**
+**Sumar valores de un RDD**
 
 ```
 from pyspark import SparkContext
@@ -548,7 +548,7 @@ En este ejemplo:
 
 -   El valor final del acumulador se imprime en el driver.
 
-### **Contabilizar inconsistencias de un RDD**
+**Contabilizar inconsistencias de un RDD**
 
 ```
 from pyspark.sql import SparkSession
@@ -592,7 +592,7 @@ Los DataFrames en PySpark son una estructura de datos distribuida y optimizada q
 
 Los DataFrames se pueden crear a partir de varias fuentes de datos, como archivos (CSV, JSON, Parquet), bases de datos, o RDDs.
 
-### **Crear un DataFrame desde una lista de datos**
+**Crear un DataFrame desde una lista de datos**
 
 ```
 from pyspark.sql import SparkSession
@@ -618,7 +618,7 @@ df.show()
 
 -   El segundo argumento especifica los nombres de las columnas.
 
-### **DataFrame creado a partir de un diccionario**
+**DataFrame creado a partir de un diccionario**
 
 ```
 from pyspark.sql import SparkSession
@@ -679,7 +679,7 @@ df.printSchema()
 
 <img src="./media/image30.png" style="width:6.1375in;height:2.24236in" />
 
-### **Crear un DataFrame desde un archivo CSV infiriendo esquema e identificando encabezados**
+**Crear un DataFrame desde un archivo CSV infiriendo esquema e identificando encabezados**
 
 ```
 from pyspark.sql import SparkSession
@@ -708,7 +708,7 @@ df.printSchema()
 
 <img src="./media/image32.png" style="width:6.1375in;height:2.35278in" />
 
-### **Crear un DataFrame desde un archivo parquet**
+**Crear un DataFrame desde un archivo parquet**
 
 ```
 from pyspark.sql import SparkSession
@@ -729,7 +729,7 @@ df.printSchema()
 
 <img src="./media/image34.png" style="width:6.1375in;height:2.02083in" />
 
-### **DataFrame desde un archivo JSON**
+**DataFrame desde un archivo JSON**
 
 ```
 from pyspark.sql import SparkSession
@@ -760,7 +760,7 @@ df.show(10)
 
 Los DataFrames permiten realizar operaciones similares a las de SQL, como seleccionar columnas, filtrar filas, agrupar datos, etc.
 
-### **Seleccionar columnas desde colección**
+**Seleccionar columnas desde colección**
 
 ```
 from pyspark.sql import SparkSession
@@ -799,7 +799,7 @@ df.show()
 
 <img src="./media/image38.png" style="width:2.1694in;height:1.82598in" />
 
-### **Seleccionar columnas con select()**
+**Seleccionar columnas con select()**
 
 ```
 from pyspark.sql import SparkSession
@@ -822,7 +822,7 @@ df.select("Product","Cost","Price").show(10)
 
 <img src="./media/image40.png" style="width:3.68284in;height:3.80848in" />
 
-### **Seleccionar columnas con la función col()**
+**Seleccionar columnas con la función col()**
 
 ```
 from pyspark.sql import SparkSession
@@ -846,7 +846,7 @@ df.select(col("Product"),col("Cost"),col("Price")).show(10)
 
 <img src="./media/image42.png" style="width:2.22147in;height:2.59511in" />
 
-### **Renombrar columnas**
+**Renombrar columnas**
 
 Con el objeto **col(),** es posible cambiar el nombre de las columnas recuperadas con su atributo **alias()**
 
@@ -871,7 +871,7 @@ df.select(col("SalesOrderNumber").alias("Order"),col("Product").alias("Producto"
 
 <img src="./media/image44.png" style="width:3.11782in;height:2.95495in" />
 
-### **Agregar columnas literales a un DataFrame existente**
+**Agregar columnas literales a un DataFrame existente**
 
 Para adicionar una columna con valor fijo, la función **lit()** permite asignar un valor constante a una nueva columna.
 
@@ -887,10 +887,10 @@ spark = SparkSession\
 # Crear DataFrame
 df = spark.read.json("/home/miguel/data/users.json", multiLine=True)
 
-# MAdicinar la coluna Status con un valor fijo
+# Adicionar la coluna Status con un valor fijo
 df_empleados = df.withColumn("Status",lit("Active"))
 
-#Mostrar el DataFrame
+# Mostrar el DataFrame
 df_empleados.show()
 ```
 
@@ -902,7 +902,7 @@ La función lit no se limita a valores simples como enteros o cadenas.
 
 Se pueden manejar expresiones más complejas, como cálculos matemáticos o concatenación de múltiples columnas.
 
-### **Agregar colunas calculadas**
+**Agregar colunas calculadas**
 
 Una forma de adicionar columnas calculadas es a través de la función expr(). El cálculo se puede basar en el nombre de la columna original o en el alias.
 
@@ -930,7 +930,7 @@ expr("Sales \* Quantity").alias("Subtotal")).show(10)
 
 -   **expr("Sales \* Quantity").alias("Subtotal")** crea la nueva columna.
 
-### **Agregar columnas calculadas a un DataFrame existente**
+**Agregar columnas calculadas a un DataFrame existente**
 
 La función **withColumn()** devuelve un nuevo DataFrame agregando una columna o reemplazando la columna existente que tiene el mismo nombre
 
@@ -994,11 +994,11 @@ df_productos.show(3)
 
 <img src="./media/image50.png" style="width:3.71738in;height:1.78434in" />
 
-### **Salvar DataFrames en archivos**
+**Salvar DataFrames en archivos**
 
 Se pueden salvar DataFrames en diferentes formatos de archivo: CSV, Parquet y JSON. Cada uno de estos formatos tiene sus ventajas y usos específicos.
 
-### **Salvar en archivo csv**
+**Salvar en archivo csv**
 
 ```
 from pyspark.sql import SparkSession
@@ -1032,7 +1032,7 @@ df_productos.write.csv("/home/miguel/data/salida/reporte1.csv", header=True, mod
 
 El parámetro **mode** controla el comportamiento si el archivo ya existe. Los valores comunes son **overwrite** (sobrescribir el archivo existente), **append** (agregar al archivo existente), **ignore** (no guardar si el archivo ya existe) y **error** (lanzar un error si el archivo ya existe).
 
-### **Salvar el archivo como parquet**
+**Salvar el archivo como parquet**
 
 ```
 from pyspark.sql import SparkSession
@@ -1115,4 +1115,4 @@ os.rename(f"/home/netec/data/salida/{archivo\_csv}", "/home/netec/data/salida/re
 
 <img src="./media/image56.png" style="width:3.45882in;height:0.63551in" />
 
-***Fin del laboratorio***
+## ***Fin del laboratorio***
