@@ -211,4 +211,4 @@ print(f"Fecha: {fecha}, Ventas: {ventas}")
 
 <img src="./media/image10.png" style="width:5.3609in;height:1.80941in" />
 
-##***Fin del laboratorio***
+## ***Fin del laboratorio***
