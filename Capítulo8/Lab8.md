@@ -1,31 +1,29 @@
 # Práctica 8. Monitoreo y optimización de PySpark
 
-**Objetivo de la práctica:** 
+## **Objetivo de la práctica:** 
 
 Al finalizar la práctica serás capaz de:
 - Identificar y aplicar mejores prácticas de desempeño y el uso de Catalyst Optimizer.
 
-**Duración aproximada:** 
+## **Duración aproximada:** 
 - 60 minutos.
 
-**Prerequisitos:**
+## **Prerequisitos:**
 -   Acceso al ambiente Linux (credenciales provistas en el curso) o Linux local con interfaz gráfica.
 -   Tener los archivos de datos.
 -   Completar el laboratorio 1.
 
-**Contexto:**
+## **Contexto:**
 
 El monitoreo del código en PySpark implica supervisar el rendimiento de las aplicaciones, identificar cuellos de botella y asegurarte de que los recursos se utilicen de manera eficiente. PySpark proporciona varias herramientas para monitorear el rendimiento
 
-**Instrucciones:** Revisar el documento con las mejores recomendaciones
-
-## 
+## **Instrucciones:** Revisar el documento con las mejores recomendaciones
 
 ## Tarea 1: Monitoreo del Código en PySpark
 
 El monitoreo del código en PySpark implica supervisar el rendimiento de las aplicaciones, identificar cuellos de botella y asegurarte de que los recursos se utilicen de manera eficiente. PySpark proporciona varias herramientas para monitorear el rendimiento:
 
-**Herramientas de monitoreo**
+### **Herramientas de monitoreo**
 
 **a) Spark UI**
 
@@ -57,7 +55,7 @@ spark “sparkContext.setLogLevel("INFO") \# Niveles: ALL, DEBUG, INFO, WARN, ER
 -   Uso de memoria y CPU.
 -   Número de registros procesados.
 
-**Ejemplo:** Configura Spark para enviar métricas a un sistema externo:
+**Ejemplo:** Configurar Spark para enviar métricas a un sistema externo:
 
 2. Aplicación de mejores prácticas en PySpark
 
@@ -87,7 +85,7 @@ df.select("columna").distinct().count()
 ```
 
 3. **Usar el esquema correcto**
-Define el esquema de tus DataFrames explícitamente para evitar inferencias costosas.
+Definir el esquema de tus DataFrames explícitamente para evitar inferencias costosas.
 
 ```
 from pyspark.sql.types import StructType, StructField, StringType, IntegerType
@@ -206,4 +204,4 @@ df\_joined.show()
 -   Mejores prácticas: Evita operaciones costosas, usa esquemas explícitos, cachea DataFrames y particiona adecuadamente.
 -   Catalyst Optimizer: Aprovecha el optimizador para mejorar el rendimiento de tus consultas.
 
-***Fin del laboratorio***
+## ***Fin del laboratorio***
