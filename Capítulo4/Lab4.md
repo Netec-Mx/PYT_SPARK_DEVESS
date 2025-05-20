@@ -1,19 +1,19 @@
 # Práctica 4. Acciones sobre RDD
 
-**Objetivo de la práctica:**
+##**Objetivo de la práctica:**
 
 Al finalizar la práctica serás capaz de:
 - Entender la función de las acciones y aplicarlas sobre RDD.
 
-**Tiempo aproximado:**
+##**Tiempo aproximado:**
 - 45 minutos.
 
-**Prerrequisitos:**
+##**Prerrequisitos:**
 
 - Acceso al ambiente Linux (credenciales provistas en el curso) o Linux local con interfaz gráfica.
 - Conexión a internet.
 
-**Contexto:**
+##**Contexto:**
 
 Las acciones en PySpark son operaciones que disparan la ejecución de las transformaciones acumuladas en un RDD.
 
@@ -27,11 +27,11 @@ Las acciones devuelven resultados al programa driver o escriben datos en un sist
 
 En este ejemplo, se leerá el contenido de un archivo para contar las palabras
 
-Iniciamos PyCharm
+Iniciar PyCharm.
 
 `pycharm-community`
 
-Se introduce el siguiente código, ajustando la ruta del archivo a la ruta local.
+Introducir el siguiente código ajustando la ruta del archivo a la ruta local.
 
 ```
 from pyspark import SparkContext
@@ -73,23 +73,23 @@ sc.stop()
 
 Un uso que se pueden aplicar en archivos CSV, es el contar filas que tienen la cantidad válida de columnas. Para esto, copiaremos y modificaremos uno de los archivos para reducir la cantidad de columnas.
 
-Abrimos una ventana de terminal nueva. En el directorio de data, pasamos al directorio TotalSalesRed
+Abrir una ventana de terminal nueva. En el directorio de data, pasamos al directorio TotalSalesRed
 
 `cd data/TotalSalesRed`
 
-Copiamos el archivo **Sales2018** a **Sales2018Redf.csv**
+Copiar el archivo **Sales2018** a **Sales2018Redf.csv**.
 
 cp Sales2018.csv Sales2018f.csv
 
 <img src="./media/image3.png" style="width:6.1375in;height:0.99722in" />
 
-Con cualquier editor, se abre el archivo y removemos campos en diferentes renglones para tener filas de menos de 5 campos. Recordemos que los campos están separados por comas (,)
+Con cualquier editor, abir el archivo y remover los campos en diferentes renglones para tener filas de menos de 5 campos. Recordar que los campos están separados por comas (,).
 
 <img src="./media/image4.png" style="width:3.46484in;height:2.26822in" />
 
-Salvamos el archivo y regresamos a PyCharm (Ctrl+O para salvar y CTRL+X para salir)
+Salvar el archivo y regresar a PyCharm (Ctrl+O para salvar y CTRL+X para salir).
 
-Probamos el siguiente código:
+Probar el siguiente código:
 
 ```
 from pyspark import SparkContext
@@ -211,4 +211,4 @@ print(f"Fecha: {fecha}, Ventas: {ventas}")
 
 <img src="./media/image10.png" style="width:5.3609in;height:1.80941in" />
 
-***Fin del laboratorio***
+##***Fin del laboratorio***
