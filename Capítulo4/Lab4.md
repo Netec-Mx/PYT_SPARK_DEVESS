@@ -21,7 +21,7 @@ Algunas acciones comunes incluyen collect(), count(), first(), take(), reduce(),
 
 Las acciones devuelven resultados al programa driver o escriben datos en un sistema externo. A diferencia de las transformaciones (como map, filter, etc.), que son perezosas (lazy) y no se ejecutan hasta que se llama a una acción, las acciones disparan la ejecución de todas las transformaciones acumuladas en el RDD.
 
-**Instrucciones:**
+## **Instrucciones:**
 
 ## Tarea 1: Aplicar acciones en un archivo
 
