@@ -22,9 +22,9 @@ Los RDD admiten dos tipos de operaciones:
 
 Todas las transformaciones de Spark son diferidas (lazzy), en el sentido de que no calculan sus resultados de inmediato. En su lugar, solo recuerdan las transformaciones aplicadas a algún conjunto de datos base (por ejemplo, un archivo). Las transformaciones solo se calculan cuando una acción requiere que se devuelva un resultado al programa controlador. Este diseño permite que Spark se ejecute de forma más eficiente. Por ejemplo, podemos darnos cuenta de que un conjunto de datos creado a través de un mapa se utilizará en una reducción y devolverá solo el resultado de la reducción al controlador, en lugar del conjunto de datos mapeado más grande.
 
-**Tipos de Transformaciones en RDDs**
+**Tipos de transformaciones en RDDs**
 
-> Hay varias clasificaciones de de transformaciones asociadas al proceso que realizan las transformaciones: de ajuste (narrow), amplias (wide)
+> Hay varias clasificaciones de transformaciones asociadas al proceso que realizan las transformaciones: de ajuste (narrow), amplias (wide).
 
 -   Transformaciones de un solo RDD:
 
@@ -54,7 +54,7 @@ Los esquemas en RDDs proporcionan una forma de definir la estructura de los dato
 
 - **Integración con otras herramientas:** Los esquemas facilitan la integración con otras herramientas y librerías, como DataFrames y SQL.
 
-Instrucciones:
+## Instrucciones
 
 ### Tarea 1: Creando RDD con esquema a partir de un archivo CSV
 
@@ -204,11 +204,11 @@ print(resultado)
 
 <img src="./media/image8.png" style="width:6.1375in;height:0.29095in" />
 
-## Tarea 3: Aplicando transformaciones comunes
+### Tarea 3: Aplicando transformaciones comunes
 
 ### Función map
 
-La función map es una de las transformaciones más comunes y poderosas que se pueden aplicar a un RDD. Toma una función como argumento y la aplica a cada elemento del RDD, devolviendo un nuevo RDD con los resultados.
+La función **map** es una de las transformaciones más comunes y poderosas que se pueden aplicar a un RDD. Toma una función como argumento y la aplica a cada elemento del RDD, devolviendo un nuevo RDD con los resultados.
 
 La función que pasas a map se aplica a cada elemento del RDD, uno por uno. Devuelve un nuevo RDD donde cada elemento es el resultado de aplicar la función al elemento original.
 
@@ -335,7 +335,7 @@ Pero si usamos flatMap, obtenemos un RDD donde cada palabra es un elemento indiv
 palabras\_flat = rdd.flatMap(lambda frase: frase.split())
 ```
 
-**Extrayendo términos**
+### **Extrayendo términos**
 
 ```
 from pyspark import SparkContext
@@ -368,7 +368,7 @@ for palabra in palabras_flat.collect():
 
 ### Función filter
 
-**filter()** - Transformación que se utiliza para seleccionar elementos de un RDD que cumplen con una condición específica. La función filter toma una función (o una expresión lambda) que devuelve True o False para cada elemento del RDD. Solo los elementos que devuelven True se incluyen en el nuevo RDD resultante.
+**filter():** Transformación que se utiliza para seleccionar elementos de un RDD que cumplen con una condición específica. La función filter toma una función (o una expresión lambda) que devuelve True o False para cada elemento del RDD. Solo los elementos que devuelven True se incluyen en el nuevo RDD resultante.
 
 **Sintaxis de filter**
 
