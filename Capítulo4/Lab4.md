@@ -23,7 +23,7 @@ Las acciones devuelven resultados al programa driver o escriben datos en un sist
 
 ## **Instrucciones:**
 
-## Tarea 1: Aplicar acciones en un archivo
+### Tarea 1: Aplicar acciones en un archivo
 
 En este ejemplo, se leerá el contenido de un archivo para contar las palabras
 
@@ -73,7 +73,7 @@ sc.stop()
 
 Un uso que se pueden aplicar en archivos CSV, es el contar filas que tienen la cantidad válida de columnas. Para esto, copiaremos y modificaremos uno de los archivos para reducir la cantidad de columnas.
 
-Abrir una ventana de terminal nueva. En el directorio de data, pasamos al directorio TotalSalesRed
+Abrir una ventana de terminal nueva. En el directorio de data, pasamos al directorio TotalSalesRed.
 
 `cd data/TotalSalesRed`
 
