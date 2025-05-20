@@ -71,7 +71,7 @@ sc.stop()
 
 **Validación de archivos por columnas**
 
-Un uso que se pueden aplicar en archivos CSV, es el contar filas que tienen la cantidad válida de columnas. Para esto, copiaremos y modificaremos uno de los archivos para reducir la cantidad de columnas.
+Un uso que se puede aplicar en archivos CSV, es el contar filas que tienen la cantidad válida de columnas. Para esto, copiaremos y modificaremos uno de los archivos para reducir la cantidad de columnas.
 
 Abrir una ventana de terminal nueva. En el directorio de data, pasamos al directorio TotalSalesRed.
 
@@ -126,7 +126,7 @@ sc.stop()
 
 **Extraer y calcular valores desde un csv**
 
-Se pueden realizar diferentes operaciones con los valores leídos del rdd
+Se pueden realizar diferentes operaciones con los valores leídos del rdd.
 
 ```
 from pyspark import SparkContext
