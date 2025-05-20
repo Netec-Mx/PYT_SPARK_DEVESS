@@ -96,13 +96,13 @@ En este ejemplo:
 -   **getNumPartitions()** para verificar RDD el número de particiones.
 -   **glom()** para mostrar el contenido de cada partición.
 
-**Nota: El número real de particiones puede ser mayor que 4 si el archivo es grande, ya que minPartitions es un mínimo, no un máximo.**
+> **Nota: El número real de particiones puede ser mayor que 4 si el archivo es grande, ya que minPartitions es un mínimo, no un máximo.**
 
 ## Tarea 2: Reparticionamiento
 
 El reparticionamiento permite ajustar el número de particiones de un RDD. Esto es útil para optimizar el paralelismo o reducir la sobrecarga.
 
-Para reparticionar, se pueden usar **repartition()** o **coalesce()**
+Para reparticionar, se pueden usar **repartition()** o **coalesce()**.
 
 -   **repartition():** Aumenta o reduce el número de particiones, pero siempre causa shuffling.
 -   **coalesce():** Reduce el número de particiones sin shuffling (más eficiente que repartition).
@@ -754,8 +754,6 @@ df.show(10)
 
 <img src="./media/image36.png" style="width:5.29262in;height:3.014in" />
 
-## 
-
 ## Tarea 10: Trabajando con DataFrames
 
 Los DataFrames permiten realizar operaciones similares a las de SQL, como seleccionar columnas, filtrar filas, agrupar datos, etc.
@@ -926,13 +924,13 @@ expr("Sales \* Quantity").alias("Subtotal")).show(10)
 
 **En este ejemplo:**
 
--   **from pyspark.sql.functions import expr** importa la función exp(), que permite definir una expresión como valor de la columna
+-   **from pyspark.sql.functions import expr** importa la función exp(), que permite definir una expresión como valor de la columna.
 
 -   **expr("Sales \* Quantity").alias("Subtotal")** crea la nueva columna.
 
 **Agregar columnas calculadas a un DataFrame existente**
 
-La función **withColumn()** devuelve un nuevo DataFrame agregando una columna o reemplazando la columna existente que tiene el mismo nombre
+La función **withColumn()** devuelve un nuevo DataFrame agregando una columna o reemplazando la columna existente que tiene el mismo nombre.
 
 ```
 from pyspark.sql import SparkSession
@@ -962,7 +960,7 @@ df_productos.show(3)
 
 Adicionar varias columnas a un DataFrame existente.
 
-La función **withColumns()** permite adicionar varias columnas a un DataFrame existente
+La función **withColumns()** permite adicionar varias columnas a un DataFrame existente.
 
 ```
 from pyspark.sql import SparkSession
@@ -988,7 +986,7 @@ df_productos.show(3)
 
 **En este ejemplo:**
 
--   Nótese que, para indicar que se va a adicionar una colección de columnas, estas aparecen con **{}** en la función **withColumns()**
+-   Nótese que, para indicar que se va a adicionar una colección de columnas, estas aparecen con **{}** en la función **withColumns()**.
 
 <img src="./media/image49.png" style="width:4.9423in;height:2.77033in" />
 
