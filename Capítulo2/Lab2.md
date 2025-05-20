@@ -10,8 +10,8 @@ Al finalizar la práctica serás capaz de:
 
 ## **Prerequisitos:**
 
-• Acceso al ambiente Linux (credenciales provistas en el curso) o Linux local con interfaz gráfica.
-• Haber completado la instalación del ambiente (Práctica 1).
+- Acceso al ambiente Linux (credenciales provistas en el curso) o Linux local con interfaz gráfica.
+- Haber completado la instalación del ambiente (Práctica 1).
 
 ## **Contexto:**
 
@@ -21,7 +21,7 @@ Un RDD (Resilient Distributed Dataset) es la unidad básica de datos en Spark. P
 
 Antes de crear RDDs, necesitamos una sesión de Spark. Esta sesión es la conexión entre nuestro programa y el motor de Spark.
 
-SparkSession es un punto de inicio a la funcionalidad de Spark, y es necesaria para crear un contexto para operar PySpark. 
+SparkSession es un punto de inicio a la funcionalidad de Spark y es necesaria para crear un contexto para operar PySpark. 
 SparkContext representa la conexión a un clúster de Spark.
 
 <img src="./media/image2.png" style="width:6.13542in;height:2.78125in" />
@@ -180,9 +180,6 @@ spark.stop()
 
 <img src="./media/image10.png" style="width:4.35567in;height:3.30741in" />
 
-
-## 
-
 ## Tarea 2: Creando RDDs a partir de conjuntos
 
 En RDD, cada registro se procesa de forma independiente a manera de fila. No existen las columnas. Los RDD son la estructura de datos fundamental que representa colecciones distribuidas de objetos.
@@ -322,7 +319,7 @@ print(line)
 
 **Creación de RDD desde múltiples archivos**
 
-Es posible recuperar una lista de archivos desde un directorio definido
+Es posible recuperar una lista de archivos desde un directorio definido.
 
 ```
 from pyspark import SparkContext
