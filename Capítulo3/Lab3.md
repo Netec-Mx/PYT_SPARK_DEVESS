@@ -591,7 +591,7 @@ print("RDD filtrado:", rdd_filtrado.collect())
 
 -   **rdd\_resultante:** Un nuevo RDD que contiene todos los elementos de rdd1 y rdd2.
 
-**Unir dos listas.**
+**Unir dos listas**
 
 ```
 from pyspark import SparkContext
