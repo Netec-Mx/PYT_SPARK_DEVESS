@@ -1,214 +1,398 @@
-# Práctica 4. Acciones sobre RDD
+# Laboratorio 4: Trabajando con DataFrames 
 
-## **Objetivo de la práctica:**
+**Objetivo:**
 
-Al finalizar la práctica serás capaz de:
-- Entender la función de las acciones y aplicarlas sobre RDD.
+Tiempo estimado: 60 minutos
 
-## **Tiempo aproximado:**
-- 45 minutos.
+**Prerequisitos:**
 
-## **Prerrequisitos:**
+-   Acceso a ambiente Linux (credenciales provistas en el curso) o Linux
+    local con interfaz gráfica
 
-- Acceso al ambiente Linux (credenciales provistas en el curso) o Linux local con interfaz gráfica.
-- Conexión a internet.
+-   Tener los archivos de datos
 
-## **Contexto:**
+-   Completar el laboratorio 1
 
-Las acciones en PySpark son operaciones que disparan la ejecución de las transformaciones acumuladas en un RDD.
+**Contexto:**
 
-Algunas acciones comunes incluyen collect(), count(), first(), take(), reduce(), foreach(), y saveAsTextFile().
+En PySpark, se pueden ejecutar consultas SQL directamente sobre
+DataFrames utilizando el módulo sql. Esto es especialmente útil si ya se
+está familiarizado con SQL o si se prefiere trabajar con consultas SQL
+en lugar de usar las API de PySpark.
 
-Las acciones devuelven resultados al programa driver o escriben datos en un sistema externo. A diferencia de las transformaciones (como map, filter, etc.), que son perezosas (lazy) y no se ejecutan hasta que se llama a una acción, las acciones disparan la ejecución de todas las transformaciones acumuladas en el RDD.
+**Instrucciones:**
 
-## **Instrucciones:**
+Tarea1: Crear DataFrame desde fuentes de datos y crear vistas temporales
 
-### Tarea 1: Aplicar acciones en un archivo
+Registrar un DataFrame como una vista temporal en PySpark es una
+operación común que permite realizar consultas SQL sobre los datos del
+DataFrame. Esto es útil porque combina la flexibilidad de SQL con la
+potencia de las operaciones de DataFrame en PySpark.
 
-En este ejemplo, se leerá el contenido de un archivo para contar las palabras
+**¿Qué es una Vista Temporal?**
 
-Iniciar PyCharm.
+Una vista temporal es una representación de un DataFrame que puede ser
+consultada usando SQL. Al registrar un DataFrame como una vista
+temporal, se pueden ejecutar consultas SQL directamente sobre él, sin
+necesidad de convertirlo a otro formato.
 
-`pycharm-community`
+-   **Vista temporal local:** Solo está disponible en la sesión de Spark
+    actual.
 
-Introducir el siguiente código ajustando la ruta del archivo a la ruta local.
+-   **Vista temporal global:** Está disponible en todas las sesiones de
+    Spark.
 
-```
-from pyspark import SparkContext
+**Creación de DataFrame con una colección local**
 
-# Inicializar SparkContext
-sc = SparkContext("local", "Ejemplo RDD desde archivo")
+**from pyspark.sql import SparkSession**
 
-# Cargar un RDD desde un archivo de texto
-rdd = sc.textFile("/home/miguel/data/TotalSalesRed/Sales2018.csv")
+**spark = SparkSession.builder \\ .appName("SQL ejemplo") \\
+.getOrCreate()**
 
-# Transformación: Dividir cada línea en palabras
-rdd_palabras = rdd.flatMap(lambda linea: linea.split(","))
+\# Datos de ejemplo
 
-# Transformación: Convertir palabras a minúsculas y mayúsculas
-rdd_minusculas = rdd_palabras.map(lambda palabra: palabra.lower())
-rdd_mayusculas = rdd_palabras.map(lambda palabra: palabra.upper())
+data = \[
 
-# Acción: Contar la cantidad de palabras
-cantidad_palabras = rdd_minusculas.count()
+("Alicia", 38, 50000, "HR"),
 
-# Acción: Recopilar las primeras 10 palabras
-primerasMin_palabras = rdd_minusculas.take(10)
-primerasMay_palabras = rdd_mayusculas.take(10)
+("Bertha", 30, 60000, "IT"),
 
-# Mostrar resultados
-print("Cantidad de palabras:", cantidad_palabras)
-print("Primeras 10 palabras minúsculas:", primerasMin_palabras)
-print("Primeras 10 palabras minúsculas:", primerasMay_palabras)
+("Carlos", 48, 70000, "Finance"),
 
-# Cerrar SparkContext
-sc.stop()
-```
+("David", 36, 80000, "HR"),
 
-<img src="./media/image1.png" style="width:4.61441in;height:4.36693in" />
+("Eva", 42, 90000, "IT")
 
-<img src="./media/image2.png" style="width:6.1375in;height:0.58819in" />
+> **\]**
 
-**Validación de archivos por columnas**
+**columnas = \["name", "age", "salary", "department"\]**
 
-Un uso que se puede aplicar en archivos CSV, es el contar filas que tienen la cantidad válida de columnas. Para esto, copiaremos y modificaremos uno de los archivos para reducir la cantidad de columnas.
+**\# Crear DataFrame df = spark.createDataFrame(data, columnas)**
 
-Abrir una ventana de terminal nueva. En el directorio de data, pasamos al directorio TotalSalesRed.
+\# Mostrar el DataFrame
 
-`cd data/TotalSalesRed`
+df.show()
 
-Copiar el archivo **Sales2018** a **Sales2018Redf.csv**.
+**\# Registrar el DataFrame como una vista temporal**
 
-cp Sales2018.csv Sales2018f.csv
+**df.createOrReplaceTempView("employees")**
 
-<img src="./media/image3.png" style="width:6.1375in;height:0.99722in" />
+**\# Consulta SQL para seleccionar todas las columnas result =
+spark.sql("SELECT \* FROM employees") result.show()**
 
-Con cualquier editor, abir el archivo y remover los campos en diferentes renglones para tener filas de menos de 5 campos. Recordar que los campos están separados por comas (,).
+![](./media/image1.png){width="4.51915135608049in"
+height="4.04412510936133in"}
 
-<img src="./media/image4.png" style="width:3.46484in;height:2.26822in" />
+![](./media/image2.png){width="2.0321784776902887in"
+height="3.06163823272091in"}
 
-Salvar el archivo y regresar a PyCharm (Ctrl+O para salvar y CTRL+X para salir).
+Ventajas de usar vistas con DataFrames:
 
-Probar el siguiente código:
+-   **Flexibilidad**: Puedes usar SQL para consultar los datos, lo que
+    es especialmente útil si ya estás familiarizado con SQL.
 
-```
-from pyspark import SparkContext
+-   **Reutilización**: Una vez que el DataFrame está registrado como una
+    vista, puedes ejecutar múltiples consultas SQL sobre él sin
+    necesidad de volver a definirlo.
 
-#Inicializar SparkContext
-sc = SparkContext("local", "Ejemplo RDD desde CSV")
+Crear DataFrame desde archivos
 
-# Cargar un RDD desde un archivo de texto
-rdd = sc.textFile("/home/miguel/data/TotalSalesRed/Sales2018f.csv")
+from pyspark.sql import SparkSession
 
-# Transformación: Dividir cada línea en columnas
-rdd_columnas = rdd.map(lambda linea: linea.split(","))
+spark = SparkSession\\
 
-# Transformación: Filtrar filas que tienen más de 2 columnas
-rdd_filtrado = rdd_columnas.filter(lambda columnas: len(columnas) &gt; 6)
+.builder\\
 
-# Acción: Contar el número de filas válidas
-cantidad_filas = rdd_filtrado.count()
+.appName("Ejemplo vista temporal")\\
 
-# Acción: Recopilar las primeras 3 filas
-primeras_filas = rdd_filtrado.take(3)
+.getOrCreate()
 
-# Mostrar resultados
-print("Cantidad de filas válidas:", cantidad_filas)
-print("Primeras 3 filas:", primeras_filas)
+**\# Crear un DataFrame desde un csv**
 
-# Cerrar SparkContext
-sc.stop()
-```
+**df = spark.read.csv("/home/miguel/data/Sales.csv", inferSchema=True,
+header=True)**
 
-<img src="./media/image5.png" style="width:4.38183in;height:3.22266in" />
+**\# Registrar el DataFrame como una vista temporal
+df.createOrReplaceTempView("ventas")**
 
-<img src="./media/image6.png" style="width:5.61721in;height:0.39769in" />
+**\# Ejecutar una consulta SQL sobre la vista temporal**
 
-**Extraer y calcular valores desde un csv**
+**resultado = spark.sql("SELECT SalesOrderNumber,
+OrderDate,Country,Sales FROM ventas where country= 'Canada'")**
 
-Se pueden realizar diferentes operaciones con los valores leídos del rdd.
+**resultado.show()**
 
-```
-from pyspark import SparkContext
-sc = SparkContext("local", "Carga desde CSV")
+![](./media/image3.png){width="6.1375in" height="2.422222222222222in"}
 
-# Cargar un archivo CSV como RDD
-rdd = sc.textFile("/home/miguel/data/TotalSalesRed/Sales2020.csv")
+![](./media/image4.png){width="2.5045898950131233in"
+height="3.3877865266841645in"}
 
-#Dividir cada línea en columnas
-rdd_columnas = rdd.map(lambda linea: linea.split(","))
+**Agregaciones y filtros con SQL**
 
-#Filtrar la cabecera (si existe)
-cabecera = rdd_columnas.first() # Obtener la primera línea (cabecera)
-rdd_datos = rdd_columnas.filter(lambda linea: linea != cabecera)
+Se pueden utilizar expresiones de condición similar a las usadas en SQL.
+En este ejemplo se usará BETWEEN, AND y OR en la sentencia WHERE:
 
-# Mapear a la columna numérica (por ejemplo, la columna 2)
-rdd_numeros = rdd_datos.map(lambda linea: float(linea[10]))
+from pyspark.sql import SparkSession
 
-#Control simple para mostrar el contenido del rdd
-for row in rdd_numeros.collect():
-    print(row)
+spark = SparkSession\\
 
-#Contar el número de elementos
-total_elementos = rdd_numeros.count()
+.builder\\
 
-#Sumar todos los valores
-suma_total = rdd_numeros.reduce(lambda x, y: x + y)
+.appName("Ejemplo vista temporal")\\
 
-# Calcular el promedio
-promedio = suma_total / total_elementos
-print(f"El promedio es: {promedio}")
-print(f"La suma es: {suma_total}")
+.getOrCreate()
 
-# Cerrar SparkContext
-sc.stop()
-```
+\# Crear un DataFrame
 
-<img src="./media/image7.png" style="width:5.80248in;height:6.19509in" />
+df = spark.read.csv("/home/miguel/data/Sales.csv", inferSchema=True,
+header=True)
 
-<img src="./media/image8.png" style="width:4.28194in;height:1.72917in" />
+\# Registrar el DataFrame como una vista temporal
 
-**Obtener el pedido, fecha cliente, país, cantidad de producto, precio. Calcular importe y total de ventas**
+df.createOrReplaceTempView("ventas")
 
-```
-from pyspark import SparkContext
+\# Ejecutar una consulta SQL sobre la vista temporal
 
-sc = SparkContext("local", "CargaCSV")
+resultado = spark.sql("SELECT SalesOrderNumber, OrderDate,Country,"
 
-rdd = sc.textFile("/home/miguel/data/Sales.csv") # Cargar el archivo CSV en un RDD
+"Sales FROM ventas where (country= 'Canada' OR country='Germany') AND "
 
-header = rdd.first() # Obtener la primera línea (encabezado)
-rdd_data = rdd.filter(lambda line: line != header) # Filtrar el encabezado
+"Sales BETWEEN 3000 and 4000")
 
-rdd_datos = rdd_data.map(lambda line: line.split(","))# Transformación: Parsear el CSV (dividir cada línea por comas)
+resultado.show()
 
-print("Datos interpretados:")
-print(rdd_datos.take(5))
+![](./media/image5.png){width="4.805311679790027in"
+height="2.2243186789151355in"}
 
-# Transformación: Calcular el total de ventas (precio * cantidad) por producto
-rdd_ventas = rdd_datos.map(lambda x: (x[0],x[1],x[2],x[4],x[7],x[10], x[11], float(x[10]) * float(x[11])))
+![](./media/image6.png){width="2.352840113735783in"
+height="2.6773698600174978in"}
 
-# Mostrar el total de ventas por producto
-print("Ventas por producto:") 
-for row in rdd_ventas.collect():
-    print(row)
+Para agrupar y obtener totales, se usa la sentencia GROUP BY
+complementando a la función de agregación. Complementamos el ejemplo
+aplicando ordenamiento ascendente por total:
 
-# Acción: Contar el número total de ventas
-print("Número total de ventas:") 
-print(rdd_ventas.count())
+from pyspark.sql import SparkSession
 
-rdd_fechas = rdd_ventas.map(lambda cols: (cols[1], 1)) # Transformación: Mapear a pares (fecha, 1)
+spark = SparkSession\\
 
-rdd_ventas_por_dia = rdd_fechas.reduceByKey(lambda x, y: x + y) # Transformación: Contar número ventas por fecha
+.builder\\
 
-for fecha, ventas in rdd_ventas_por_dia.collect(): # Acción: Recopilar y mostrar las ventas por día
-print(f"Fecha: {fecha}, Ventas: {ventas}")
+.appName("Ejemplo agrupaciones")\\
 
-**sc.stop()**
-```
+.getOrCreate()
 
-<img src="./media/image9.png" style="width:5.56909in;height:3.26974in" />
+\# Crear un DataFrame
 
-<img src="./media/image10.png" style="width:5.3609in;height:1.80941in" />
+df = spark.read.csv("/home/miguel/data/Sales.csv", inferSchema=True,
+header=True)
 
-## ***Fin del laboratorio***
+\# Registrar el DataFrame como una vista temporal
+
+df.createOrReplaceTempView("ventas")
+
+\# Ejecutar una consulta SQL sobre la vista temporal
+
+resultado = spark.sql("SELECT Country, COUNT(Sales) as NoOperaciones,
+SUM(Sales) as Total"
+
+" FROM ventas "
+
+"GROUP BY (Country) Order BY Total")
+
+resultado.show()
+
+![](./media/image7.png){width="5.084622703412074in"
+height="2.3225415573053367in"}
+
+![](./media/image8.png){width="2.935148731408574in"
+height="2.0613265529308835in"}
+
+## Tarea 2: Operaciones CRUD con DataFrames
+
+En PySpark, puedes realizar operaciones CRUD (Create, Read, Update,
+Delete) tanto utilizando DataFrames como SQL. Para usar SQL en PySpark,
+primero debes registrar el DataFrame como una vista temporal.
+
+**Actualizando un DataFrame con SQL**
+
+En SQL, puedes simular una actualización seleccionando y transformando
+los datos.
+
+from pyspark.sql import SparkSession
+
+spark = SparkSession\\
+
+.builder\\
+
+.appName("Ejemplo crud")\\
+
+.getOrCreate()
+
+\# Crear un DataFrame
+
+df = spark.read.csv("/home/miguel/data/Model/Products.csv",
+inferSchema=True, header=True)
+
+\# Registrar el DataFrame como una vista temporal
+
+df.createOrReplaceTempView("catalogo")
+
+df_actualizado= spark.sql("SELECT ProductKey,Product,Category,Price, "
+
+"CASE WHEN Category = 'Accessories' THEN Price\*1.10 ELSE Price END AS
+NewPrice "
+
+"FROM catalogo")
+
+df_actualizado.show()
+
+![](./media/image9.png){width="4.463797025371829in"
+height="1.9591622922134733in"}![](./media/image10.png){width="3.401636045494313in"
+height="3.2007764654418196in"}
+
+Notemos el resultado de la ejecución del siguiente código, válido en SQL
+
+from pyspark.sql import SparkSession
+
+spark = SparkSession\\
+
+.builder\\
+
+.appName("Ejemplo crud")\\
+
+.getOrCreate()
+
+\# Crear un DataFrame
+
+df = spark.read.csv("/home/miguel/data/Model/Products.csv",
+inferSchema=True, header=True)
+
+\# Registrar el DataFrame como una vista temporal
+
+df.createOrReplaceTempView("catalogo")
+
+df_actualizado= spark.sql("Update catalogo "
+
+"set Price = Price \*1.10 where Category='Accessories'")
+
+df_actualizado.show()
+
+![](./media/image11.png){width="4.5018536745406825in"
+height="2.0079549431321086in"}
+
+![](./media/image12.png){width="4.645621172353456in"
+height="1.3834886264216972in"}
+
+Esto porque, al ser un objeto temporal, no son tablas SQL y
+actualizaciones con UPDATE o DELETE no se permiten
+
+**Eliminar filas de un DataFrame: Puedes simular una eliminación
+excluyendo filas en una consulta SQL.**
+
+from pyspark.sql import SparkSession
+
+spark = SparkSession\\
+
+.builder\\
+
+.appName("Ejemplo crud")\\
+
+.getOrCreate()
+
+\# Crear un DataFrame
+
+df = spark.read.csv("/home/miguel/data/Sales.csv", inferSchema=True,
+header=True)
+
+\# Registrar el DataFrame como una vista temporal
+
+df.createOrReplaceTempView("ventas")
+
+\# Ejecutar una consulta SQL sobre la vista temporal, filtrando los
+datos que no se requieren
+
+df_filtrado = spark.sql("SELECT YEAR(OrderDate) AS Year, SUM(Sales)"
+
+" FROM ventas "
+
+"WHERE year(OrderDate) != 2020"
+
+" GROUP BY (YEAR(OrderDate))")
+
+df_filtrado.show()
+
+![](./media/image13.png){width="4.563931539807524in"
+height="2.364589895013123in"}
+
+![](./media/image14.png){width="2.4870133420822396in"
+height="1.6173228346456694in"}
+
+## Tarea 3: Uso de vistas temporales globales
+
+Si necesitas que una vista temporal esté disponible en todas las
+sesiones de Spark, puedes registrarla como una vista global con la
+función **createOrReplaceGlobalTempView** .
+
+from pyspark.sql import SparkSession
+
+spark = SparkSession\\
+
+.builder\\
+
+.appName("Ejemplo agrupaciones")\\
+
+.getOrCreate()
+
+\# Crear un DataFrame
+
+df = spark.read.csv("/home/netec/data/Model/Products.csv",
+inferSchema=True, header=True)
+
+\# Registrar el DataFrame como una vista temporal global
+
+df.createOrReplaceGlobalTempView("catalogo_global")
+
+\# Acceder a la vista global desde otra sesión de Spark
+
+spark_nueva_sesion = SparkSession\\
+
+.builder\\
+
+.appName("NuevaSesion")\\
+
+.getOrCreate()
+
+resultado = spark_nueva_sesion.sql("SELECT
+ProductKey,Product,Subcategory,Category,Model,Cost"
+
+" FROM global_temp.catalogo_global")
+
+resultado.show()
+
+**En este ejemplo:**
+
+-   **NuevaSesion** es la sesión alternativa que se crea para probar el
+    objeto global
+
+-   **global_temp** es el espacio de nombres donde se localizan los
+    objetos globales disponibles
+
+![](./media/image15.png){width="4.255542432195975in"
+height="2.451823053368329in"}
+
+![](./media/image16.png){width="3.8817465004374454in"
+height="3.193063210848644in"}
+
+**¿Cuándo no usar vistas temporales?**
+
+-   Si solo necesitas operaciones simples (como filtros o selecciones),
+    es más eficiente usar las API de DataFrame directamente.
+
+-   Si trabajas con datos pequeños y no necesitas SQL, registrar una
+    vista temporal puede ser innecesario.
+
+Las vistas temporales son una herramienta poderosa en PySpark para
+combinar SQL y DataFrames, lo que facilita el análisis de datos en
+entornos distribuidos.
+
+\*\*\* Fin del Laboratorio
