@@ -52,3 +52,8 @@ Cada uno de estos laboratorios está diseñado para ofrecerte una experiencia pr
    - **Descripción**:
      A través de la siguiente práctica aprenderás a utilizar funciones de diferentes tipos en consultas SQL en PySpark, también conocerás el uso de CatalystOptimizer. 
    - ⏱️ **Duración estimada**:  60 minutos.
+     
+  - [Práctica 9. Laboratorio 9: Monitoreo y optimización de PySpark.](./Capítulo9/Lab9.md)
+   - **Descripción**:
+     Objetivo: - Identificar y aplicar mejores prácticas de desempeño y el uso de Catalyst Optimizer. 
+   - ⏱️ **Duración estimada**:  60 minutos.
