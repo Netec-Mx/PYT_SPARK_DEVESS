@@ -1,530 +1,771 @@
-# Laboratorio 7: Uso de agregaciones, agrupaciones y relaciones
+# Laboratorio 7: Aplicando aspectos avanzados
 
-## **Objetivo de la práctica:**
+**Objetivo:** Se aplarán técnicas avanzadas a conjuntos de datos, como
+shuffling, accumulators, partitioning y brodcast de variables.
 
-Al finalizar la práctica serás capaz de:
-- Aplicar agregaciones, agrupaciones y relaciones.
+**Tiempo estimado:** 60 minutos
 
-## **Tiempo aproximado:**
-- 60 minutos.
+**Prerequisitos:**
 
-## **Prerequisitos:**
+-   Acceso a ambiente Linux (credenciales provistas en el curso) o Linux
+    local con interfaz gráfica
 
-- Acceso al ambiente Linux (credenciales provistas en el curso) o Linux local con interfaz gráfica.
-- Tener los archivos de datos.
-- Completar el laboratorio 1.
+-   Tener los archivos de datos
 
-## **Contexto:**
+-   Completar el laboratorio 1
 
-Como parte de las consultas y análisis, el vincular tablas de diferentes fuentes es una necesidad regular, así como obtener agregaciones para analizar la información.
+Contexto:
 
-En PySpark, se puede realizar agregaciones y agrupaciones utilizando tanto DataFrames como SQL.
+-   La optimización de operaciones con RDDs en PySpark es crucial para
+    mejorar el rendimiento de las aplicaciones, especialmente cuando se
+    trabajan con grandes volúmenes de datos.
 
-**Funciones de agregación comunes en SQL**
+-   El particionamiento es la forma en que los datos se dividen y
+    distribuyen en el clúster. Un buen particionamiento puede mejorar el
+    rendimiento al permitir un paralelismo eficiente y minimizar el
+    shuffling.
 
-Las funciones de agregación más comunes en SQL son:
+**Instrucciones:**
 
-- **COUNT**: Cuenta el número de filas.
+## Tarea1: Crear y ajustar el número de particiones:
 
-- **SUM**: Suma los valores de una columna.
+**Crear un RDD con un número específico de particiones**
 
-- **AVG**: Calcula el promedio de los valores de una columna.
+from pyspark import SparkContext
 
-- **MIN**: Encuentra el valor mínimo de una columna.
+\# Inicializar SparkContext
 
-- **MAX**: Encuentra el valor máximo de una columna.
+sc = SparkContext("local", "Particionamiento")
 
-    **Instrucciones:**
+\# Crear un RDD con 4 particiones
 
-## Tarea 1: Agregaciones y agrupaciones con SQL
+rdd = sc.parallelize(range(10), 4)
 
-**Agrupar DataFrames**
+\# Ver el número de particiones
 
-Abrir la sesión de PyCharm e introducir el siguente código:
+print("Número de particiones:", rdd.getNumPartitions())
 
-```
+\# Mostrar el contenido de cada partición
+
+print(rdd.glom().collect())
+
+\# Cerrar SparkContext
+
+sc.stop()
+
+![](./media/image1.png){width="5.0352504374453195in"
+height="2.815592738407699in"}
+
+![](./media/image2.png){width="4.0005588363954505in"
+height="1.1251574803149607in"}
+
+En este ejemplo:
+
+-   **sc.parallelize(range(10), 4)** crea un RDD con 10 elementos
+    divididos en 4 particiones.
+
+-   **glom()** muestra el contenido de cada partición.
+
+**Cargar un archivo csv con 4 particiones**
+
+from pyspark import SparkContext
+
+sc = SparkContext("local", "Cargar CSV con 4 particiones")
+
+ruta_csv = "/home/miguel/data/Model/Products.csv"
+
+\# Cargar el archivo CSV en un RDD con 4 particiones
+
+rdd = sc.textFile(ruta_csv, minPartitions=4)
+
+\# Verificar el número de particiones
+
+print("Número de particiones:", rdd.getNumPartitions()) \# Debería ser 4
+
+\# Transformación: Dividir cada línea en columnas
+
+rdd_columnas = rdd.map(lambda linea: linea.split(","))
+
+\# Filtrar la cabecera (si existe)
+
+cabecera = rdd_columnas.first() \# Obtener la primera línea (cabecera)
+
+rdd_datos = rdd_columnas.filter(lambda linea: linea != cabecera) \#
+Filtrar la cabecera
+
+\# Ver el contenido de cada partición
+
+print("Contenido de las particiones:")
+
+particiones = rdd_datos.glom().collect()
+
+for i, particion in enumerate(particiones):
+
+print(f"Partición {i}: {particion}")
+
+\# Cerrar SparkContext
+
+sc.stop()
+
+![](./media/image3.png){width="6.1375in" height="3.785416666666667in"}
+
+![](./media/image4.png){width="6.24293416447944in"
+height="0.8835323709536308in"}
+
+En este ejemplo:
+
+-   **sc.textFile(ruta_csv, minPartitions=4)** para cargar el archivo
+    CSV en un RDD con al menos 4 particiones.
+
+-   **getNumPartitions()** para verificar RDD el número de particiones.
+
+-   **glom()** para mostrar el contenido de cada partición.
+
+**Nota: El número real de particiones puede ser mayor que 4 si el
+archivo es grande, ya que minPartitions es un mínimo, no un máximo.**
+
+## Tarea 2: Reparticionamiento
+
+El reparticionamiento permite ajustar el número de particiones de un
+RDD. Esto es útil para optimizar el paralelismo o reducir la sobrecarga.
+
+Para reparticionar, se pueden usar **repartition()** o **coalesce()**
+
+-   **repartition():** Aumenta o reduce el número de particiones, pero
+    siempre causa shuffling.
+
+-   **coalesce():** Reduce el número de particiones sin shuffling (más
+    eficiente que repartition).
+
+from pyspark import SparkContext
+
+sc = SparkContext("local\[4\]", "Particionamiento")
+
+rdd = sc.textFile("/home/miguel/data/Model/Customers.csv") \# Cargar el
+archivo CSV en un RDD
+
+\# Mostrar el número de particiones
+
+print(rdd.getNumPartitions())
+
+\# Reparticionar el RDD
+
+rdd_reparticionado1 = rdd.repartition(10) \# Esto provocaría shuffling
+
+rdd_reparticionado2 = rdd.coalesce(10) \# No provoca shuffling
+
+print(rdd_reparticionado1.getNumPartitions())
+
+\# Mostrar el contenido de cada partición
+
+print(rdd_reparticionado1.glom().collect())
+
+print(rdd_reparticionado2.getNumPartitions())
+
+print(rdd_reparticionado1.glom().collect())
+
+\# Cerrar SparkContext
+
+sc.stop()
+
+![](./media/image5.png){width="6.1375in" height="3.202777777777778in"}
+
+![](./media/image6.png){width="6.1375in" height="2.1368055555555556in"}
+
+En este ejemplo:
+
+-   **repartition(10)** ajusta el número de particiones a 10, pero causa
+    shuffling.
+
+-   **coalesce(10)** ajusta el número de particiones a 10 sin shuffling.
+
+## Tarea 3: Optimización con Particionamiento y Persistencia
+
+El control de operaciones implica gestionar cómo se ejecutan las
+transformaciones y acciones en el clúster.
+
+-   **Persistencia de RDDs:** Usa persist() o cache() para evitar
+    recalcular RDDs que se usan varias veces.
+
+-   **Control del orden de ejecución:** Las transformaciones son
+    perezosas (lazy), pero puedes forzar la ejecución con acciones como
+    count() o collect().
+
+from pyspark import SparkContext, StorageLevel
+
+\# Inicializar SparkContext
+
+sc = SparkContext("local", "Optimización con Particionamiento")
+
+\# Cargar datos de ventas
+
+rdd = sc.textFile("/home/miguel/data/Sales.csv")
+
+\# Eliminar cabecera
+
+cabecera = rdd.first()
+
+rdd_datos = rdd.filter(lambda linea: linea != cabecera)
+
+\# Transformación: Mapear a (producto, cantidad)
+
+rdd_productos = rdd_datos.map(lambda linea: (linea.split(",")\[6\],
+float(linea.split(",")\[10\])))
+
+\# Reparticionar por clave (producto)
+
+rdd_reparticionado = rdd_productos.partitionBy(4)
+
+\# Persistir el RDD para reutilización
+
+rdd_reparticionado.persist(StorageLevel.MEMORY_AND_DISK)
+
+\# Reducción: Calcular total por producto
+
+rdd_total = rdd_reparticionado.reduceByKey(lambda x, y: x + y)
+
+\# Acción: Recopilar resultados
+
+resultados = rdd_total.collect()
+
+\# Mostrar resultados
+
+for producto, total in resultados:
+
+print(f"{producto}: {total}")
+
+\# Liberar persistencia
+
+rdd_reparticionado.unpersist()
+
+\# Cerrar SparkContext
+
+sc.stop()
+
+![](./media/image7.png){width="4.402428915135608in"
+height="2.7680807086614174in"}
+
+![](./media/image8.png){width="3.2791338582677168in"
+height="2.9162510936132984in"}
+
+En este ejemplo, optimizaciones aplicadas:
+
+-   **Particionamiento por clave:** Se usa partitionBy para distribuir
+    los datos por producto.
+
+-   **Persistencia:** El RDD se persiste en memoria y disco para evitar
+    recalcularlo.
+
+-   **Reducción local:** reduceByKey realiza una reducción local antes
+    del shuffling.
+
+## Tarea 4: Reconocer el impacto del shuffling
+
+El **shuffling** es un concepto muy importante en PySpark y Spark debido
+a su impacto significativo en el rendimiento de las aplicaciones
+distribuidas. El shuffling ocurre cuando los datos necesitan ser
+redistribuidos entre los nodos del clúster, lo que puede ser una
+operación costosa en términos de tiempo y recursos.
+
+El shuffling es el proceso de redistribuir los datos entre los nodos del
+clúster para agruparlos o reorganizarlos según una clave. Esto ocurre en
+operaciones como:
+
+-   **groupByKey**: Agrupa los valores por clave.
+
+-   **reduceByKey**: Reduce los valores por clave.
+
+-   **join**: Combina dos RDDs basados en una clave.
+
+-   **distinct**: Elimina duplicados.
+
+-   **repartition**: Cambia el número de particiones.
+
+Durante el shuffling, los datos se escriben en disco y se transfieren a
+través de la red, lo que lo convierte en una operación costosa.
+
+**Se tiene un RDD con pares clave-valor y se quiere agrupar los valores
+por clave.**
+
+from pyspark import SparkContext
+
+\# Inicializar SparkContext
+
+sc = SparkContext("local", "Ejemplo de Shuffling")
+
+\# Crear un RDD con pares clave-valor
+
+rdd = sc.parallelize(\[("a", 1), ("b", 2), ("a", 3), ("b", 4)\])
+
+\# Operación que causa shuffling: groupByKey
+
+rdd_agrupado = rdd.groupByKey()
+
+\# Mostrar los resultados
+
+resultados = rdd_agrupado.collect()
+
+for clave, valores in resultados:
+
+print(f"{clave}: {list(valores)}")
+
+\# Cerrar SparkContext
+
+sc.stop()
+
+![](./media/image9.png){width="5.012517497812773in"
+height="3.1738003062117235in"}
+
+![](./media/image10.png){width="3.3546347331583553in"
+height="1.1147386264216972in"}
+
+En este ejemplo:
+
+-   **groupByKey** causa shuffling porque necesita agrupar todos los
+    valores con la misma clave en la misma partición.
+
+-   Durante el shuffling, los datos se transfieren entre los nodos del
+    clúster.
+
+## Tarea 5: Minimizar shuffling
+
+Minimizar el shuffling es clave para optimizar el rendimiento en
+PySpark.
+
+-   **Usar reduceByKey en lugar de groupByKey:** reduceByKey realiza una
+    reducción local antes de hacer el shuffling, lo que reduce la
+    cantidad de datos transferidos.
+
+-   **groupByKey** transfiere todos los datos sin reducción previa.
+
+-   **Evitar operaciones amplias (wide):** Operaciones como cartesian()
+    o distinct() pueden causar mucho shuffling. Úsalas solo cuando sea
+    estrictamente necesario.
+
+-   **Usar particionamiento adecuado:** Un buen particionamiento puede
+    reducir el shuffling al mantener los datos relacionados en la misma
+    partición.
+
+-   **Minimizar el tamaño de los datos:** Reduce el tamaño de los datos
+    antes de operaciones que causen shuffling. Por ejemplo, filtra o
+    proyecta columnas innecesarias.
+
+-   **Usar coalesce en lugar de repartition:** **coalesce** reduce el
+    número de particiones sin shuffling, mientras que **repartition**
+    siempre causa shuffling.
+
+**Ejemplo:**
+
+Se tiene un RDD con registros de ventas y queremos calcular el total de
+ventas por producto, minimizando el shuffling.
+
+from pyspark import SparkContext
+
+sc = SparkContext("local", "CargaCSV")
+
+rdd = sc.textFile("/home/miguel/data/Sales.csv") \# Cargar el archivo
+CSV en un RDD
+
+header = rdd.first() \# Obtener la primera línea (encabezado)
+
+rdd_data = rdd.filter(lambda line: line != header) \# Filtrar el
+encabezado
+
+rdd_datos = rdd_data.map(lambda line: line.split(","))# Transformación:
+Parsear el CSV (dividir cada línea por comas)
+
+\# Transformación: Obtener pais e importe
+
+rdd_ventas = rdd_datos.map(lambda x: (x\[4\], float(x\[10\]) \*
+float(x\[11\])))
+
+for producto in rdd_ventas.collect():
+
+print(producto)
+
+\# Reducción: Calcular total por producto (con reducción local)
+
+rdd_total = rdd_ventas.reduceByKey(lambda x, y: x + y)
+
+\# Acción: Recopilar resultados
+
+resultados = rdd_total.collect()
+
+\# Mostrar resultados
+
+print(" \*\*\* Total por país")
+
+for producto, total in resultados:
+
+print(f"{producto}: {total}")
+
+sc.stop()
+
+![](./media/image11.png){width="4.829694881889764in"
+height="3.040554461942257in"}
+
+![](./media/image12.png){width="4.6360640857392825in"
+height="3.5629975940507435in"}
+
+## 
+
+## Tarea 6: Broadcast de variables
+
+En PySpark, broadcast Variables (variables transmitidas) permite
+distribuir grandes estructuras de datos de solo lectura a todos los
+nodos del clúster de manera eficiente. Esto evita el costo de enviar
+repetidamente la misma información a cada tarea, lo que mejora el
+rendimiento.
+
+Cuando trabajamos con RDDs en un clúster de Spark, cualquier variable
+externa utilizada dentro de una función lambda en una transformación
+(map, filter, etc.) se enviará a cada tarea ejecutada en los
+trabajadores. Si la variable es grande, esto puede generar un uso
+excesivo de la red y reducir el rendimiento.
+
+Con broadcast, enviamos la variable una sola vez, y luego todas las
+tareas acceden a ella desde su caché local, evitando el reenvío
+repetido.
+
+from pyspark import SparkContext
+
+\# Inicializar SparkContext
+
+sc = SparkContext("local", "Broadcast Example")
+
+\# Diccionario de referencia (código de producto -\> nombre)
+
+diccionario_productos = {
+
+101: "ProductoA",
+
+102: "ProductoB",
+
+103: "ProductoC"
+
+}
+
+\# Crear la variable broadcast
+
+broadcast_diccionario = sc.broadcast(diccionario_productos)
+
+\# RDD de ventas (código de producto, cantidad)
+
+rdd_ventas = sc.parallelize(\[(101, 2), (102, 3), (103, 1), (101, 5)\])
+
+\# Transformación: Enriquecer el RDD con los nombres de los productos
+
+rdd_enriquecido = rdd_ventas.map(lambda venta: (venta\[0\], venta\[1\],
+broadcast_diccionario.value\[venta\[0\]\]))
+
+\# Acción: Recopilar y mostrar los resultados resultados =
+rdd_enriquecido.collect() for resultado in resultados:
+
+print(resultado) \# Salida: (101, 2, 'ProductoA'), (102, 3,
+'ProductoB'), etc.
+
+\# Liberar la variable broadcast
+
+broadcast_diccionario.unpersist()
+
+\# Cerrar SparkContext
+
+sc.stop()
+
+![](./media/image13.png){width="6.1375in" height="3.591666666666667in"}
+
+![](./media/image14.png){width="4.250592738407699in"
+height="1.3856102362204725in"}
+
+En este ejemplo:
+
+-   **sc.broadcast(diccionario_productos):** Crea un objeto broadcast
+    con el diccionario.
+
+-   **broadcast_diccionario.value:** Accede al diccionario en los
+    executors.
+
+-   **map():** Usa el diccionario broadcast para enriquecer el RDD de
+    ventas.
+
+-   **unpersist():** Libera los recursos utilizados por el broadcast.
+
+**Broadcast con una Lista**
+
+Asumamos que se tiene una lista de códigos de productos en oferta y se
+quiere filtrar un RDD de ventas para incluir solo esos productos.
+
+from pyspark import SparkContext
+
+\# Inicializar SparkContext
+
+sc = SparkContext("local", "Broadcast Example")
+
+\# Lista de productos en oferta
+
+productos_oferta = \[101, 103\]
+
+\# Crear la variable broadcast
+
+broadcast_oferta = sc.broadcast(productos_oferta)
+
+\# RDD de ventas (código de producto, cantidad)
+
+rdd_ventas = sc.parallelize(\[(101, 2), (102, 3), (103, 1), (101, 5)\])
+
+\# Transformación: Filtrar ventas de productos en oferta
+
+rdd_filtrado = rdd_ventas.filter(lambda venta: venta\[0\] in
+broadcast_oferta.value)
+
+\# Acción: Recopilar y mostrar los resultados resultados =
+rdd_filtrado.collect() for resultado in resultados:
+
+print(resultado) \# Salida: (101, 2), (103, 1), (101, 5)
+
+\# Liberar la variable broadcast
+
+broadcast_oferta.unpersist()
+
+\# Cerrar SparkContext
+
+sc.stop()
+
+![](./media/image15.png){width="6.1375in" height="4.541666666666667in"}
+
+![](./media/image16.png){width="3.5317432195975504in"
+height="1.3856102362204725in"}
+
+En este ejemplo:
+
+-   **sc.broadcast(productos_oferta):** Crea un objeto broadcast con la
+    lista de productos en oferta.
+
+-   **broadcast_oferta.value:** Accede a la lista en los executors.
+
+-   **filter():** Usa la lista broadcast para filtrar el RDD de ventas.
+
+-   **unpersist():** Libera los recursos utilizados por el broadcast.
+
+## Tarea 7: Broadcast con tabla de parámetros
+
+Ahora tenemos una tabla de parámetros que se requiere usar en múltiples
+operaciones.
+
+from pyspark import SparkContext
+
+\# Inicializar SparkContext
+
+sc = SparkContext("local", "Broadcast Example")
+
+\# Configuración (diccionario de parámetros)
+
+configuracion = {
+
+"tasa_impuesto": 0.15,
+
+"descuento": 0.10
+
+}
+
+\# Crear la variable broadcast
+
+broadcast_config = sc.broadcast(configuracion)
+
+\# RDD de ventas (producto, monto)
+
+rdd_ventas = sc.parallelize(\[("ProductoA", 100), ("ProductoB", 200),
+("ProductoC", 150)\])
+
+\# Transformación: Calcular el monto total con impuestos y descuentos
+
+rdd_calculado = rdd_ventas.map(lambda venta: (
+
+venta\[0\],
+
+venta\[1\],
+
+venta\[1\] \* (1 + broadcast_config.value\["tasa_impuesto"\]), \# Monto
+con impuesto
+
+venta\[1\] \* (1 - broadcast_config.value\["descuento"\]) \# Monto con
+descuento
+
+))
+
+\# Acción: Recopilar y mostrar los resultados
+
+resultados = rdd_calculado.collect()
+
+for resultado in resultados:
+
+print(resultado) \# Salida: ('ProductoA', 100, 115.0, 90.0), etc.
+
+\# Liberar la variable broadcast
+
+broadcast_config.unpersist()
+
+\# Cerrar SparkContext
+
+sc.stop()
+
+En este ejemplo:
+
+-   **sc.broadcast(configuracion):** Crea un objeto broadcast con la
+    configuración.
+
+-   **broadcast_config.value:** Accede a la configuración en los
+    executors.
+
+-   **map():** Usa la configuración broadcast para calcular montos con
+    impuestos y descuentos.
+
+-   **unpersist():** Libera los recursos utilizados por el broadcast.
+
+![](./media/image17.png){width="6.1375in" height="3.848611111111111in"}
+
+![](./media/image18.png){width="4.386029090113736in"
+height="1.4689545056867892in"}
+
+## 
+
+## Tarea 8: Usando de acumuladores
+
+Los acumuladores en PySpark son variables compartidas que permiten sumar
+valores de manera eficiente en un clúster distribuido. Son útiles cuando
+necesitamos contar eventos, sumar valores o rastrear estadísticas sin
+comunicación constante entre los nodos.
+
+**Contar elementos que cumplen una condición**
+
+from pyspark import SparkContext
+
+\# Inicializar SparkContext
+
+sc = SparkContext("local", "Ejemplo Acumulador")
+
+rdd = sc.parallelize(\[1, 2, 3, 6, 7, 8, 9, 10\])
+
+\# Crear un acumulador para contar números mayores que 5
+
+contador = sc.accumulator(0)
+
+\# Transformación: Incrementar el acumulador si el número es mayor que 5
+
+rdd.foreach(lambda x: contador.add(1) if x \> 5 else None)
+
+\# Acción: Mostrar el valor del acumulador
+
+print("Números mayores que 5:", contador.value) \# Salida: 5
+
+\# Cerrar SparkContext
+
+sc.stop()
+
+![](./media/image19.png){width="6.1375in" height="3.58125in"}
+
+![](./media/image20.png){width="3.4900699912510937in"
+height="0.8647036307961505in"}
+
+En este ejemplo:
+
+-   Se crea un acumulador contador inicializado en 0.
+
+-   En la transformación foreach, se incrementa el acumulador si el
+    número es mayor que 5.
+
+-   El valor final del acumulador se imprime en el driver.
+
+**Sumar valores de un RDD**
+
+from pyspark import SparkContext
+
+sc = SparkContext("local", "Ejemplo Acumulador Suma")
+
+rdd = sc.parallelize(\[1, 2, 3, 4, 5\])
+
+\# Crear un acumulador para la suma
+
+suma_acumulador = sc.accumulator(0)
+
+\# Transformación: Sumar todos los valores al acumulador
+
+rdd.foreach(lambda x: suma_acumulador.add(x))
+
+\# Acción: Mostrar el valor del acumulador
+
+print("Suma total:", suma_acumulador.value) \# Salida: 15
+
+sc.stop()
+
+![](./media/image21.png){width="5.332528433945757in"
+height="3.8235148731408573in"}
+
+![](./media/image22.png){width="3.969304461942257in"
+height="0.9793033683289589in"}
+
+En este ejemplo:
+
+-   Se crea un acumulador suma_acumulador inicializado en 0.
+
+-   En la transformación foreach, se suma cada valor del RDD al
+    acumulador.
+
+-   El valor final del acumulador se imprime en el driver.
+
+**Contabilizar inconsistencias de un RDD**
+
 from pyspark.sql import SparkSession
 
-spark = SparkSession\
-.builder\
-.appName("Usra SQL y DataFrames")\
+spark = SparkSession\\
+
+.builder\\
+
+.appName("Acumuladores")\\
+
 .getOrCreate()
 
-# Crear DataFrame
-dfSales = spark.read.csv("/home/miguel/data/Sales.csv", inferSchema=True, header=True)
-# Registrar el DataFrame como una tabla temporal
-dfSales.createOrReplaceTempView("ventas")
+sc = spark.sparkContext
 
-query = ("SELECT Country, SUM(Sales) AS TotalSales "
-         " FROM ventas "
-         " GROUP BY Country "
-         )
+rdd_usuarios = sc.parallelize(\[
 
-spark.sql(query).show()
-```
+(1, "Ana", 25),
 
-**En este ejemplo:**
+(2, "Carlos", -1), \# Edad inválida
 
-- **createOrReplaceTempView** expone el DataFrame como table para usarse en la sentencia SQL.
-- **SUM()** suma los valores del campo Sales y los corta por Country.
+(3, "Luis", 30),
 
-<img src="./media/image1.png" style="width:3.6255in;height:2.07857in" />
+(4, None, 40), \# Nombre nulo
 
-<img src="./media/image2.png" style="width:1.92733in;height:1.82518in" />
+(5, "Sofía", 0), \# Edad inválida
 
-**Agrupar por más de un campo**
+\])
 
-Se pueden aplicar cortes en más de un campo. Es importante considerar que si los campos no utilizan una función de agregación, todos ellos deberán estar en GROUP BY. El primer campo declarado maneja la agrupación principal.
+\# Crear un acumulador
 
-```
-from pyspark.sql import SparkSession
+acumulador_errores = sc.accumulator(0)
 
-spark = SparkSession\
-.builder\
-.appName("Usra SQL y DataFrames")\
-.getOrCreate()
+\# Filtrar los registros inválidos mientras se incrementa el acumulador
 
-# Crear DataFrame
-dfSales = spark.read.csv("/home/miguel/data/Sales.csv", inferSchema=True, header=True)
-# Registrar el DataFrame como una tabla temporal
-dfSales.createOrReplaceTempView("ventas")
+rdd_usuarios_validos = rdd_usuarios.filter(lambda x: not
+(acumulador_errores.add(1) if x\[1\] is None or x\[2\] \<= 0 else
+False))
 
-query = ("SELECT Territory, Country, SUM(Sales) AS TotalSales "
-         " FROM ventas "
-         " GROUP BY Territory, Country "
-         )
+\# Ejecutar la transformación y mostrar resultados
 
-spark.sql(query).show()
-```
+print("Usuarios válidos:", rdd_usuarios_validos.collect())
 
-<img src="./media/image3.png" style="width:4.37252in;height:2.41087in" />
+print("Total de registros inválidos:", acumulador_errores.value)
 
-<img src="./media/image4.png" style="width:2.53455in;height:1.89767in" />
+![](./media/image23.png){width="5.422018810148732in"
+height="2.757020997375328in"}
 
-**Aplicar múltiples funciones de agregación**
+![](./media/image24.png){width="4.9283825459317585in"
+height="0.4784514435695538in"}
 
-```
-from pyspark.sql import SparkSession
+En este ejemplo:
 
-spark = SparkSession\
-.builder\
-.appName("Usra SQL y DataFrames")\
-.getOrCreate()
+-   Se usa **acumulador_errores.add(1)** dentro de filter().
 
-# Crear DataFrame
-dfSales = spark.read.csv("/home/miguel/data/Model/Products.csv", inferSchema=True, header=True)
-# Registrar el DataFrame como una tabla temporal
-dfSales.createOrReplaceTempView("productos")
-
-query = ("SELECT Category, SUM(Price) As TotalSales, AVG(Price) as Average, MIN(Price) as MinPrice"
-         " FROM productos "
-         " GROUP BY Category "
-         )
-
-dfVentas= spark.sql(query)
-
-dfVentas.show()
-```
-
-<img src="./media/image5.png" style="width:4.1684in;height:2.2738in" />
-
-<img src="./media/image6.png" style="width:3.65833in;height:1.45185in" />
-
-**Usando HAVING**
-
-Notemos la ejecución del siguiente código
-
-```
-from pyspark.sql import SparkSession
-
-spark = SparkSession\
-.builder\
-.appName("Usra SQL y DataFrames")\
-.getOrCreate()
-
-# Crear DataFrame
-dfProducts = spark.read.csv("/home/miguel/data/Model/Products.csv", inferSchema=True, header=True)
-# Registrar el DataFrame como una tabla temporal
-dfProducts.createOrReplaceTempView("productos")
-
-# Consultar la cantidad de productos por categoría
-query = ("SELECT Category, COUNT(Product) as NoProducts"
-         " FROM productos "
-       " GROUP BY Category "
-     #   "HAVING COUNT(Product) &gt;5"
-       )
-
-dfProducts= spark.sql(query)
-
-dfProducts.show()
-```
-
-<img src="./media/image7.png" style="width:4.39647in;height:2.54098in" />
-
-<img src="./media/image8.png" style="width:2.06736in;height:1.8036in" />
-
-¿Cómo obtener las categorías cuyo total es superior a 100?
-
-La cláusula WHERE no puede ser aplicable porque esta se aplica a nivel registro y no a nivel agrupación. Para aplicar condiciones por grupo se tiene que utiliar la cláusula HAVING.
-
-```
-from pyspark.sql import SparkSession
-
-spark = SparkSession\
-.builder\
-.appName("Usra SQL y DataFrames")\
-.getOrCreate()
-
-# Crear DataFrame
-dfProducts = spark.read.csv("/home/netec/data/Model/Products.csv", inferSchema=True, header=True)
-# Registrar el DataFrame como una tabla temporal
-dfProducts.createOrReplaceTempView("productos")
-
-# Consultar la cantidad de productos por categoría
-query = ("SELECT Category, COUNT(Product) as NoProducts"
-         " FROM productos "
-       " GROUP BY Category "
-         "HAVING COUNT(Product) &gt;100"
-         )
-
-dfProducts= spark.sql(query)
-
-dfProducts.show()
-```
-
-La cláusula HAVING se puede aplicar a cualquier agregación. También se puede combinar con WHERE, ya que esta filtra registros y HAVING agregaciones.
-
-<img src="./media/image9.png" style="width:4.26862in;height:2.6057in" />
-
-<img src="./media/image10.png" style="width:2.16993in;height:1.48427in" />
-
-**Agregación sin agrupación**
-
-Si no se usa GROUP BY, las funciones de agregación se aplican a toda la tabla.
-
-```
-from pyspark.sql import SparkSession
-
-spark = SparkSession\
-.builder\
-.appName("Usra SQL y DataFrames")\
-.getOrCreate()
-
-# Crear DataFrame
-dfProducts = spark.read.csv("/home/miguel/data/Model/Products.csv", inferSchema=True, header=True)
-# Registrar el DataFrame como una tabla temporal
-dfProducts.createOrReplaceTempView("productos")
-
-# Consultar la cantidad de productos por categoría
-query = ("SELECT SUM(Price) As TotalSales, AVG(Price) as Average, MAX(Price) as MaxPrice,"
-         " MIN(Price) as MinPrice, COUNT(price) as NoProducts"
-         " FROM productos "
-         )
-
-dfProducts= spark.sql(query)
-
-dfProducts.show()
-```
-
-<img src="./media/image11.png" style="width:4.29099in;height:2.42078in" />
-
-<img src="./media/image12.png" style="width:4.34545in;height:0.94795in" />
-
-## Tarea 2: Manejando relaciones
-
-Se puede utilizar SQL para trabajar con relaciones entre tablas (DataFrames) utilizando operaciones como JOIN, UNION, INTERSECT, y EXCEPT. Estas operaciones permiten combinar o comparar datos de múltiples tablas basadas en condiciones específicas.
-
-JOIN se utiliza para combinar filas de dos o más tablas basadas en una condición relacionada. Los tipos más comunes de JOIN son:
-
-- **INNER JOIN:** Devuelve solo las filas que tienen coincidencias en ambas tablas.
-
-- **LEFT JOIN (o LEFT OUTER JOIN):** Devuelve todas las filas de la tabla izquierda y las coincidencias de la tabla derecha. Si no hay coincidencias, se devuelven NULL para las columnas de la tabla derecha.
-
-- **RIGHT JOIN (o RIGHT OUTER JOIN):** Devuelve todas las filas de la tabla derecha y las coincidencias de la tabla izquierda. Si no hay coincidencias, se devuelven NULL para las columnas de la tabla izquierda.
-
-- **FULL JOIN (o FULL OUTER JOIN):** Devuelve todas las filas cuando hay una coincidencia en cualquiera de las tablas. Si no hay coincidencias, se devuelven NULL para las columnas de la tabla sin coincidencias.
-
-```
-from pyspark.sql import SparkSession
-
-spark = SparkSession\
-.builder\
-.appName("Usra SQL y DataFrames")\
-.getOrCreate()
-
-# Crear DataFrame de productos
-dfProducts = spark.read.csv("/home/miguel /data/Model/Products.csv", inferSchema=True, header=True)
-# Registrar el DataFrame como una tabla temporal
-dfProducts.createOrReplaceTempView("productos")
-
-# Crear DataFrame de clientes
-dfProducts = spark.read.csv("/home/miguel /data/Model/Customers.csv", inferSchema=True, header=True)
-# Registrar el DataFrame como una tabla temporal
-dfProducts.createOrReplaceTempView("clientes")
-
-# Crear DataFrame de clientes
-dfProducts = spark.read.csv("/home/miguel/data/Model/Sales.csv", inferSchema=True, header=True)
-# Registrar el DataFrame como una tabla temporal
-dfProducts.createOrReplaceTempView("ventas")
-
-#Combina solo las filas que tienen coincidencias en lass tres tablas.
-
-query = ("SELECT v.SalesOrderNumber,c.Customer, v.OrderDate,p.Product, p.Category,"
-         " v.UnitPrice,v.OrderQuantity "
-         " FROM ventas v JOIN productos p on v.productkey = p.productkey"
-         " JOIN clientes c on v.customerKey = c.customerKey"
-         )
-
-dfProducts= spark.sql(query)
-
-dfProducts.show()
-```
-
-<img src="./media/image13.png" style="width:3.50029in;height:2.40877in" />
-
-<img src="./media/image14.png" style="width:3.64563in;height:1.81291in" />
-
-**Aplicando diferentes tipos de relación**
-
-Nótese que de la lista, hay empleados sin departamento y departamentos sin empleados (en base al campo común). En INNER JOIN no se mostrarán estos registros.
-
-```
-from pyspark.sql import SparkSession
-
-# Crear una sesión de Spark
-spark = SparkSession.builder.appName("SQL relaciones").getOrCreate()
-
-# Datos de empleados
-data_empleados = [
-    (1, "Alejandra", 101),
-    (2, "Berenice", 102),
-    (3, "Carlos", 101),
-    (4, "Daniela", 104),
-    (5, "Ernesto", 110)
-]
-
-# Datos de departamentos
-data_departamentos = [
-    (101, "Ventas"),
-    (102, "Marketing"),
-    (103, "IT"),
-    (105, "RH"),
-    (106, "Operacione"),
-]
-
-# Crear DataFrames
-df_empleados = spark.createDataFrame(data_empleados, ["id_empleado", "nombre", "id_departamento"])
-df_departamentos = spark.createDataFrame(data_departamentos, ["id_departamento", "nombre_departamento"])
-
-# Registrar DataFrames como tablas temporales
-df_empleados.createOrReplaceTempView("empleados")
-df_departamentos.createOrReplaceTempView("departamentos")
-
-query = ("SELECT e.id_empleado, e.nombre, d.nombre_departamento "
-"FROM empleados e "
-"INNER JOIN departamentos d "
-"ON e.id_departamento = d.id_departamento")
-
-spark.sql(query).show()
-```
-
-<img src="./media/image15.png" style="width:4.28339in;height:3.29905in" />
-
-<img src="./media/image16.png" style="width:3.03148in;height:1.77736in" />
-
-**LEFT JOIN**
-
-Devuelve todos los empleados, incluso si no tienen un departamento asignado.
-
-```
-from pyspark.sql import SparkSession
-
-# Crear una sesión de Spark
-spark = SparkSession.builder.appName("SQL relaciones").getOrCreate()
-
-# Datos de empleados
-data_empleados = [
-    (1, "Alejandra", 101),
-    (2, "Berenice", 102),
-    (3, "Carlos", 101),
-    (4, "Daniela", 104),
-    (5, "Ernesto", 110)
-]
-
-# Datos de departamentos
-data_departamentos = [
-    (101, "Ventas"),
-    (102, "Marketing"),
-    (103, "IT"),
-    (105, "RH"),
-    (106, "Operacione"),
-]
-
-# Crear DataFrames
-df_empleados = spark.createDataFrame(data_empleados, ["id_empleado", "nombre", "id_departamento"])
-df_departamentos = spark.createDataFrame(data_departamentos, ["id_departamento", "nombre_departamento"])
-
-# Registrar DataFrames como tablas temporales
-df_empleados.createOrReplaceTempView("empleados")
-df_departamentos.createOrReplaceTempView("departamentos")
-
-query = ("SELECT e.id_empleado, e.nombre, d.nombre_departamento "
-"FROM empleados e "
-"LEFT JOIN departamentos d "
-"ON e.id_departamento = d.id_departamento")
-
-spark.sql(query).show()
-```
-
-<img src="./media/image17.png" style="width:4.52605in;height:0.75026in" />
-
-<img src="./media/image18.png" style="width:3.10441in;height:2.03981in" />
-
-**RIGHT JOIN**
-
-Devuelve todos los departamentos, incluso si no tienen empleados asignados.
-
-```
-from pyspark.sql import SparkSession
-
-# Crear una sesión de Spark
-spark = SparkSession.builder.appName("SQL relaciones").getOrCreate()
-
-# Datos de empleados
-data_empleados = [
-    (1, "Alejandra", 101),
-    (2, "Berenice", 102),
-    (3, "Carlos", 101),
-    (4, "Daniela", 104),
-    (5, "Ernesto", 110)
-]
-
-# Datos de departamentos
-data_departamentos = [
-    (101, "Ventas"),
-    (102, "Marketing"),
-    (103, "IT"),
-    (105, "RH"),
-    (106, "Operacione"),
-]
-
-# Crear DataFrames
-df_empleados = spark.createDataFrame(data_empleados, ["id_empleado", "nombre", "id_departamento"])
-df_departamentos = spark.createDataFrame(data_departamentos, ["id_departamento", "nombre_departamento"])
-
-# Registrar DataFrames como tablas temporales
-df_empleados.createOrReplaceTempView("empleados")
-df_departamentos.createOrReplaceTempView("departamentos")
-
-query = ("SELECT e.id_empleado, e.nombre, d.nombre_departamento "
-"FROM empleados e "
-"RIGHT JOIN departamentos d "
-"ON e.id_departamento = d.id_departamento")
-
-spark.sql(query).show()
-```
-
-<img src="./media/image19.png" style="width:4.6136in;height:0.94825in" />
-
-<img src="./media/image20.png" style="width:2.54769in;height:2.02913in" />
-
-**FULL JOIN**
-
-Devuelve todas las filas de ambas tablas, con NULL donde no hay coincidencias.
-
-```
-from pyspark.sql import SparkSession
-
-spark = SparkSession.builder.appName("SQL relaciones").getOrCreate()
-
-\# Datos de empleados
-
-data\_empleados = \[
-(1, "Alejandra", 101),
-(2, "Berenice", 102),
-(3, "Carlos", 101),
-(4, "Daniela", 104),
-(5, "Ernesto", 110)
-\]
-
-\# Datos de departamentos
-
-data\_departamentos = \[
-(101, "Ventas"),
-(102, "Marketing"),
-(103, "IT"),
-(105, "RH"),
-(106, "Operacione"),
-\]
-
-\# Crear DataFrames
-
-df\_empleados = spark.createDataFrame(data\_empleados, \["id\_empleado", "nombre", "id\_departamento"\])
-df\_departamentos = spark.createDataFrame(data\_departamentos, \["id\_departamento", "nombre\_departamento"\])
-
-\# Registrar DataFrames como tablas temporales
-
-df\_empleados.createOrReplaceTempView("empleados")
-df\_departamentos.createOrReplaceTempView("departamentos")
-
-query = ("SELECT e.id\_empleado, e.nombre, d.nombre\_departamento "
-
-"FROM empleados e "
-
-"FULL JOIN departamentos d "
-
-"ON e.id\_departamento = d.id\_departamento")
-
-spark.sql(query).show()
-```
-
-<img src="./media/image21.png" style="width:5.24724in;height:0.82997in" />
-
-<img src="./media/image22.png" style="width:2.72506in;height:1.80814in" />
-
-**Relaciones con UNION**
-
-La operación UNION combina los resultados de dos consultas en un solo conjunto de resultados. Las filas duplicadas se eliminan a menos que se use UNION ALL.
-
-```
-from pyspark.sql import SparkSession
-
-spark = SparkSession\
-.builder\
-.appName("Usar UNION")\
-.getOrCreate()
-
-# Crear DataFrame de ventas del año 2018
-df2018 = spark.read.csv("/home/miguel/data/TotalSales/Sales2018.csv", inferSchema=True, header=True)
-
-# Registrar el DataFrame como una tabla temporal
-df2018.createOrReplaceTempView("y2018")
-
-# Crear DataFrame de ventas del año 2018
-df2019 = spark.read.csv("/home/miguel/data/TotalSales/Sales2019.csv", inferSchema=True, header=True)
-
-# Registrar el DataFrame como una tabla temporal
-df2019.createOrReplaceTempView("y2019")
-
-# Crear DataFrame de ventas del año 2018
-df2020 = spark.read.csv("/home/miguel/data/TotalSales/Sales2020.csv", inferSchema=True, header=True)
-
-# Registrar el DataFrame como una tabla temporal
-df2020.createOrReplaceTempView("y2020")
-
-# Sumando los registros de las 3 tablas
-query = ("SELECT \* FROM y2018 "
-"UNION "
-"SELECT \* FROM y2019 "
-"UNION "
-"SELECT \* FROM y2020 "
-)
-
-spark.sql(query).show()
-```
-
-<img src="./media/image23.png" style="width:4.94921in;height:3.00548in" />
-
-<img src="./media/image24.png" style="width:6.1375in;height:1.72292in" />
-
-## ***Fin del laboratorio***
+-   Cuando un usuario tiene datos inválidos (None o edad ≤ 0), el
+    acumulador se incrementa antes de excluir el registro.
