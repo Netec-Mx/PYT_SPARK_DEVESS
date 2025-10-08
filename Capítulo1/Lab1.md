@@ -2,13 +2,13 @@
 
 ## **Objetivo**
 
-Al finalizar la práctica serás capaz de:
+Al finalizar la práctica, serás capaz de:
 - Configurar el servidor de PySpark en Linux y el IDE PyCharm.
 
 ## **Duración aproximada**
 - 60 minutos.
 
-## **Prerequisitos**
+## **Prerrequisitos**
 
 - Acceso al ambiente Linux (credenciales provistas en el curso) o Linux local con interfaz gráfica.
 - Conexión a internet.
@@ -107,7 +107,6 @@ No es estrictamente necesario, pero se puede mover el directorio de Spark a una 
 sudo mv spark-3.5.4-bin-hadoop3 /usr/local/spark
 ```
 
-## 
 
 ## Tarea 3. Configuración de variables
 
@@ -143,16 +142,16 @@ Una vez instalado, realiza la prueba desde la línea a la terminal.
 
 <img src="./media/image12.png" style="width:5.92021in;height:1.91667in" />
 
-> ***Nota. En ocasiones, puede aparecer un error indicando que no se puede acceder al servidor. Si esto ocurre, edita el archivo `load-spark-env.sh` en el directorio `spark/bin` y adiciona la siguiente línea:`export SPARK\_LOCAL\_IP="127.0.0.1"`.***
+> ***Nota. En ocasiones, puede aparecer un error indicando que no se puede acceder al servidor. Si esto ocurre, edita el archivo `load-spark-env.sh` en el directorio `spark/bin` y adiciona la siguiente línea: `export SPARK\_LOCAL\_IP="127.0.0.1"`.***
 
 
-Nota que se establecieron diferentes elementos por omisión.
+- Nota que se establecieron diferentes elementos por omisión.
 ```
 - Spark context Web UI available at http://pyspark1.internal.cloudapp.net:4040.
 - Spark context available as 'sc' (master = local\[\*\], app id = local-1737635834756).
 - SparkSession available as 'spark'.
 ```
-Prueba la instalación con los siguientes comandos.
+- Prueba la instalación con los siguientes comandos.
 
 ```
 print(sc)
@@ -214,4 +213,5 @@ pycharm-community
 Finalmente, tienes la pantalla de inicio.
 
 <img src="./media/image19.png" style="width:4.32608in;height:3.50374in" />
+
 
