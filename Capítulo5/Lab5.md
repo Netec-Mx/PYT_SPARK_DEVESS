@@ -47,7 +47,7 @@ Operaciones que involucran dos RDD.
 
 Ejemplos: `union()`, `intersection()`, `subtract()`, `cartesian()`, etcétera.
 
-![](./media/image1.png){width="6.1375in" height="2.834722222222222in"}
+![](./media/image1.png)
 
 ### Trabajando con esquemas (schema)
 
@@ -126,10 +126,10 @@ rdd_con_esquema.show()
 rdd_con_esquema.printSchema()
 ```
 
-![](./media/image2.png){width="6.1375in" height="3.9555555555555557in"}
+![](./media/image2.png)
 
-![](./media/image3.png){width="3.278985126859143in"
-height="4.267502187226596in"}
+![](./media/image3.png)
+
 
 En este ejemplo, primero, se carga el archivo CSV utilizando `textFile()`.
 Luego, se omite la primera línea si contiene encabezados. Después, se
@@ -280,9 +280,9 @@ rdd_frecuencia = rdd_palabras_mayusculas.map(lambda x: (x,
 rdd_frecuencia.collect() print(resultado)
 ```
 
-![](./media/image7.png){width="6.1375in" height="2.1055555555555556in"}
+![](./media/image7.png)
 
-![](./media/image8.png){width="6.1375in" height="0.2909547244094488in"}
+![](./media/image8.png)
 
 ### Tarea 3. Aplicando transformaciones comunes
 
@@ -322,10 +322,9 @@ rdd_mayusculas = rdd.map(lambda x: x.upper())
 print(rdd_mayusculas.collect())
 ```
 
-![](./media/image9.png){width="4.5924420384951885in"
-height="2.103338801399825in"}
+![](./media/image9.png)
 
-![](./media/image10.png){width="3.7506944444444446in" height="0.875in"}
+![](./media/image10.png)
 
 **Transformar tuplas**
 
@@ -500,8 +499,7 @@ nuevo_rdd = rdd.filter(función)
 
 `rdd`: el RDD original.
 
-`función`: una función que toma un elemento del RDD y devuelve `True` o
-False.
+`función`: una función que toma un elemento del RDD y devuelve `True` o `False`.
 
 `nuevo_rdd`: el RDD resultante que contiene solo los elementos que cumplen la condición.
 
@@ -523,10 +521,9 @@ rdd_pares = rdd.filter(lambda x: x % 2 == 0)
 **print(rdd_pares.collect())**
 ```
 
-![](./media/image20.png){width="4.764538495188101in"
-height="2.192507655293088in"}
+![](./media/image20.png)
 
-![](./media/image21.png){width="4.240277777777778in" height="1.09375in"}
+![](./media/image21.png)
 
 **Filtrar filas basadas en una condición**
 
@@ -555,9 +552,9 @@ print("Personas mayores de 25 años:")
 print(rdd_mayores.collect())
 ```
 
-![](./media/image22.png){width="6.1375in" height="3.0208333333333335in"}
+![](./media/image22.png)
 
-![](./media/image23.png){width="5.584027777777778in" height="1.40625in"}
+![](./media/image23.png)
 
 **Filtrar usando una función definida**
 
@@ -856,16 +853,16 @@ union no garantiza un orden específico en el RDD resultante. Los
 elementos se combinan en el orden en que se encuentran en los RDD
 originales.
 
-### Función intersection
+### Función `intersection`
 
-**intersection** permite encontrar los elementos comunes entre dos
-RDDs. Devuelve un nuevo RDD que contiene solo los elementos que están
+`Intersection` permite encontrar los elementos comunes entre dos
+RDD. Devuelve un nuevo RDD que contiene solo los elementos que están
 presentes en ambos RDDs originales.
 
 -   Ambos RDD deben contener elementos del mismo tipo para que la
     operación sea válida.
 
--   intersection implica un **shuffle** (reorganización de datos entre
+-   `intersection` implica un `shuffle` (reorganización de datos entre
     particiones), lo que puede ser costoso en términos de rendimiento,
     especialmente con grandes volúmenes de datos.
 
@@ -900,9 +897,9 @@ print(rdd_interseccion.collect())
 
 ![](./media/image38.png)
 
-**intersection con cadenas de texto**
+**Intersección con cadenas de texto**
 
-También puedes usar intersection con RDDs que contengan cadenas de
+También puedes usar `intersection` con RDD que contengan cadenas de
 texto.
 
 ```
@@ -943,14 +940,14 @@ el primer RDD y no en el segundo.
 
 resultado_rdd = rdd1.subtract(rdd2)
 
--   rdd1: El RDD del cual se quieren extraer los elementos.
+-   `rdd1`: el RDD del cual se quieren extraer los elementos.
 
--   rdd2: El RDD cuyos elementos se quieren excluir del primer RDD.
+-  ` rdd2`: el RDD cuyos elementos se quieren excluir del primer RDD.
 
--   resultado_rdd: Un nuevo RDD que contiene los elementos de rdd1 que
-    no están en rdd2.
+-   `resultado_rdd`: un nuevo RDD que contiene los elementos de `rdd1` que
+    no están en `rdd2`.
 
-**Restar dos listas.**
+**Restar dos listas**
 
 ```
 from pyspark import SparkContext
@@ -997,25 +994,26 @@ print("Tuplas en rdd1 que no están en rdd2:")
 print(resultado_rdd.collect())
 ```
 
-subtract compara los elementos de los RDDs de manera exacta. Para tuplas
+`Subtract` compara los elementos de los RDD de manera exacta. Para tuplas
 o estructuras complejas, todos los elementos de la tupla deben coincidir
 para que se considere un duplicado.
 
-### Función cartesian
+### Función `cartesian`
 
-**cartesian -** se utiliza para calcular el producto cartesiano entre
-dos RDDs. El producto cartesiano de dos conjuntos (o RDDs) es un
+Se utiliza para calcular el producto cartesiano entre
+dos RDD. El producto cartesiano de dos conjuntos (o RDD) es un
 conjunto de pares ordenados donde el primer elemento pertenece al primer
-RDD y el segundo elemento pertenece al segundo RDD.Ejemplo: Producto
+RDD y el segundo elemento pertenece al segundo RDD. 
+Ejemplo: producto
 cartesiano de dos listas.
 
-Toma dos RDDs, RDD1 y RDD2.
+Toma dos RDD, `RDD1` y `RDD2`.
 
 Devuelve un nuevo RDD que contiene todas las combinaciones posibles de
-elementos entre RDD1 y RDD2.
+elementos entre `RDD1` y `RDD2`.
 
-El tamaño del RDD resultante es el producto de los tamaños de RDD1 y
-RDD2. Por ejemplo, si RDD1 tiene 3 elementos y RDD2 tiene 2 elementos,
+El tamaño del RDD resultante es el producto de los tamaños de `RDD1` y
+`RDD2`. Por ejemplo, si `RDD1` tiene 3 elementos y `RDD2` tiene 2 elementos,
 el RDD resultante tendrá 3×2=6 elementos.
 
 ```
@@ -1045,7 +1043,7 @@ print(cartesian_rdd.collect())
 El producto cartesiano puede generar un RDD muy grande, ya que su tamaño
 es el producto de los tamaños de los dos RDDs originales.
 
-Por ejemplo, si rdd1 tiene 1,000 elementos y rdd2 tiene 1,000 elementos,
+Por ejemplo, si `rdd1` tiene 1,000 elementos y `rdd2` tiene 1,000 elementos,
 el RDD resultante tendrá 1,000,000 de elementos. Esto puede consumir
 mucha memoria y tiempo de procesamiento.
 
@@ -1053,9 +1051,9 @@ El producto cartesiano es útil en casos donde necesitas comparar o
 combinar todos los elementos de un conjunto con todos los elementos de
 otro conjunto.
 
-### Función groupByKey
+### Función `groupByKey`
 
-**groupByKey** - es una transformación que se aplica a RDDs que
+Es una transformación que se aplica a RDD que
 contienen pares clave-valor. Su propósito es agrupar todos los valores
 que comparten la misma clave en una sola colección. El resultado es un
 nuevo RDD donde cada clave única está asociada a un iterable de todos
@@ -1098,29 +1096,29 @@ print(f" {subject}: {grade}")
 
 ![](./media/image44.png)
 
--   groupByKey puede ser costoso en términos de rendimiento, ya que
+-   `groupByKey` puede ser costoso en términos de rendimiento, ya que
     implica mezclar todos los datos con la misma clave en un solo lugar.
     Si necesitas realizar operaciones de agregación (como sumas o
     promedios), es más eficiente usar reduceByKey o aggregateByKey.
 
--   El resultado de groupByKey es un RDD donde los valores son
+-   El resultado de `groupByKey` es un RDD donde los valores son
     iterables.
 
 -   Si necesitas realizar una operación de reducción (como suma,
-    promedio, máximo, etc.) sobre los valores agrupados, reduceByKey es
+    promedio, máximo, etc.) sobre los valores agrupados, `reduceByKey` es
     una opción más eficiente.
 
--   aggregateByKey es similar a reduceByKey, pero ofrece más
+-   `aggregateByKey` es similar a `reduceByKey`, pero ofrece más
     flexibilidad para inicializar y combinar los valores.
 
-### Función reduceByKey
+### Función `reduceByKey`
 
-**reduceByKey** - transformación que se aplica a RDDs que contienen
+Transformación que se aplica a RDD que contienen
 pares clave-valor. Su objetivo es combinar los valores que comparten la
 misma clave, utilizando una función de reducción. Esta función debe ser
 asociativa y conmutativa para garantizar resultados consistentes.
 
--   reduceByKey agrupa todos los pares clave-valor que tienen la misma
+-   `reduceByKey` agrupa todos los pares clave-valor que tienen la misma
     clave.
 
 -   Para cada grupo de valores con la misma clave, se aplica la función
@@ -1163,41 +1161,41 @@ print(f"Producto: {producto}, Ventas totales: {ventas}")
 
 En este ejemplo:
 
--   rdd.reduceByKey(lambda a, b: a + b): Aplica la función reduceByKey
-    al RDD. La función lambda a, b: a + b es la función de reducción que
+-   `rdd.reduceByKey(lambda a, b: a + b)`: aplica la función `reduceByKey`
+    al RDD. La función `lambda a, b: a + b` es la función de reducción que
     suma los valores.
 
 -   La función de reducción debe ser asociativa y conmutativa. Por
-    ejemplo, la suma (a + b) lo es, pero la resta (a - b) no lo es.
+    ejemplo, la suma `(a + b)` lo es, pero la resta `(a - b)` no lo es.
 
--   reduceByKey es una operación eficiente para grandes conjuntos de
+-   `reduceByKey` es una operación eficiente para grandes conjuntos de
     datos, ya que realiza la reducción de forma distribuida.
 
--   Es importante recordar que reduceByKey opera sobre RDDs de pares
+-   Es importante recordar que `reduceByKey` opera sobre RDD de pares
     clave-valor.
 
 **Además de la suma, se pueden usar otras funciones de reducción como:**
 
--   Máximo: lambda a, b: max(a, b)
+-   Máximo: `lambda a, b: max(a, b)`.
 
--   Mínimo: lambda a, b: min(a, b)
+-   Mínimo: `lambda a, b: min(a, b)`.
 
--   Multiplicación: lambda a, b: a \* b
+-   Multiplicación: `lambda a, b: a \* b`.
 
-### Función sortByKey
+### Función `sortByKey`
 
-**sortByKey -** se utiliza en RDDs que contienen pares clave-valor. Su
+Se utiliza en RDD que contienen pares clave-valor. Su
 propósito es ordenar los elementos del RDD basándose en las claves. Por
 defecto, ordena de forma ascendente, pero esto se puede cambiar.
 
-sortByKey(ascending=True, numPartitions=None, keyfunc=lambda x: x)
+`sortByKey(ascending=True, numPartitions=None, keyfunc=lambda x: x)`
 
--   ascending: Booleano. True para orden ascendente (predeterminado),
-    False para descendente.
+-   `ascending`: booleano. `True` para orden ascendente (predeterminado),
+    `False` para descendente.
 
--   numPartitions: Entero. Número de particiones para el RDD resultante.
+-   `numPartitions`: entero. Número de particiones para el RDD resultante.
 
--   keyfunc: Función que se aplica a las claves antes de la ordenación.
+-   `keyfunc`: función que se aplica a las claves antes de la ordenación.
   
 ```
 from pyspark import SparkContext
@@ -1229,10 +1227,10 @@ for fruta, cantidad in sorted_rdd.collect():
 print(f"{fruta}: {cantidad}")
 ```
 
--   sortByKey solo funciona en RDD de pares clave-valor.
+-   `sortByKey` solo funciona en RDD de pares clave-valor.
 
 -   La ordenación se realiza dentro de cada partición del RDD. Si
-    necesitas una ordenación global, puedes usar repartition(1) para
+    necesitas una ordenación global, puedes usar `repartition(1)` para
     tener una sola partición.
 
 -   Si tienes claves duplicadas, sortByKey no las agrupa, simplemente
@@ -1252,8 +1250,8 @@ Nota la estructura del archivo Sales.csv.
 
 ![](./media/image45.png)
 
-Tenemos más de 10 campos. Y no requerimos en este momento trabajar con
-todos. Así que solo seleccionaremos los campos necesarios.
+Tienes más de 10 campos y no requieres en este momento trabajar con
+todos, así que solo selecciona los campos necesarios.
 
 ```
 from pyspark.sql import SparkSession
@@ -1287,9 +1285,9 @@ print(row)
 
 ![](./media/image47.png)
 
-**Usando map para seleccionar campos**
+**Usando `map` para seleccionar campos**
 
-Otra alternativa es utilizar la función **map** para transformar cada
+Otra alternativa es utilizar la función `map` para transformar cada
 elemento del RDD.
 
 ```
@@ -1323,7 +1321,7 @@ print(row)
 
 ### Convertir tipos de datos en un RDD
 
-Los RDDs no tienen un esquema definido, por lo que no tienen columnas
+Los RDD no tienen un esquema definido, por lo que no tienen columnas
 con tipos de datos específicos. Sin embargo, se puede manipular los
 datos dentro de un RDD para convertir tipos de datos durante el
 procesamiento.
@@ -1359,16 +1357,16 @@ print(rdd_converted.collect())
 
 **En este ejemplo:**
 
-**map**: Esta transformación aplica una función a cada elemento del RDD.
-En este caso, la función es una lambda que toma una tupla x y devuelve
-una nueva tupla donde el primer elemento (x\[0\]) permanece igual, y el
-segundo elemento (x\[1\]) se convierte a un entero usando int().
+`map`: esta transformación aplica una función a cada elemento del RDD.
+En este caso, la función es una lambda que toma una tupla `x` y devuelve
+una nueva tupla donde el primer elemento `(x\[0\])` permanece igual y el
+segundo elemento `(x\[1\])` se convierte a un entero usando `int()`.
 
-**Lambda function: lambda x: (x\[0\], int(x\[1\])):**
+**`Lambda function: lambda x: (x\[0\], int(x\[1\]))`:**
 
-**x\[0\]:** Conserva el primer elemento de la tupla (el nombre).
+**`x\[0\]`:** conserva el primer elemento de la tupla (el nombre).
 
-**int(x\[1\]):** Convierte el segundo elemento de la tupla (la edad) a
+**`int(x\[1\])`:** convierte el segundo elemento de la tupla (la edad) a
 un entero.
 
 ![](./media/image48.png)
@@ -1383,11 +1381,12 @@ un entero.
     la función map.
 
 -   **Rendimiento.** Las operaciones de transformación en RDDs son
-    perezosas (lazy), lo que significa que no se ejecutan hasta que se
-    llama a una acción (como collect()). Esto permite que Spark optimice
+    perezosas `(lazy)`, lo que significa que no se ejecutan hasta que se
+    llama a una acción (como `collect()`). Esto permite que Spark optimice
     el procesamiento.
 
 -   **Uso de DataFrames.** Si estás trabajando con datos estructurados y
     necesitas convertir tipos de datos con frecuencia, es recomendable
-    usar DataFrames en lugar de RDDs. Los DataFrames tienen soporte
+    usar DataFrames en lugar de RDD. Los `DataFrames` tienen soporte
     integrado para esquemas y conversiones de tipos de datos.
+
