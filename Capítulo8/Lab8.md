@@ -41,7 +41,7 @@ Las funciones de agregación más comunes en SQL son:
 
 ## Instrucciones
 
-Tarea 1. Agregaciones y agrupaciones con SQL
+### Tarea 1. Agregaciones y agrupaciones con SQL
 
 **Agrupar DataFrames**
 
@@ -173,7 +173,7 @@ dfVentas.show()
 
 **Usando `HAVING`**
 
-Notemos la ejecución del siguiente código.
+Nota la ejecución del siguiente código.
 
 ```
 from pyspark.sql import SparkSession
@@ -753,5 +753,6 @@ spark.sql(query).show()
 ![](./media/image23.png)
 
 ![](./media/image24.png)
+
 
 
