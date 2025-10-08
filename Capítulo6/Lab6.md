@@ -268,3 +268,4 @@ print(f"Fecha: {fecha}, Ventas: {ventas}")
 ![](./media/image10.png)
 
 
+
