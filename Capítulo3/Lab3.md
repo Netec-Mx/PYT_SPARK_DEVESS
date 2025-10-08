@@ -1,6 +1,11 @@
 # Práctica 3. DataFrames en PySpark
 
-## Tarea 1: Creando DataFrames
+## Duración aproximada
+- 45 minutos.
+
+## Instrucciones
+
+### Tarea 1. Creando DataFrames
 
 Los DataFrames en PySpark son una estructura de datos distribuida y
 optimizada que permite trabajar con datos estructurados o
@@ -11,6 +16,7 @@ archivos (CSV, JSON, Parquet), bases de datos, o RDDs.
 
 **Crear un DataFrame desde una lista de datos**
 
+```
 from pyspark.sql import SparkSession
 
 spark = SparkSession\\
@@ -28,22 +34,21 @@ df = spark.createDataFrame(data, \["Mes", "Ingreso"\])
 \# Mostrar el DataFrame
 
 df.show()
+```
 
-![](./media/image1.png){width="5.875820209973753in"
-height="2.6774573490813647in"}
+![](./media/image1.png)
 
-![](./media/image2.png){width="3.2608716097987753in"
-height="2.3024048556430445in"}
+![](./media/image2.png)
 
 **En este ejemplo:**
 
--   spark.createDataFrame() crea un DataFrame a partir de una lista de
-    tuplas.
+-   `spark.createDataFrame()` crea un `DataFrame` a partir de una lista de tuplas.
 
 -   El segundo argumento especifica los nombres de las columnas.
 
 **DataFrame creado a partir de un diccionario**
 
+```
 from pyspark.sql import SparkSession
 
 \# Crear una SparkSession
@@ -73,22 +78,21 @@ df.show()
 \# Consultar el esquema del DataFrame
 
 df.printSchema()
+```
 
-![](./media/image3.png){width="5.011449037620298in"
-height="3.5399956255468066in"}
+![](./media/image3.png)
 
-![](./media/image4.png){width="2.3959514435695537in"
-height="2.162534995625547in"}
+![](./media/image4.png)
 
 **En este ejemplo:**
 
--   **createDataFrame** se utiliza para crear el DataFrame desde una
-    colección.
+-   `createDataFrame` se utiliza para crear el DataFrame desde una colección.
 
--   **df.printSchema** muestra la estructura de datos inferida
+-   `df.printSchema` muestra la estructura de datos inferida.
 
 **Crear un DataFrame desde un archivo CSV**
 
+```
 from pyspark.sql import SparkSession
 
 spark = SparkSession\\
@@ -108,21 +112,22 @@ df = spark.read.csv("/home/miguel/data/Sales.csv")
 df.show(5)
 
 df.printSchema()
+```
 
 **En este ejemplo:**
 
--   **spark.read.csv()** carga un archivo CSV.
+-   `spark.read.csv()` carga un archivo CSV.
 
--   Nótese el primer registro, nombres de columnas y tipos de datos.
+-   Nota el primer registro, nombres de columnas y tipos de datos.
 
-![](./media/image5.png){width="5.6674573490813644in"
-height="2.6566207349081363in"}
+![](./media/image5.png)
 
-![](./media/image6.png){width="6.1375in" height="2.2423611111111112in"}
+![](./media/image6.png)
 
 **Crear un DataFrame desde un archivo CSV infiriendo esquema e
 identificando encabezados**
 
+```
 from pyspark.sql import SparkSession
 
 spark = SparkSession\\
@@ -143,50 +148,51 @@ inferSchema=True)
 df.show(5)
 
 df.printSchema()
+```
 
 **En este ejemplo:**
 
--   **spark.read.csv()** carga un archivo CSV.
+-   `spark.read.csv()` carga un archivo CSV.
 
--   **header=True** indica que la primera fila contiene los nombres de
-    las columnas.
+-   `header=True` indica que la primera fila contiene los nombres de las columnas.
 
--   **inferSchema=True** infiere automáticamente los tipos de datos de
-    las columnas.
+-   `inferSchema=True` infiere automáticamente los tipos de datos de las columnas.
 
-![](./media/image7.png){width="6.1375in" height="2.3402777777777777in"}
+![](./media/image7.png)
 
-![](./media/image8.png){width="6.1375in" height="2.352777777777778in"}
+![](./media/image8.png)
 
-Crear un DataFrame desde un archivo parquet
+**Crear un DataFrame desde un archivo parquet**
 
-**from pyspark.sql import SparkSession**
+```
+from pyspark.sql import SparkSession
 
-**spark = SparkSession\\**
+spark = SparkSession\\
 
-**.builder\\**
+.builder\\
 
-**.appName("Ejemplo CSV")\\**
+.appName("Ejemplo CSV")\\
 
-**.getOrCreate()**
+.getOrCreate()
 
-**\# Crear un DataFrame desde un archivo CSV**
+\# Crear un DataFrame desde un archivo CSV
 
-**df = spark.read.parquet("/home/miguel/data/house-price.parquet")**
+df = spark.read.parquet("/home/miguel/data/house-price.parquet")
 
-**\# Mostrar el DataFrame y el esquema**
+\# Mostrar el DataFrame y el esquema
 
-**df.show(10)**
+df.show(10)
 
-**df.printSchema()**
+df.printSchema()
+```
 
-![](./media/image9.png){width="4.4900481189851265in"
-height="1.9595745844269465in"}
+![](./media/image9.png)
 
-![](./media/image10.png){width="6.1375in" height="2.0208333333333335in"}
+![](./media/image10.png)
 
 **DataFrame desde un archivo JSON**
 
+```
 from pyspark.sql import SparkSession
 
 \# Crear una SparkSession
@@ -210,21 +216,21 @@ df.printSchema()
 \# Mostrar los primeros 10 registros del DataFrame
 
 df.show(10)
+```
 
-![](./media/image11.png){width="6.1375in" height="2.3430555555555554in"}
+![](./media/image11.png)
 
-![](./media/image12.png){width="5.292620297462817in"
-height="3.014002624671916in"}
+![](./media/image12.png)
 
-## 
 
-## Tarea 2: Trabajando con DataFrames
+### Tarea 2. Trabajando con DataFrames
 
 Los DataFrames permiten realizar operaciones similares a las de SQL,
 como seleccionar columnas, filtrar filas, agrupar datos, etc.
 
 **Seleccionar columnas desde colección**
 
+```
 from pyspark.sql import SparkSession
 
 from pyspark.sql.functions import col
@@ -268,16 +274,16 @@ df.show()
     columnas que tendrá el DataFrame
 
 -   **createDataFrame(data, columns)** crea el DataFrame a partir de la
-    colección de datos y la declaración de columnas
+    colección de datos y la declaración de columnas.
+```
 
-![](./media/image13.png){width="3.583513779527559in"
-height="3.389226815398075in"}
+![](./media/image13.png)
 
-![](./media/image14.png){width="2.1693963254593176in"
-height="1.8259787839020123in"}
+![](./media/image14.png)
 
 **Seleccionar columnas con select()**
 
+```
 from pyspark.sql import SparkSession
 
 from pyspark.sql.functions import col
@@ -300,15 +306,15 @@ df.printSchema()
 \# Mostrar el DataFrame
 
 df.select("Product","Cost","Price").show(10)
+```
 
-![](./media/image15.png){width="5.238077427821523in"
-height="2.2118700787401573in"}
+![](./media/image15.png)
 
-![](./media/image16.png){width="3.682843394575678in"
-height="3.8084831583552057in"}
+![](./media/image16.png)
 
 **Seleccionar columnas con la función col()**
 
+```
 from pyspark.sql import SparkSession
 
 from pyspark.sql.functions import col
@@ -331,17 +337,18 @@ df.printSchema()
 \# Mostrar el DataFrame
 
 df.select(col("Product"),col("Cost"),col("Price")).show(10)
+```
 
-![](./media/image17.png){width="6.1375in" height="2.5833333333333335in"}
+![](./media/image17.png)
 
-![](./media/image18.png){width="2.221470909886264in"
-height="2.595112642169729in"}
+![](./media/image18.png)
 
 **Renombrar columnas**
 
 Con el objeto **col(),** es posible cambiar el nombre de las columnas
-recuperadas con su atributo **alias()**
+recuperadas con su atributo **alias()**.
 
+```
 **from pyspark.sql import SparkSession**
 
 **from pyspark.sql.functions import col**
@@ -363,17 +370,18 @@ header=True)**
 
 **df.select(col("SalesOrderNumber").alias("Order"),col("Product").alias("Producto")
 ,col("Quantity").alias("Cantidad"),col("Sales").alias("Importe")).show(10)**
+```
 
-![](./media/image19.png){width="6.1375in" height="2.5993055555555555in"}
+![](./media/image19.png)
 
-![](./media/image20.png){width="3.117824803149606in"
-height="2.9549529746281715in"}
+![](./media/image20.png)
 
 **Agregar columnas literales a un DataFrame existente**
 
 Para adicionar una columna con valor fijo, la función **lit()** permite
 asignar un valor constante a una nueva columna.
 
+```
 from pyspark.sql import SparkSession
 
 from pyspark.sql.functions import col, lit
@@ -397,11 +405,11 @@ df_empleados = df.withColumn("Status",lit("Active"))
 #Mostrar el DataFrame
 
 df_empleados.show()
+```
 
-![](./media/image21.png){width="4.541171259842519in"
-height="2.663660323709536in"}
+![](./media/image21.png)
 
-![](./media/image22.png){width="6.1375in" height="0.9388888888888889in"}
+![](./media/image22.png)
 
 La función lit no se limita a valores simples como enteros o cadenas.
 
@@ -414,6 +422,7 @@ Una forma de adicionar columnas calculadas es a través de la función
 expr(). El cálculo se puede basar en el nombre de la columna original o
 en el alias.
 
+```
 from pyspark.sql import SparkSession
 
 from pyspark.sql.functions import col
@@ -440,6 +449,7 @@ df.select(col("SalesOrderNumber").alias("Order"),col("Product").alias("Producto"
 ,col("Quantity").alias("Cantidad"),col("Sales").alias("Importe"),
 
 expr("Sales \* Quantity").alias("Subtotal")).show(10)
+```
 
 **En este ejemplo:**
 
@@ -454,6 +464,7 @@ expr("Sales \* Quantity").alias("Subtotal")).show(10)
 La función **withColumn()** devuelve un nuevo DataFrame agregando una
 columna o reemplazando la columna existente que tiene el mismo nombre
 
+```
 from pyspark.sql import SparkSession
 
 from pyspark.sql.functions import col
@@ -484,18 +495,18 @@ df_productos = df_productos.withColumn("Total", df_productos.Cantidad \*
 df_productos.Importe)
 
 df_productos.show(3)
+```
 
-![](./media/image23.png){width="5.180621172353455in"
-height="2.5797594050743657in"}
+![](./media/image23.png)
 
-![](./media/image24.png){width="3.4125831146106735in"
-height="1.9004702537182852in"}
+![](./media/image24.png)
 
 Adicionar varias columnas a un DataFrame existente.
 
 La función **withColumns()** permite adicionar varias columnas a un
-DataFrame existente
+DataFrame existente.
 
+```
 from pyspark.sql import SparkSession
 
 from pyspark.sql.functions import col
@@ -528,17 +539,16 @@ df_productos = df_productos.withColumns({"Total": df_productos.Cantidad
 "Impuesto": df_productos.Importe\*.16})
 
 df_productos.show(3)
+```
 
 **En este ejemplo:**
 
 -   Nótese que, para indicar que se va a adicionar una colección de
     columnas, estas aparecen con **{}** en la función **withColumns()**
 
-![](./media/image25.png){width="4.942299868766404in"
-height="2.770326990376203in"}
+![](./media/image25.png)
 
-![](./media/image26.png){width="3.7173818897637796in"
-height="1.7843438320209974in"}
+![](./media/image26.png)
 
 **Salvar DataFrames en archivos**
 
@@ -547,7 +557,7 @@ Parquet y JSON. Cada uno de estos formatos tiene sus ventajas y usos
 específicos.
 
 **Salvar en archivo csv**
-
+```
 from pyspark.sql import SparkSession
 
 from pyspark.sql.functions import col
@@ -585,12 +595,11 @@ df_productos.show(3)
 
 df_productos.write.csv("/home/miguel/data/salida/reporte1.csv",
 header=True, mode="overwrite")
+```
 
-![](./media/image27.png){width="4.855197944006999in"
-height="2.9604724409448817in"}
+![](./media/image27.png)
 
-![](./media/image28.png){width="4.650160761154855in"
-height="1.8441666666666667in"}
+![](./media/image28.png)
 
 El parámetro **mode** controla el comportamiento si el archivo ya
 existe. Los valores comunes son **overwrite** (sobrescribir el archivo
@@ -599,7 +608,7 @@ guardar si el archivo ya existe) y **error** (lanzar un error si el
 archivo ya existe).
 
 **Salvar el archivo como parquet**
-
+```
 from pyspark.sql import SparkSession
 
 from pyspark.sql.functions import col
@@ -637,24 +646,23 @@ df_productos.show(3)
 
 df_productos.write.parquet("/home/miguel/data/salida/reporte2.parquet",
 mode="overwrite")
+```
 
-![](./media/image29.png){width="4.1762642169728785in"
-height="2.8026060804899386in"}
+![](./media/image29.png)
 
-![](./media/image30.png){width="4.0051410761154855in"
-height="1.8343536745406823in"}
+![](./media/image30.png)
 
 Al mostrar el contenido del directorio, se muestran archivos por
 partición. Este es el comportamiento por omisión.
 
-![](./media/image31.png){width="5.84456583552056in"
-height="1.2605927384076991in"}
+![](./media/image31.png)
 
 ¿Cómo reducir a un solo archivo y cambiar la salida del archivo salvado?
 
 Hay que reducir las particiones antes de salvar el archivo. Esto se
-logra con la función coalesce():
+logra con la función `coalesce()`.
 
+```
 from pyspark.sql import SparkSession
 
 from pyspark.sql.functions import col
@@ -711,8 +719,9 @@ archivo_csv = \[f for f in archivos if f.endswith(".csv")\]\[0\]
 
 os.rename(f"/home/netec/data/salida/{archivo_csv}",
 "/home/netec/data/salida/reporte.csv")
+```
 
-![](./media/image32.png){width="3.4588156167979003in"
-height="0.635505249343832in"}
+![](./media/image32.png)
 
-\*\*\* Fin del laboratorio
+
+
