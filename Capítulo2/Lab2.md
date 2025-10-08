@@ -1,58 +1,62 @@
-# Laboratorio 2: Creación de RDD en PySpark
+# Laboratorio 2. Creación de RDD en PySpark
 
-**Objetivo:** Iniciar la carga de datos en RDD a partir de diferentes
+## Objetivo
+Al finalizar la práctica, serás capaz de:
+- Iniciar la carga de datos en RDD a partir de diferentes
 fuentes de información.
 
-**Tiempo estimado:** 45 minutos
+## Duración aproximada: 
+- 45 minutos
 
-**Prerequisitos:**
+## Prerequisitos
 
-• Acceso a ambiente Linux (credenciales provistas en el curso) o Linux
-local con interfaz gráfica
+- Acceso a ambiente Linux (credenciales provistas en el curso) o Linux
+local con interfaz gráfica.
 
-• Haber completado la instalación del ambiente (laboratorio 1)
+- Haber completado la instalación del ambiente (laboratorio 1).
 
-**Contexto:**
+## Instrucciones
 
 Un RDD (Resilient Distributed Dataset) es la unidad básica de datos en
 Spark. Podemos conceptualizarlos como una colección inmutable de
 elementos que pueden ser procesados en paralelo a través de un clúster.
 
-![](./media/image1.png){width="4.75in" height="2.5in"}
+![](./media/image1.png) 
 
-Antes de crear RDDs, necesitamos una sesión de Spark. Esta sesión es la
-conexión entre nuestro programa y el motor de Spark.
+Antes de crear un RDD, necesitamos una sesión de Spark. Esta sesión es la conexión entre nuestro programa y el motor de Spark.
 
-SparkSession es un punto de inicio a la funcionalidad de Spark, y es
+SparkSession es un punto de inicio a la funcionalidad de Spark y es
 necesaria para crear un contexto para operar PySpark. SparkContext
 representa la conexión a un clúster de Spark.
 
 ![](./media/image2.png){width="6.135416666666667in" height="2.78125in"}
 
-**Instrucciones:**
-
-## Tarea 1: Crear y configurar SparkSession y SparkContext
+### Tarea 1. Crear y configurar SparkSession y SparkContext
 
 Iniciamos PyCharm con el siguiente comando:
 
-pycharm-community
+`pycharm-community`
 
-Creamos un proyecto y editamos el archivo .py
+Creamos un proyecto y editamos el archivo `.py`. 
 
 ![](./media/image3.png){width="3.3448425196850393in"
 height="2.81121062992126in"}
 
-Para acceder a la sesión de Spark y tener acceso a RDDs, vamos a crear
+Para acceder a la sesión de Spark y tener acceso a RDD, vas a crear
 un SparkSession. Este puede tomar diferentes parámetros para tomar el
 control de las características de la conexión desde Python. La manera
-más simple es:
+más simple es la siguiente.
+
+```
 
 spark = SparkSession.builder \\
 
 .getOrCreate()
+```
 
 ![](./media/image4.png){width="5.295334645669291in"
 height="2.3073468941382327in"}
+
 
 La función **SparkSession.builder.getOrCreate()** obtiene una
 SparkSession existente o, si no hay ninguna, crea una nueva en función
@@ -73,6 +77,7 @@ sesión:
 ![](./media/image5.png){width="5.4443733595800525in"
 height="2.3229166666666665in"}
 
+```
 from pyspark.sql import SparkSession
 
 spark = SparkSession.builder \\
@@ -84,6 +89,7 @@ spark = SparkSession.builder \\
 .getOrCreate()
 
 print(spark)
+```
 
 En el parámetro master, es posible indicar en cuántos núcleos queremos
 lanzar la ejecución.
@@ -219,9 +225,7 @@ spark.stop()
 ![](./media/image10.png){width="4.355667104111986in"
 height="3.307409230096238in"}
 
-## 
-
-## Tarea 2: Creando RDDs a partir de conjuntos
+## Tarea 2. Creando RDD a partir de conjuntos
 
 En RDD, cada registro se procesa de forma independiente amanera de fila.
 No existen las columnas. Los RDD son la estructura de datos fundamental
@@ -355,7 +359,7 @@ En este ejemplo:
 -   **rdd.collect():** Recupera todos los elementos del RDD y los
     devuelve como una lista.
 
-## Tarea 3: Creando RDDs a partir de un archivo de texto
+### Tarea 3. Creando RDD a partir de un archivo de texto
 
 Para crear RDD (conjuntos de datos distribuidos resistentes) a partir de
 archivos en Apache Spark, se pueden usar métodos integrados para leer
@@ -441,9 +445,7 @@ print(line)
 -   Es mejor usar DataFrames para datos estructurados en la mayoría de
     casos
 
-## Tarea 4: Obtener Información de un RDD
-
-**Inspeccionar el contenido de un RDD**
+### Tarea 4. Inspeccionar el contenido de un RDD
 
 Se pueden usar acciones como collect(), take(), o first() para
 inspeccionar los datos del RDD.
@@ -464,7 +466,7 @@ print(rdd.first()) \# Ver el primer elemento
 ![](./media/image23.png){width="5.415733814523184in"
 height="2.3261056430446194in"}
 
-**Leer usando SparkContext**
+- Leer usando SparkContext.
 
 \# Crear SparkContext
 
@@ -491,9 +493,8 @@ print(rdd_split.take(5))
 ![](./media/image24.png){width="5.729396325459318in"
 height="2.0323206474190725in"}
 
-## 
 
-## Tarea 5: Salvar RDDs
+### Tarea 5. Salvar RDDs
 
 En PySpark, se pueden guardar RDD en diferentes tipos de archivos
 utilizando varios métodos. Para estos ejemplos, usaremos un directorio
@@ -585,3 +586,4 @@ df = rdd.toDF(\["columna1", "columna2"\])
 df.write.csv("ruta/del/archivo")
 
 \*\*\*Fin del laboratorio
+
