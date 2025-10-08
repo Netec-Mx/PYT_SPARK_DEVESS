@@ -1,19 +1,22 @@
-# Laboratorio 8: Uso de agregaciones, agrupaciones y relaciones
+# Práctica 8. Uso de agregaciones, agrupaciones y relaciones
 
-**Objetivo:** Aplicar agregaciones, agrupaciones y relaciones
+## Objetivos
+Al finalizar la práctica, serás capaz de:
+- Aplicar agregaciones, agrupaciones y relaciones
 
-**Tiempo estimado:** 60 minutos
+## Duración aproximada
+- 60 minutos.
 
-**Prerequisitos:**
+## Prerrequisitos
 
 -   Acceso a ambiente Linux (credenciales provistas en el curso) o Linux
-    local con interfaz gráfica
+    local con interfaz gráfica.
 
--   Tener los archivos de datos
+-   Tener los archivos de datos.
 
--   Completar el laboratorio 1
+-   Completar el laboratorio 1.
 
-**Contexto:**
+## Contexto
 
 Como parte de las consultas y análisis, el vincular tablas de diferentes
 fuentes es una necesidad regular, así como obtener agregaciones para
@@ -26,25 +29,27 @@ Funciones de Agregación Comunes en SQL
 
 Las funciones de agregación más comunes en SQL son:
 
--   **COUNT**: Cuenta el número de filas.
+-   `COUNT`: Cuenta el número de filas.
 
--   **SUM**: Suma los valores de una columna.
+-   `SUM`: Suma los valores de una columna.
 
--   **AVG**: Calcula el promedio de los valores de una columna.
+-   `AVG`: Calcula el promedio de los valores de una columna.
 
--   **MIN**: Encuentra el valor mínimo de una columna.
+-   `MIN`: Encuentra el valor mínimo de una columna.
 
--   **MAX**: Encuentra el valor máximo de una columna.
+-   `MAX`: Encuentra el valor máximo de una columna.
 
-**Instrucciones:**
+## Instrucciones
 
-Tarea1: Agregaciones y agrupaciones con SQL
+Tarea 1. Agregaciones y agrupaciones con SQL
 
 **Agrupar DataFrames**
 
-Abrimos la sesión de PyCharm e introducimos el siguente código:
+**Paso 1.** Abre la sesión de PyCharm e introduce el siguente código.
 
-**from pyspark.sql import SparkSession**
+
+```
+from pyspark.sql import SparkSession
 
 spark = SparkSession\\
 
@@ -54,37 +59,36 @@ spark = SparkSession\\
 
 .getOrCreate()
 
-**\# Crear DataFrame**
+\# Crear DataFrame
 
-**dfSales = spark.read.csv("/home/miguel/data/Sales.csv",
-inferSchema=True, header=True)**
+dfSales = spark.read.csv("/home/miguel/data/Sales.csv",
+inferSchema=True, header=True)
 
-**\# Registrar el DataFrame como una tabla temporal**
+\# Registrar el DataFrame como una tabla temporal
 
-**dfSales.createOrReplaceTempView("ventas")**
+dfSales.createOrReplaceTempView("ventas")
 
-**query = ("SELECT Country, SUM(Sales) AS TotalSales "**
+query = ("SELECT Country, SUM(Sales) AS TotalSales "
 
-**" FROM ventas "**
+" FROM ventas "
 
-**" GROUP BY Country "**
+" GROUP BY Country "
 
-**)**
+)
 
-**spark.sql(query).show()**
+spark.sql(query).show()
+```
 
-**En este ejemplo:**
+En este ejemplo:
 
--   **createOrReplaceTempView** expone el DataFrame como table para
+-   `createOrReplaceTempView` expone el DataFrame como table para
     usarse en la sentencia SQL
 
--   **SUM()** suma los valores del campo Sales y los corta por Country
+-   `SUM()` suma los valores del campo Sales y los corta por Country
 
-![](./media/image1.png){width="3.625495406824147in"
-height="2.0785673665791777in"}
+![](./media/image1.png)
 
-![](./media/image2.png){width="1.927331583552056in"
-height="1.8251760717410324in"}
+![](./media/image2.png)
 
 **Agrupar por más de un campo**
 
@@ -93,6 +97,7 @@ que si los campos no utilizan una función de agregación, todos ellos
 deberán estar en GROUP BY. El primer campo declarado maneja la
 agrupación principal.
 
+```
 from pyspark.sql import SparkSession
 
 spark = SparkSession\\
@@ -121,15 +126,14 @@ query = ("SELECT Territory, Country, SUM(Sales) AS TotalSales "
 )
 
 spark.sql(query).show()
+```
 
-![](./media/image3.png){width="4.372521872265967in"
-height="2.410873797025372in"}
-
-![](./media/image4.png){width="2.5345538057742782in"
-height="1.8976662292213473in"}
+![](./media/image3.png)
+![](./media/image4.png)
 
 **Aplicar múltiples funciones de agregación**
 
+```
 from pyspark.sql import SparkSession
 
 spark = SparkSession\\
@@ -161,17 +165,17 @@ Average, MIN(Price) as MinPrice"
 dfVentas= spark.sql(query)
 
 dfVentas.show()
+```
 
-![](./media/image5.png){width="4.168404418197725in"
-height="2.2738035870516184in"}
+![](./media/image5.png)
 
-![](./media/image6.png){width="3.6583311461067365in"
-height="1.4518482064741907in"}
+![](./media/image6.png)
 
-**Usando HAVING**
+**Usando `HAVING`**
 
-Notemos la ejecución del siguiente código
+Notemos la ejecución del siguiente código.
 
+```
 from pyspark.sql import SparkSession
 
 spark = SparkSession\\
@@ -206,19 +210,19 @@ query = ("SELECT Category, COUNT(Product) as NoProducts"
 dfProducts= spark.sql(query)
 
 dfProducts.show()
+```
 
-![](./media/image7.png){width="4.396468722659668in"
-height="2.540977690288714in"}
+![](./media/image7.png)
 
-![](./media/image8.png){width="2.0673643919510063in"
-height="1.8035968941382328in"}
+![](./media/image8.png)
 
 ¿Cómo obtener las categorías cuyo total es superior a 100?
 
-La cláusula WHERE no puede ser aplicable porque esta se aplica a nivel
+La cláusula `WHERE` no puede ser aplicable porque esta se aplica a nivel
 registro y no a nivel agrupación. Para aplicar condiciones por grupo se
-tiene a la cláusula HAVING
+tiene a la cláusula `HAVING`.
 
+```
 from pyspark.sql import SparkSession
 
 spark = SparkSession\\
@@ -253,22 +257,22 @@ query = ("SELECT Category, COUNT(Product) as NoProducts"
 dfProducts= spark.sql(query)
 
 dfProducts.show()
+```
 
-La cláusula HAVING se puede aplicar a cualquier agregación. También se
-puede combinar con WHERE, ya que esta filtra registros y HAVING
+La cláusula `HAVING` se puede aplicar a cualquier agregación. También se
+puede combinar con `WHERE`, ya que esta filtra registros y `HAVING`
 agregaciones.
 
-![](./media/image9.png){width="4.2686220472440946in"
-height="2.6057042869641296in"}
+![](./media/image9.png)
 
-![](./media/image10.png){width="2.1699343832021in"
-height="1.4842672790901137in"}
+![](./media/image10.png)
 
 **Agregación sin agrupación**
 
 Si no se usa GROUP BY, las funciones de agregación se aplican a toda la
 tabla.
 
+```
 from pyspark.sql import SparkSession
 
 spark = SparkSession\\
@@ -302,43 +306,41 @@ MAX(Price) as MaxPrice,"
 dfProducts= spark.sql(query)
 
 dfProducts.show()
+```
 
-![](./media/image11.png){width="4.290988626421697in"
-height="2.4207819335083114in"}
+![](./media/image11.png)
 
-![](./media/image12.png){width="4.345452755905511in"
-height="0.9479472878390202in"}
+![](./media/image12.png)
 
-## 
-
-## Tarea 2: Manejando relaciones
+### Tarea 2. Manejando relaciones
 
 Se puede utilizar SQL para trabajar con relaciones entre tablas
-(DataFrames) utilizando operaciones como JOIN, UNION, INTERSECT, y
-EXCEPT. Estas operaciones permiten combinar o comparar datos de
+(DataFrames) utilizando operaciones como `JOIN`, `UNION`, `INTERSECT` y
+`EXCEPT`. Estas operaciones permiten combinar o comparar datos de
 múltiples tablas basadas en condiciones específicas.
 
-JOIN se utiliza para combinar filas de dos o más tablas basadas en una
-condición relacionada. Los tipos más comunes de JOIN son:
+`JOIN` se utiliza para combinar filas de dos o más tablas basadas en una
+condición relacionada. Los tipos más comunes de `JOIN` son:
 
--   **INNER JOIN:** Devuelve solo las filas que tienen coincidencias en
+-   `INNER JOIN` devuelve solo las filas que tienen coincidencias en
     ambas tablas.
 
--   **LEFT JOIN (o LEFT OUTER JOIN):** Devuelve todas las filas de la
+-   `LEFT JOIN (o LEFT OUTER JOIN)` devuelve todas las filas de la
     tabla izquierda y las coincidencias de la tabla derecha. Si no hay
     coincidencias, se devuelven NULL para las columnas de la tabla
     derecha.
 
--   **RIGHT JOIN (o RIGHT OUTER JOIN):** Devuelve todas las filas de la
+-   `RIGHT JOIN (o RIGHT OUTER JOIN)` devuelve todas las filas de la
     tabla derecha y las coincidencias de la tabla izquierda. Si no hay
-    coincidencias, se devuelven NULL para las columnas de la tabla
+    coincidencias, se devuelven `NULL` para las columnas de la tabla
     izquierda.
 
--   **FULL JOIN (o FULL OUTER JOIN):** Devuelve todas las filas cuando
+-   `FULL JOIN (o FULL OUTER JOIN):` Devuelve todas las filas cuando
     hay una coincidencia en cualquiera de las tablas. Si no hay
     coincidencias, se devuelven NULL para las columnas de la tabla sin
     coincidencias.
 
+```
 from pyspark.sql import SparkSession
 
 spark = SparkSession\\
@@ -392,19 +394,19 @@ p.Category,"
 dfProducts= spark.sql(query)
 
 dfProducts.show()
+```
 
-![](./media/image13.png){width="3.500285433070866in"
-height="2.408772965879265in"}
+![](./media/image13.png)
 
-![](./media/image14.png){width="3.645625546806649in"
-height="1.8129133858267716in"}
+![](./media/image14.png)
 
 **Aplicando diferentes tipos de relación**
 
 Nótese que de la lista, hay empleados sin departamento y departamentos
-sin empleados (en base al campo común). En INNER JOIN no se mostrarán
+sin empleados (en base al campo común). En `INNER JOIN` no se mostrarán
 estos registros
 
+```
 from pyspark.sql import SparkSession
 
 spark = SparkSession.builder.appName("SQL relaciones").getOrCreate()
@@ -464,18 +466,18 @@ query = ("SELECT e.id_empleado, e.nombre, d.nombre_departamento "
 "ON e.id_departamento = d.id_departamento")
 
 spark.sql(query).show()
+```
 
-![](./media/image15.png){width="4.283389107611549in"
-height="3.2990540244969377in"}
+![](./media/image15.png)
 
-![](./media/image16.png){width="3.031482939632546in"
-height="1.777363298337708in"}
+![](./media/image16.png)
 
-**LEFT JOIN**
+**`LEFT JOIN`**
 
 Devuelve todos los empleados, incluso si no tienen un departamento
 asignado.
 
+```
 from pyspark.sql import SparkSession
 
 \# Crear una sesión de Spark
@@ -537,18 +539,18 @@ query = ("SELECT e.id_empleado, e.nombre, d.nombre_departamento "
 "ON e.id_departamento = d.id_departamento")
 
 spark.sql(query).show()
+```
 
-![](./media/image17.png){width="4.526045494313211in"
-height="0.7502635608048994in"}
+![](./media/image17.png)
 
-![](./media/image18.png){width="3.1044083552055994in"
-height="2.0398075240594924in"}
+![](./media/image18.png)
 
-**RIGHT JOIN**
+**`RIGHT JOIN`**
 
 Devuelve todos los departamentos, incluso si no tienen empleados
 asignados.
 
+```
 from pyspark.sql import SparkSession
 
 \# Crear una sesión de Spark
@@ -610,18 +612,18 @@ query = ("SELECT e.id_empleado, e.nombre, d.nombre_departamento "
 "ON e.id_departamento = d.id_departamento")
 
 spark.sql(query).show()
+```
 
-![](./media/image19.png){width="4.613600174978128in"
-height="0.9482491251093613in"}
+![](./media/image19.png)
 
-![](./media/image20.png){width="2.547687007874016in"
-height="2.0291305774278214in"}
+![](./media/image20.png)
 
-**FULL JOIN**
+**`FULL JOIN`**
 
 Devuelve todas las filas de ambas tablas, con NULL donde no hay
 coincidencias.
 
+```
 from pyspark.sql import SparkSession
 
 spark = SparkSession.builder.appName("SQL relaciones").getOrCreate()
@@ -681,19 +683,19 @@ query = ("SELECT e.id_empleado, e.nombre, d.nombre_departamento "
 "ON e.id_departamento = d.id_departamento")
 
 spark.sql(query).show()
+```
 
-![](./media/image21.png){width="5.2472430008748905in"
-height="0.8299682852143482in"}
+![](./media/image21.png)
 
-![](./media/image22.png){width="2.7250590551181104in"
-height="1.8081375765529308in"}
+![](./media/image22.png)
 
-**Relaciones con UNION**
+**Relaciones con `UNION`**
 
 El UNION combina los resultados de dos consultas en un solo conjunto de
 resultados. Las filas duplicadas se eliminan a menos que se use UNION
 ALL.
 
+```
 from pyspark.sql import SparkSession
 
 spark = SparkSession\\
@@ -746,10 +748,10 @@ query = ("SELECT \* FROM y2018 "
 )
 
 spark.sql(query).show()
+```
 
-![](./media/image23.png){width="4.949208223972003in"
-height="3.0054779090113737in"}
+![](./media/image23.png)
 
-![](./media/image24.png){width="6.1375in" height="1.7229166666666667in"}
+![](./media/image24.png)
 
-\*\*\* Fin del laboratorio
+
