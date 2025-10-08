@@ -1376,8 +1376,8 @@ un entero.
 
 -   **Manejo de errores.** Si algunos valores no se pueden convertir
     (por ejemplo, si una cadena no es un número válido), se lanzará una
-    excepción. Puedes manejar esto usando bloques try-except dentro de
-    la función map.
+    excepción. Puedes manejar esto usando bloques `try-except` dentro de
+    la función `map`.
 
 -   **Rendimiento.** Las operaciones de transformación en RDD son
     perezosas `(lazy)`, lo que significa que no se ejecutan hasta que se
@@ -1388,6 +1388,7 @@ un entero.
     necesitas convertir tipos de datos con frecuencia, es recomendable
     usar DataFrames en lugar de RDD. Los `DataFrames` tienen soporte
     integrado para esquemas y conversiones de tipos de datos.
+
 
 
 
