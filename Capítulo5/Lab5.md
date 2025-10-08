@@ -51,8 +51,7 @@ Ejemplos: `union()`, `intersection()`, `subtract()`, `cartesian()`, etcétera.
 
 ### Trabajando con esquemas (schema)
 
-Los esquemas en RDD proporcionan una forma de definir la estructura de
-los datos dentro de un RDD, especificando los nombres y tipos de las
+Los esquemas en RDD permiten definir la estructura de los datos en un RDD, especificando los nombres y tipos de las
 columnas. Esto permite a PySpark optimizar el procesamiento de los datos y realizar operaciones más eficientes.
 
 **¿Por qué usar esquemas en RDD?**
@@ -83,7 +82,7 @@ pycharm-community
 ```
 
 Crea un archivo Python e introduce el siguiente código. Se ajusta
-la ruta al archivo `Customers.cvs`.
+la ruta al archivo `Customers.csv`.
 
 ```
 from pyspark.sql import SparkSession
@@ -116,7 +115,7 @@ spark.sparkContext.textFile("/home/miguel/data/Model/Customers.csv")
 encabezado = rdd.zipWithIndex().filter(lambda x: x\[1\] \> 0).map(lambda
 x: x\[0\])
 
-#Se convierte el RDD a DataFrame
+# El RDD se convierte a DataFrame
 
 rdd_con_esquema = encabezado.map(lambda linea:
 linea.split(",")).toDF(schema)
@@ -1335,7 +1334,7 @@ sc = SparkContext("local", "ConvertirTiposRDD")
 
 \# Crear un RDD de ejemplo
 
-rdd = sc.parallelize(\[("Alejandro", "25"), ("Betriz", "30"), ("Carmen",
+rdd = sc.parallelize(\[("Alejandro", "25"), ("Beatriz", "30"), ("Carmen",
 "28")\])
 
 \# Mostrar el RDD original
@@ -1389,5 +1388,6 @@ un entero.
     necesitas convertir tipos de datos con frecuencia, es recomendable
     usar DataFrames en lugar de RDD. Los `DataFrames` tienen soporte
     integrado para esquemas y conversiones de tipos de datos.
+
 
 
