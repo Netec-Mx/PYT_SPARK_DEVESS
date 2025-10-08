@@ -1,91 +1,91 @@
-# Laboratorio 5: Uso de funciones de transformación 
+# Práctica 5. Uso de funciones de transformación 
 
-**Objetivo:** En este laboratorio tendrás la oportunidad de entender y
-aplicar funciones de transformación sobre RDD
+## Objetivos
+Al finalizar la práctica, serás capaz de:
+-Entender y aplicar funciones de transformación sobre RDD.
 
-**Tiempo estimado:** 60 minutos
+## Duración aproximada
+- 60 minutos
 
-**Prerequisitos:**
+## Prerrequisitos
 
 -   Acceso a ambiente Linux (credenciales provistas en el curso) o Linux
-    local con interfaz gráfica
+    local con interfaz gráfica.
 
--   Haber completado el laboratorio 1
+-   Haber completado el laboratorio 1.
 
--   Haber descargado los archivos de datos
+-   Haber descargado los archivos de datos.
 
-**Contexto:**
+## Contexto
 
-Los RDD admiten dos tipos de operaciones: transformaciones, que crean un
-nuevo conjunto de datos a partir de uno existente, y acciones, que
+Los RDD admiten dos tipos de operaciones: transformaciones, que crean un nuevo conjunto de datos a partir de uno existente y acciones, que
 devuelven un valor al programa controlador después de ejecutar un
 cálculo en el conjunto de datos.
 
-Todas las transformaciones de Spark son diferidas (lazzy), en el sentido
+Todas las transformaciones de Spark son diferidas (lazy), en el sentido
 de que no calculan sus resultados de inmediato. En su lugar, solo
 recuerdan las transformaciones aplicadas a algún conjunto de datos base
 (por ejemplo, un archivo). Las transformaciones solo se calculan cuando
 una acción requiere que se devuelva un resultado al programa
 controlador. Este diseño permite que Spark se ejecute de forma más
-eficiente. Por ejemplo, podemos darnos cuenta de que un conjunto de
+eficiente. Por ejemplo, puedes darte cuenta de que un conjunto de
 datos creado a través de un mapa se utilizará en una reducción y
-devolverá solo el resultado de la reducción al controlador, en lugar del
-conjunto de datos mapeado más grande.
+devolverá solo el resultado de la reducción al controlador, en lugar del conjunto de datos mapeado más grande.
 
-**Tipos de Transformaciones en RDDs**
+### Tipos de transformaciones en RDD
 
-Hay varias clasificaciones de de transformaciones asociadas del proceso
-que realizan las transformaciones: de ajuste (narrow), amplias (wide)
+Hay varias clasificaciones de transformaciones asociadas del proceso
+que realizan las transformaciones: de ajuste (narrow), amplias (wide).
 
--   Transformaciones de un solo RDD:
-
+**Transformaciones de un solo RDD**
 Operaciones que se aplican a un único RDD.
 
-Ejemplos: map(), filter(), flatMap(), distinct(), sample(), etc.
+Ejemplos: `map()`, `filter()`, `flatMap()`, `distinct()`, `sample()`, etcétera.
 
--   Transformaciones entre dos RDDs:
+**Transformaciones entre dos RDD**
+Operaciones que involucran dos RDD.
 
-Operaciones que involucran dos RDDs.
-
-Ejemplos: union(), intersection(), subtract(), cartesian(), etc.
+Ejemplos: `union()`, `intersection()`, `subtract()`, `cartesian()`, etcétera.
 
 ![](./media/image1.png){width="6.1375in" height="2.834722222222222in"}
 
-## Trabajando con esquemas (schema)
+### Trabajando con esquemas (schema)
 
-Los esquemas en RDDs proporcionan una forma de definir la estructura de
+Los esquemas en RDD proporcionan una forma de definir la estructura de
 los datos dentro de un RDD, especificando los nombres y tipos de las
-columnas. Esto permite a PySpark optimizar el procesamiento de los datos
-y realizar operaciones más eficientes.
+columnas. Esto permite a PySpark optimizar el procesamiento de los datos y realizar operaciones más eficientes.
 
-¿Por qué usar esquemas en RDDs?
+**¿Por qué usar esquemas en RDD?**
 
--   Mejor rendimiento: Al definir un esquema, PySpark puede optimizar
+-   Mejor rendimiento. Al definir un esquema, PySpark puede optimizar
     las consultas y transformaciones, lo que se traduce en un
     procesamiento más rápido y eficiente.
 
--   Validación de datos: Los esquemas permiten validar los datos al
+-   Validación de datos. Los esquemas permiten validar los datos al
     momento de cargarlos o procesarlos, asegurando que cumplan con la
     estructura definida.
 
--   Mayor legibilidad: Al tener una estructura clara y definida, el
+-   Mayor legibilidad. Al tener una estructura clara y definida, el
     código es más fácil de entender y mantener.
 
--   Integración con otras herramientas: Los esquemas facilitan la
+-   Integración con otras herramientas. Los esquemas facilitan la
     integración con otras herramientas y librerías, como DataFrames y
     SQL.
 
-Instrucciones:
+## Instrucciones
 
-### Tarea 1: Creando RDD con esquema a partir de un archivo CSV
+### Tarea 1. Crear un RDD con esquema a partir de un archivo CSV
 
-Iniciamos la sesión de PyCharm:
+- Inicia la sesión de PyCharm.
 
+```
 pycharm-community
+```
 
-Creamos un archivo Python e introducimos el siguiente código. Se ajusta
-la ruta al archivo Customers.cvs
+Crea un archivo Python e introduce el siguiente código. Se ajusta
+la ruta al archivo `Customers.cvs`.
 
+```
 from pyspark.sql import SparkSession
 
 from pyspark.sql.types import StructType, StructField, StringType
@@ -124,19 +124,18 @@ linea.split(",")).toDF(schema)
 rdd_con_esquema.show()
 
 rdd_con_esquema.printSchema()
+```
 
 ![](./media/image2.png){width="6.1375in" height="3.9555555555555557in"}
 
 ![](./media/image3.png){width="3.278985126859143in"
 height="4.267502187226596in"}
 
-En este ejemplo, Primero, se carga el archivo CSV utilizando textFile().
+En este ejemplo, primero, se carga el archivo CSV utilizando `textFile()`.
 Luego, se omite la primera línea si contiene encabezados. Después, se
-divide cada línea en campos utilizando split(","). Finalmente, se crea
-el RDD con esquema utilizando toDF(schema).
+divide cada línea en campos con `split(",")`. Finalmente, se crea el RDD con esquema utilizando `toDF(schema)`.
 
--   Es importante asegurarse de que los tipos de datos en el archivo CSV
-    coinciden con los tipos de datos definidos en el esquema.
+-   Es importante asegurarse de que los tipos de datos en el archivo CSV coinciden con los tipos de datos definidos en el esquema.
 
 -   Si el archivo CSV contiene encabezados, es necesario omitirlos al
     crear el RDD con esquema.
@@ -144,10 +143,11 @@ el RDD con esquema utilizando toDF(schema).
 -   Si el archivo CSV contiene valores nulos, se pueden manejar
     utilizando la opción nullable=True en la definición del esquema.
 
--   
 
-**Leyendo desde archivo parquet con esquema**
 
+**Leer desde un archivo parquet con esquema**
+
+```
 from pyspark.sql import SparkSession
 
 from pyspark.sql.types import StructType, StructField, StringType,
@@ -214,45 +214,43 @@ print(row)
 df.show(5, 0)
 
 df.printSchema()
+```
 
-![](./media/image4.png){width="4.653777340332458in"
-height="5.253008530183727in"}
+![](./media/image4.png)
 
-![](./media/image5.png){width="6.1375in"
-height="0.6918088363954505in"}![](./media/image6.png){width="6.1375in"
-height="2.817549212598425in"}
+![](./media/image5.png)
+![](./media/image6.png)
 
 **Recomendaciones**
 
--   Utilizar DataFrames cuando sea posible: Si bien es posible crear
-    RDDs con esquemas desde archivos Parquet, se recomienda utilizar
+-   Utilizar DataFrames cuando sea posible. Si bien es posible crear
+    RDD con esquemas desde archivos parquet, se recomienda utilizar
     DataFrames directamente, ya que ofrecen un mejor rendimiento y
     funcionalidades para el procesamiento de datos estructurados.
 
--   Definir esquemas explícitos: Si necesitas un control preciso sobre
+-   Definir esquemas explícitos. Si necesitas un control preciso sobre
     el esquema de los datos, define un esquema explícito utilizando
     StructType y StructField.
 
-### Tarea 2: Aplicando transformaciones
+### Tarea 2. Aplicar transformaciones
 
-**Características de las transformaciones:**
+**Características de las transformaciones**
 
--   **Perezosas (Lazy Evaluation):** Las transformaciones no se ejecutan
-    hasta que se llama a una acción (como collect(), count(),
-    saveAsTextFile(), etc.). Esto permite optimizar el plan de
+-   **Lazy Evaluation (Perezosas).** Las transformaciones no se ejecutan hasta que se llama a una acción (como `collect()`, `count()`,
+    `saveAsTextFile()`, etcétera). Esto permite optimizar el plan de
     ejecución.
 
--   **Inmutabilidad:** Los RDDs son inmutables, lo que significa que las
+-   **Inmutabilidad.** Los RDD son inmutables, lo que significa que las
     transformaciones no modifican el RDD original, sino que generan uno
     nuevo.
 
--   **Lineage (Linaje):** PySpark mantiene un registro de las
-    transformaciones aplicadas a un RDD, lo que permite recalcular datos
-    en caso de fallos.
+-   **Lineage (Linaje).** PySpark mantiene un registro de las
+    transformaciones aplicadas a un RDD, lo que permite recalcular datos en caso de fallos.
 
-Queremos procesar un conjunto de frases para contar la frecuencia de
+Procesa un conjunto de frases para contar la frecuencia de
 cada palabra:
 
+```
 from pyspark import SparkContext
 
 sc = SparkContext("local", "ConteoPalabras")
@@ -280,34 +278,37 @@ rdd_frecuencia = rdd_palabras_mayusculas.map(lambda x: (x,
 
 \# Ejecutar acción para obtener resultados resultado =
 rdd_frecuencia.collect() print(resultado)
+```
 
 ![](./media/image7.png){width="6.1375in" height="2.1055555555555556in"}
 
 ![](./media/image8.png){width="6.1375in" height="0.2909547244094488in"}
 
-### Tarea 3: Aplicando Transformaciones comunes
+### Tarea 3. Aplicando transformaciones comunes
 
-### Función map
+**Función `map`**
 
-**L**a función map es una de las transformaciones más comunes y
+La función `map` es una de las transformaciones más comunes y
 poderosas que se pueden aplicar a un RDD. Toma una función como
 argumento y la aplica a cada elemento del RDD, devolviendo un nuevo RDD
 con los resultados.
 
-La función que pasas a map se aplica a cada elemento del RDD, uno por
+La función que pasas a `map` se aplica a cada elemento del RDD, uno por
 uno. Devuelve un nuevo RDD donde cada elemento es el resultado de
 aplicar la función al elemento original.
 
+```
 salida= entrada.map(funcion())
+```
 
-La función map toma como argumento una función (por ejemplo, una función
-de Python o una lambda) que se aplica a cada elemento del RDD.
+La función `map` toma como argumento una función (por ejemplo, una función de Python o una lambda), que se aplica a cada elemento del RDD.
 
 Devuelve un nuevo RDD donde cada elemento es el resultado de aplicar la
 función al elemento original.
 
-**Convertir todos los elementos de un RDD a mayúsculas.**
+**Convertir todos los elementos de un RDD a mayúsculas**
 
+```
 from pyspark import SparkContext
 
 sc = SparkContext("local",\\
@@ -319,6 +320,7 @@ rdd = sc.parallelize(\["hola", "mundo", "pyspark"\])
 rdd_mayusculas = rdd.map(lambda x: x.upper())
 
 print(rdd_mayusculas.collect())
+```
 
 ![](./media/image9.png){width="4.5924420384951885in"
 height="2.103338801399825in"}
@@ -327,9 +329,10 @@ height="2.103338801399825in"}
 
 **Transformar tuplas**
 
-Se tiene un RDD de tuplas que representan nombres y edades, y se desea
+Se tiene un RDD de tuplas que representan nombres y edades y se desea
 incrementar la edad de cada persona en 2.
 
+```
 from pyspark import SparkContext
 
 sc = SparkContext("local",\\
@@ -348,16 +351,17 @@ rdd_transformado = rdd.map(lambda x: (x\[0\], x\[1\] + 2))
 \# Mostrar el resultado
 
 print(rdd_transformado.collect())
+```
 
-![](./media/image11.png){width="6.1375in" height="2.4763888888888888in"}
+![](./media/image11.png)
 
-![](./media/image12.png){width="4.844425853018373in"
-height="0.8126137357830271in"}
+![](./media/image12.png)
 
 **Transformar cadenas de texto**
 
 Convertir cada cadena a mayúsculas.
 
+```
 from pyspark import SparkContext
 
 sc = SparkContext("local",\\
@@ -375,18 +379,18 @@ rdd_transformado = rdd.map(lambda x: x.upper())
 \# Mostrar el resultado
 
 print(rdd_transformado.collect())
+```
 
-![](./media/image13.png){width="5.490277777777778in"
-height="3.0840277777777776in"}
+![](./media/image13.png)
 
-![](./media/image14.png){width="3.3650524934383204in"
-height="0.6875962379702537in"}
+![](./media/image14.png)
 
 **Transformaciones más complejas**
 
-Puedes usar map para realizar transformaciones más complejas, como
+Puedes usar `map` para realizar transformaciones más complejas, como
 extraer información de un formato de datos.
 
+```
 from pyspark import SparkContext
 
 sc = SparkContext("local",\\
@@ -405,49 +409,48 @@ int(x.split(":")\[1\])))
 \# Mostrar el resultado
 
 print(rdd_transformado.collect())
+```
 
-![](./media/image15.png){width="5.611724628171479in"
-height="2.5133759842519683in"}
+![](./media/image15.png)
 
-![](./media/image16.png){width="4.813171478565179in"
-height="0.8542858705161854in"}
+![](./media/image16.png)
 
-### Función flatMap
+**Función `flatMap`**
 
-**flatMap** - transformación que se aplica a un RDD y devuelve un nuevo
-RDD. La diferencia principal con la transformación map es que flatMap
-puede "aplanar" los resultados.
+Transformación que se aplica a un RDD y devuelve un nuevo
+RDD. A diferencia de `map`, puede "aplanar" los resultados.
 
--   **map**: Aplica una función a cada elemento del RDD y devuelve un
+-   **`map`**. Aplica una función a cada elemento del RDD y devuelve un
     nuevo RDD con los resultados. Si la función devuelve una lista o
     secuencia, cada elemento de esa lista se mantiene como un elemento
     separado en el nuevo RDD.
 
--   **flatMap**: Aplica una función a cada elemento del RDD y devuelve
-    un nuevo RDD con los resultados. Si la función devuelve una lista o
-    secuencia, flatMap "aplana" esa lista, de modo que los elementos
-    individuales de la lista se convierten en elementos separados en el
-    nuevo RDD.
+-   **`flatMap`**. Aplica una función a cada elemento del RDD y devuelve un nuevo RDD con los resultados. Si la función devuelve una lista o secuencia, `flatMap` "aplana" esa lista, de modo que los elementos individuales de la lista se convierten en elementos separados en el nuevo RDD.
 
-flatMap es útil cuando tienes un RDD donde cada elemento contiene una
+`flatMap` es útil cuando tienes un RDD donde cada elemento contiene una
 colección (como una lista) y deseas crear un nuevo RDD donde cada
 elemento sea un elemento individual de esas colecciones.
 
-Si aplicamos map para dividir cada frase en palabras, obtendríamos un
+Si aplicas `map` para dividir cada frase en palabras, obtendríamos un
 RDD donde cada elemento es una lista de palabras:
 
+```
 palabras_map = rdd.map(lambda frase: frase.split())
 
 \# Resultado: \[\['Hola', 'mundo'\], \['Python', 'es', 'genial'\],
 \['Spark', 'es', 'poderoso'\]\]
+```
 
-Pero si usamos flatMap, obtenemos un RDD donde cada palabra es un
+Pero si usas `flatMap`, obtendrás un RDD donde cada palabra es un
 elemento individual:
 
+```
 palabras_flat = rdd.flatMap(lambda frase: frase.split())
+```
 
 **Extrayendo términos**
 
+```
 from pyspark import SparkContext
 
 sc = SparkContext("local", "Aplicando flatMap")
@@ -475,49 +478,50 @@ print("\\nResultado con flatMap:")
 for palabra in palabras_flat.collect():
 
 print(palabra)
+```
 
-![](./media/image17.png){width="4.851906167979003in"
-height="3.9609076990376204in"}
+![](./media/image17.png)
 
-![](./media/image18.png){width="5.357580927384077in"
-height="1.1841010498687663in"}
+![](./media/image18.png)
 
-![](./media/image19.png){width="2.138852799650044in"
-height="2.903413167104112in"}
+![](./media/image19.png)
 
-### Función filter
+**Función `filter`**
 
-**filter()** - Transformación que se utiliza para seleccionar elementos
-de un RDD que cumplen con una condición específica. La función filter
-toma una función (o una expresión lambda) que devuelve True o False para
-cada elemento del RDD. Solo los elementos que devuelven True se incluyen
-en el nuevo RDD resultante.
+Transformación que se utiliza para seleccionar elementos
+de un RDD que cumplen con una condición específica. La función `filter`
+toma una función (o una expresión lambda) que devuelve `True` o `False` para cada elemento del RDD. Solo los elementos que devuelven `True` se incluyen en el nuevo RDD resultante.
 
 **Sintaxis de filter**
 
+```
 nuevo_rdd = rdd.filter(función)
+```
 
-rdd: El RDD original.
+`rdd`: el RDD original.
 
-función: Una función que toma un elemento del RDD y devuelve True o
+`función`: una función que toma un elemento del RDD y devuelve `True` o
 False.
 
-nuevo_rdd: El RDD resultante que contiene solo los elementos que cumplen
-la condición.
+`nuevo_rdd`: el RDD resultante que contiene solo los elementos que cumplen la condición.
 
-**Filtrar números pares.**
+**Filtrar números pares**
 
+```
 from pyspark import SparkContext
 
 sc = SparkContext("local",\\
+```
 
-**"Filtrar RDD")**
+**"Filtrar RDD**
 
+```
 rdd = sc.parallelize(\[1, 2, 3, 4, 5, 6\])
 
 rdd_pares = rdd.filter(lambda x: x % 2 == 0)
 
 **print(rdd_pares.collect())**
+```
 
 ![](./media/image20.png){width="4.764538495188101in"
 height="2.192507655293088in"}
@@ -526,9 +530,9 @@ height="2.192507655293088in"}
 
 **Filtrar filas basadas en una condición**
 
-Se tiene un RDD de tuplas que representan personas con su nombre y edad,
-y se desea filtrar solo las personas mayores de 25 años.
+Se tiene un RDD de tuplas que representan personas con su nombre y edad y se desea filtrar solo las personas mayores de 25 años.
 
+```
 from pyspark import SparkContext
 
 \# Inicializar SparkContext
@@ -549,6 +553,7 @@ rdd_mayores = rdd.filter(lambda x: x\[1\] \> 25)
 print("Personas mayores de 25 años:")
 
 print(rdd_mayores.collect())
+```
 
 ![](./media/image22.png){width="6.1375in" height="3.0208333333333335in"}
 
@@ -556,10 +561,9 @@ print(rdd_mayores.collect())
 
 **Filtrar usando una función definida**
 
-En lugar de usar una expresión lambda, se puede definir una función para
-realizar el filtrado. Esto es útil cuando la lógica de filtrado es más
-compleja.
+En lugar de usar una expresión lambda, se puede definir una función para realizar el filtrado. Esto es útil cuando la lógica de filtrado es más compleja.
 
+```
 from pyspark import SparkContext
 
 \# Inicializar SparkContext
@@ -588,17 +592,18 @@ rdd_mayores = rdd.filter(es_mayor_de_25)
 print("Personas mayores de 25 años:")
 
 print(rdd_mayores.collect())
+```
 
-![](./media/image24.png){width="6.1375in" height="3.3569444444444443in"}
+![](./media/image24.png)
 
-![](./media/image25.png){width="4.042230971128609in"
-height="1.2814293525809275in"}
+![](./media/image25.png)
 
 **Filtrar basado en múltiples condiciones**
 
 Se pueden combinar múltiples condiciones usando operadores lógicos como
-and, or, etc.
+`and`, `or`, etcétera.
 
+```
 from pyspark import SparkContext
 
 sc = SparkContext("local", "FilterEjemplo")
@@ -630,35 +635,31 @@ rdd_filtrado = rdd.filter(lambda x: x\[2\] == "Bogotá" and x\[1\] \> 25)
 print("Personas que viven en Bogotá y tienen más de 25 años:")
 
 print(rdd_filtrado.collect())
+```
 
-![](./media/image26.png){width="4.469010279965004in"
-height="2.7750535870516186in"}
+![](./media/image26.png)
 
-![](./media/image27.png){width="5.655154199475065in"
-height="1.404038713910761in"}
+![](./media/image27.png)
 
-### 
+**Función `distinct`**
 
-### Función distinct
+Se utiliza para eliminar duplicados en un RDD. Esta función devuelve un nuevo RDD que contiene solo los elementos únicos del RDD original. Es una operación útil cuando necesitas eliminar filas o registros repetidos en un conjunto de datos.
 
-**distinct** - se utiliza para eliminar duplicados en un RDD. Esta
-función devuelve un nuevo RDD que contiene solo los elementos únicos del
-RDD original. Es una operación útil cuando necesitas eliminar filas o
-registros repetidos en un conjunto de datos.
-
+```
 salida = entrada.distinct()
+```
 
--   entrada: Un RDD con elementos que pueden contener duplicados.
+-   `entrada`: un RDD con elementos que pueden contener duplicados.
 
--   salida: Un nuevo RDD donde cada elemento aparece solo una vez (sin
-    duplicados).
+-   `salida`: un nuevo RDD donde cada elemento aparece solo una vez (sin duplicados).
 
-La función distinct() realiza un **shuffle** internamente para agrupar y
+La función `distinct()` realiza un **shuffle** internamente para agrupar y
 eliminar los duplicados. Esto puede ser costoso en términos de
 rendimiento, especialmente con grandes volúmenes de datos
 
-**Obtener elementos únicos.**
+**Obtener elementos únicos**
 
+```
 from pyspark import SparkContext
 
 sc = SparkContext("local",\\
@@ -678,18 +679,17 @@ rdd_distinct = rdd.distinct()
 print("RDD original:", rdd.collect())
 
 print("RDD sin duplicados:", rdd_distinct.collect())
+```
 
-![](./media/image28.png){width="5.03153980752406in"
-height="2.8880971128608923in"}
+![](./media/image28.png)
 
-![](./media/image29.png){width="3.936841644794401in"
-height="1.001330927384077in"}
+![](./media/image29.png)
 
 **Eliminar filas duplicadas**
 
-En un RDD de tuplas, distinct() eliminará las tuplas duplicadas en su
-totalidad.
+En un RDD de tuplas, `distinct()` eliminará las tuplas duplicadas en su totalidad.
 
+```
 from pyspark import SparkContext
 
 \# Inicializar SparkContext
@@ -710,19 +710,20 @@ rdd_distinct = rdd.distinct()
 print("RDD original:", rdd.collect())
 
 print("RDD sin duplicados:", rdd_distinct.collect())
+```
 
-![](./media/image30.png){width="6.1375in" height="2.8222222222222224in"}
+![](./media/image30.png)
 
-![](./media/image31.png){width="5.605594925634295in"
-height="0.8714916885389327in"}
+![](./media/image31.png)
 
 **Eliminar duplicados basados en una "columna"**
 
 Si deseas eliminar duplicados basados en una "columna" específica (un
-elemento de la tupla), puedes usar **map** para seleccionar esa columna
-y luego aplicar **distinct**(). Después, puedes unir los datos
+elemento de la tupla), puedes usar `map` para seleccionar esa columna
+y luego aplicar `distinct()`. Después, puedes unir los datos
 originales con los elementos únicos.
 
+```
 from pyspark import SparkContext
 
 sc = SparkContext("local", "DistinctColumnExample")
@@ -751,31 +752,30 @@ x\[1\]\[0\])
 \# Mostrar el RDD filtrado
 
 print("RDD filtrado:", rdd_filtrado.collect())
+```
 
-![](./media/image32.png){width="6.1375in" height="3.397222222222222in"}
+![](./media/image32.png)
 
 **En este ejemplo:**
 
--   Usamos map(lambda x: x\[0\]) para seleccionar solo la primera
+-   Usa `map(lambda x: x\[0\])` para seleccionar solo la primera
     columna (el nombre).
 
--   Eliminamos los duplicados en la columna seleccionada con
-    **distinct**().
+-   Elimina los duplicados en la columna seleccionada con `distinct()`.
 
--   Usamos **join** para combinar el RDD original con los nombres
-    únicos.
+-   Usa `join` para combinar el RDD original con los nombres únicos.
 
--   Finalmente, mapeamos el resultado para obtener solo las filas
+-   Finalmente, mapea el resultado para obtener solo las filas
     originales sin duplicados.
 
-### Función union
+### Función `union`
 
-**union**: la función union se utiliza para combinar dos RDDs en uno
-solo. Esta función retorna un nuevo RDD que contiene todos los elementos
-de ambos RDDs originales. Es importante destacar que union no elimina
-duplicados; si los RDDs tienen elementos repetidos, estos se mantendrán
+Se utiliza para combinar dos RDD en uno solo. Esta función retorna un nuevo RDD que contiene todos los elementos
+de ambos RDD originales. Es importante destacar que `union` no elimina
+duplicados; si los RDD tienen elementos repetidos, estos se mantendrán
 en el RDD resultante.
 
+```
 rdd_resultante = rdd1.union(rdd2)
 
 -   rdd1: El primer RDD.
@@ -806,18 +806,18 @@ rdd_union = rdd1.union(rdd2)
 print("RDD combinado:")
 
 print(rdd_union.collect())
+```
 
-![](./media/image33.png){width="4.970816929133858in"
-height="3.513694225721785in"}
+![](./media/image33.png)
 
-![](./media/image34.png){width="4.294737532808399in"
-height="1.2548917322834645in"}
+![](./media/image34.png)
 
-**RDDs de tuplas**
+**RDD de tuplas**
 
 También puedes usar union con RDDs que contienen estructuras más
 complejas, como tuplas.
 
+```
 from pyspark import SparkContext
 
 sc = SparkContext("local",\\
@@ -839,30 +839,30 @@ rdd_union = rdd1.union(rdd2)
 print("RDD combinado:")
 
 print(rdd_union.collect())
+```
 
-![](./media/image35.png){width="6.1375in" height="4.2034722222222225in"}
+![](./media/image35.png)
+![](./media/image36.png)
 
-![](./media/image36.png){width="5.1473687664042in"
-height="1.022765748031496in"}
+`union` no elimina duplicados. Si necesitas eliminar elementos repetidos,
+puedes usar la función `distinct` después de aplicar `union`.
 
-union no elimina duplicados. Si necesitas eliminar elementos repetidos,
-puedes usar la función distinct después de aplicar union.
-
+```
 rdd_sin_duplicados = rdd_union.distinct()
 
 print(rdd_sin_duplicados.collect())
-
+```
 union no garantiza un orden específico en el RDD resultante. Los
-elementos se combinan en el orden en que se encuentran en los RDDs
+elementos se combinan en el orden en que se encuentran en los RDD
 originales.
 
 ### Función intersection
 
-**intersection -** permite encontrar los elementos comunes entre dos
+**intersection** permite encontrar los elementos comunes entre dos
 RDDs. Devuelve un nuevo RDD que contiene solo los elementos que están
 presentes en ambos RDDs originales.
 
--   Ambos RDDs deben contener elementos del mismo tipo para que la
+-   Ambos RDD deben contener elementos del mismo tipo para que la
     operación sea válida.
 
 -   intersection implica un **shuffle** (reorganización de datos entre
@@ -878,8 +878,9 @@ rdd1.intersection(rdd2)
 
 -   rdd2: Segundo RDD.
 
-**Intersección de dos listas.**
+**Intersección de dos listas**
 
+```
 from pyspark import SparkContext
 
 sc = SparkContext("local",\\
@@ -893,18 +894,18 @@ rdd2 = sc.parallelize(\[1, 3, 4, 5,7\])
 rdd_interseccion = rdd1.intersection(rdd2)
 
 print(rdd_interseccion.collect())
+```
 
-![](./media/image37.png){width="4.076456692913386in"
-height="2.2490802712160978in"}
+![](./media/image37.png)
 
-![](./media/image38.png){width="4.417283464566929in"
-height="0.9897211286089239in"}
+![](./media/image38.png)
 
 **intersection con cadenas de texto**
 
 También puedes usar intersection con RDDs que contengan cadenas de
 texto.
 
+```
 from pyspark import SparkContext
 
 \# Inicializar SparkContext
@@ -927,11 +928,11 @@ rdd_intersection = rdd1.intersection(rdd2)
 print("Intersección de rdd1 y rdd2:")
 
 print(rdd_intersection.collect())
+```
 
-![](./media/image39.png){width="6.1375in" height="2.727777777777778in"}
+![](./media/image39.png)
 
-![](./media/image40.png){width="4.011111111111111in"
-height="1.2395833333333333in"}
+![](./media/image40.png)
 
 ### Función substract
 
@@ -951,6 +952,7 @@ resultado_rdd = rdd1.subtract(rdd2)
 
 **Restar dos listas.**
 
+```
 from pyspark import SparkContext
 
 sc = SparkContext("local", "Substract con RDD")
@@ -962,17 +964,18 @@ rdd2 = sc.parallelize(\[3, 4, 5, 8\])
 rdd_diferencia = rdd1.subtract(rdd2)
 
 print(rdd_diferencia.collect())
+```
 
-![](./media/image41.png){width="6.1375in" height="2.2284722222222224in"}
+![](./media/image41.png)
 
-![](./media/image42.png){width="4.469444444444444in"
-height="1.0104166666666667in"}
+![](./media/image42.png)
 
 **Usando tuplas**
 
 La función subtract también funciona con RDDs que contienen tuplas o
 estructuras más complejas.
 
+```
 from pyspark import SparkContext
 
 sc = SparkContext("local", "Subtract tuplas")
@@ -992,6 +995,7 @@ resultado_rdd = rdd1.subtract(rdd2)
 print("Tuplas en rdd1 que no están en rdd2:")
 
 print(resultado_rdd.collect())
+```
 
 subtract compara los elementos de los RDDs de manera exacta. Para tuplas
 o estructuras complejas, todos los elementos de la tupla deben coincidir
@@ -1014,6 +1018,7 @@ El tamaño del RDD resultante es el producto de los tamaños de RDD1 y
 RDD2. Por ejemplo, si RDD1 tiene 3 elementos y RDD2 tiene 2 elementos,
 el RDD resultante tendrá 3×2=6 elementos.
 
+```
 from pyspark import SparkContext
 
 sc = SparkContext("local",\\
@@ -1035,6 +1040,7 @@ cartesian_rdd = rdd1.cartesian(rdd2)
 print("Producto cartesiano:")
 
 print(cartesian_rdd.collect())
+```
 
 El producto cartesiano puede generar un RDD muy grande, ya que su tamaño
 es el producto de los tamaños de los dos RDDs originales.
@@ -1055,6 +1061,7 @@ que comparten la misma clave en una sola colección. El resultado es un
 nuevo RDD donde cada clave única está asociada a un iterable de todos
 los valores correspondientes a esa clave.
 
+```
 from pyspark import SparkContext
 
 sc = SparkContext("local", "groupByKey_example")
@@ -1086,12 +1093,10 @@ print(f"Estudiante: {student}")
 for subject, grade in grades:
 
 print(f" {subject}: {grade}")
+```
+![](./media/image43.png)
 
-![](./media/image43.png){width="4.971310148731408in"
-height="3.4660793963254592in"}
-
-![](./media/image44.png){width="3.9067957130358706in"
-height="2.59411198600175in"}
+![](./media/image44.png)
 
 -   groupByKey puede ser costoso en términos de rendimiento, ya que
     implica mezclar todos los datos con la misma clave en un solo lugar.
@@ -1126,6 +1131,7 @@ asociativa y conmutativa para garantizar resultados consistentes.
 
 **Información de ventas de diferentes productos**
 
+```
 from pyspark import SparkContext
 
 sc = SparkContext("local", "ReduceByKey_Example")
@@ -1153,6 +1159,7 @@ total_ventas = rdd.reduceByKey(lambda a, b: a + b)
 for producto, ventas in total_ventas.collect():
 
 print(f"Producto: {producto}, Ventas totales: {ventas}")
+```
 
 En este ejemplo:
 
@@ -1191,7 +1198,8 @@ sortByKey(ascending=True, numPartitions=None, keyfunc=lambda x: x)
 -   numPartitions: Entero. Número de particiones para el RDD resultante.
 
 -   keyfunc: Función que se aplica a las claves antes de la ordenación.
-
+  
+```
 from pyspark import SparkContext
 
 sc = SparkContext("local", "SortByKey")
@@ -1219,8 +1227,9 @@ sorted_rdd = rdd.sortByKey(ascending=False)
 for fruta, cantidad in sorted_rdd.collect():
 
 print(f"{fruta}: {cantidad}")
+```
 
--   sortByKey solo funciona en RDDs de pares clave-valor.
+-   sortByKey solo funciona en RDD de pares clave-valor.
 
 -   La ordenación se realiza dentro de cada partición del RDD. Si
     necesitas una ordenación global, puedes usar repartition(1) para
@@ -1239,14 +1248,14 @@ de un archivo de origen.
 La forma más sencilla y eficiente de seleccionar solo algunos campos es
 usar la función **select**.
 
-Notemos la estructura del archivo Sales.csv
+Nota la estructura del archivo Sales.csv.
 
-![](./media/image45.png){width="5.288090551181102in"
-height="2.283535651793526in"}
+![](./media/image45.png)
 
 Tenemos más de 10 campos. Y no requerimos en este momento trabajar con
-todos. Así que solo seleccionaremos los campos necesarios
+todos. Así que solo seleccionaremos los campos necesarios.
 
+```
 from pyspark.sql import SparkSession
 
 spark =
@@ -1272,17 +1281,18 @@ rdd = nuevo_df.rdd
 for row in rdd.collect():
 
 print(row)
+```
 
-![](./media/image46.png){width="6.1375in" height="3.0722222222222224in"}
+![](./media/image46.png)
 
-![](./media/image47.png){width="6.524904855643045in"
-height="2.2235290901137357in"}
+![](./media/image47.png)
 
 **Usando map para seleccionar campos**
 
 Otra alternativa es utilizar la función **map** para transformar cada
 elemento del RDD.
 
+```
 from pyspark.sql import SparkSession
 
 spark = SparkSession.builder.appName("SeleccionarCamposRDD")\\
@@ -1309,6 +1319,7 @@ indices_deseados))
 for row in rdd.collect():
 
 print(row)
+```
 
 ### Convertir tipos de datos en un RDD
 
@@ -1317,6 +1328,7 @@ con tipos de datos específicos. Sin embargo, se puede manipular los
 datos dentro de un RDD para convertir tipos de datos durante el
 procesamiento.
 
+```
 from pyspark import SparkContext
 
 \# Inicializar SparkContext
@@ -1343,6 +1355,7 @@ rdd_converted = rdd.map(lambda x: (x\[0\], int(x\[1\])))
 print("RDD convertido:")
 
 print(rdd_converted.collect())
+```
 
 **En este ejemplo:**
 
@@ -1358,26 +1371,23 @@ segundo elemento (x\[1\]) se convierte a un entero usando int().
 **int(x\[1\]):** Convierte el segundo elemento de la tupla (la edad) a
 un entero.
 
-![](./media/image48.png){width="4.532804024496938in"
-height="2.5982338145231845in"}
+![](./media/image48.png)
 
-![](./media/image49.png){width="5.490277777777778in" height="1.5625in"}
+![](./media/image49.png)
 
 **Consideraciones importantes**
 
--   **Manejo de errores:** Si algunos valores no se pueden convertir
+-   **Manejo de errores.** Si algunos valores no se pueden convertir
     (por ejemplo, si una cadena no es un número válido), se lanzará una
     excepción. Puedes manejar esto usando bloques try-except dentro de
     la función map.
 
--   **Rendimiento:** Las operaciones de transformación en RDDs son
+-   **Rendimiento.** Las operaciones de transformación en RDDs son
     perezosas (lazy), lo que significa que no se ejecutan hasta que se
     llama a una acción (como collect()). Esto permite que Spark optimice
     el procesamiento.
 
--   **Uso de DataFrames:** Si estás trabajando con datos estructurados y
+-   **Uso de DataFrames.** Si estás trabajando con datos estructurados y
     necesitas convertir tipos de datos con frecuencia, es recomendable
     usar DataFrames en lugar de RDDs. Los DataFrames tienen soporte
     integrado para esquemas y conversiones de tipos de datos.
-
-\*\*\*Fin del laboratorio
