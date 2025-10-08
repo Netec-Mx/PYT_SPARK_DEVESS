@@ -29,15 +29,15 @@ Funciones de Agregación Comunes en SQL
 
 Las funciones de agregación más comunes en SQL son:
 
--   `COUNT`: Cuenta el número de filas.
+-   `COUNT`: cuenta el número de filas.
 
--   `SUM`: Suma los valores de una columna.
+-   `SUM`: suma los valores de una columna.
 
--   `AVG`: Calcula el promedio de los valores de una columna.
+-   `AVG`: calcula el promedio de los valores de una columna.
 
--   `MIN`: Encuentra el valor mínimo de una columna.
+-   `MIN`: encuentra el valor mínimo de una columna.
 
--   `MAX`: Encuentra el valor máximo de una columna.
+-   `MAX`: encuentra el valor máximo de una columna.
 
 ## Instrucciones
 
@@ -753,6 +753,7 @@ spark.sql(query).show()
 ![](./media/image23.png)
 
 ![](./media/image24.png)
+
 
 
 
