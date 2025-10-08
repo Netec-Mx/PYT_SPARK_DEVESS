@@ -1,22 +1,25 @@
-# Laboratorio 7: Aplicando aspectos avanzados
+# Práctica 7. Aspectos avanzados
 
-**Objetivo:** Se aplarán técnicas avanzadas a conjuntos de datos, como
-shuffling, accumulators, partitioning y brodcast de variables.
+## Objetivos
+Al finalizar la práctica, serás capaz de:
+- Aplicar técnicas avanzadas a conjuntos de datos, como `shuffling`, `accumulators`, `partitioning` y `brodcast` de variables.
 
-**Tiempo estimado:** 60 minutos
 
-**Prerequisitos:**
+## Duración aproximada
+- 60 minutos.
+
+## Prerequisitos
 
 -   Acceso a ambiente Linux (credenciales provistas en el curso) o Linux
-    local con interfaz gráfica
+    local con interfaz gráfica.
 
--   Tener los archivos de datos
+-   Tener los archivos de datos.
 
--   Completar el laboratorio 1
+-   Completar el laboratorio 1.
 
-Contexto:
+## Contexto
 
--   La optimización de operaciones con RDDs en PySpark es crucial para
+-   La optimización de operaciones con RDD en PySpark es crucial para
     mejorar el rendimiento de las aplicaciones, especialmente cuando se
     trabajan con grandes volúmenes de datos.
 
@@ -25,12 +28,13 @@ Contexto:
     rendimiento al permitir un paralelismo eficiente y minimizar el
     shuffling.
 
-**Instrucciones:**
+## Instrucciones
 
-## Tarea1: Crear y ajustar el número de particiones:
+### Tarea 1. Crear y ajustar el número de particiones
 
-**Crear un RDD con un número específico de particiones**
+- Crea un RDD con un número específico de particiones.
 
+```
 from pyspark import SparkContext
 
 \# Inicializar SparkContext
@@ -52,22 +56,22 @@ print(rdd.glom().collect())
 \# Cerrar SparkContext
 
 sc.stop()
+```
 
-![](./media/image1.png){width="5.0352504374453195in"
-height="2.815592738407699in"}
+![](./media/image1.png)
 
-![](./media/image2.png){width="4.0005588363954505in"
-height="1.1251574803149607in"}
+![](./media/image2.png)
 
 En este ejemplo:
 
--   **sc.parallelize(range(10), 4)** crea un RDD con 10 elementos
+-   `sc.parallelize(range(10), 4)` crea un RDD con 10 elementos
     divididos en 4 particiones.
 
--   **glom()** muestra el contenido de cada partición.
+-   `glom()` muestra el contenido de cada partición.
 
 **Cargar un archivo csv con 4 particiones**
 
+```
 from pyspark import SparkContext
 
 sc = SparkContext("local", "Cargar CSV con 4 particiones")
@@ -106,37 +110,38 @@ print(f"Partición {i}: {particion}")
 \# Cerrar SparkContext
 
 sc.stop()
+```
 
-![](./media/image3.png){width="6.1375in" height="3.785416666666667in"}
+![](./media/image3.png)
 
-![](./media/image4.png){width="6.24293416447944in"
-height="0.8835323709536308in"}
+![](./media/image4.png)
 
 En este ejemplo:
 
--   **sc.textFile(ruta_csv, minPartitions=4)** para cargar el archivo
+-   `sc.textFile(ruta_csv, minPartitions=4)` para cargar el archivo
     CSV en un RDD con al menos 4 particiones.
 
--   **getNumPartitions()** para verificar RDD el número de particiones.
+-   `getNumPartitions()` para verificar RDD el número de particiones.
 
--   **glom()** para mostrar el contenido de cada partición.
+-   `glom()` para mostrar el contenido de cada partición.
 
-**Nota: El número real de particiones puede ser mayor que 4 si el
-archivo es grande, ya que minPartitions es un mínimo, no un máximo.**
+**Nota. El número real de particiones puede ser mayor que 4 si el
+archivo es grande, ya que `minPartitions` es un mínimo, no un máximo.**
 
-## Tarea 2: Reparticionamiento
+## Tarea 2. Reparticionamiento
 
 El reparticionamiento permite ajustar el número de particiones de un
 RDD. Esto es útil para optimizar el paralelismo o reducir la sobrecarga.
 
-Para reparticionar, se pueden usar **repartition()** o **coalesce()**
+Para reparticionar, se pueden usar `repartition()` o `coalesce()`.
 
--   **repartition():** Aumenta o reduce el número de particiones, pero
+-   `repartition()` aumenta o reduce el número de particiones, pero
     siempre causa shuffling.
 
--   **coalesce():** Reduce el número de particiones sin shuffling (más
-    eficiente que repartition).
+-   `coalesce()` reduce el número de particiones sin shuffling (más
+    eficiente que `repartition`).
 
+```
 from pyspark import SparkContext
 
 sc = SparkContext("local\[4\]", "Particionamiento")
@@ -167,30 +172,32 @@ print(rdd_reparticionado1.glom().collect())
 \# Cerrar SparkContext
 
 sc.stop()
+```
 
-![](./media/image5.png){width="6.1375in" height="3.202777777777778in"}
+![](./media/image5.png)
 
-![](./media/image6.png){width="6.1375in" height="2.1368055555555556in"}
+![](./media/image6.png)
 
 En este ejemplo:
 
--   **repartition(10)** ajusta el número de particiones a 10, pero causa
+-   `repartition(10)` ajusta el número de particiones a 10, pero causa
     shuffling.
 
--   **coalesce(10)** ajusta el número de particiones a 10 sin shuffling.
+-   `coalesce(10)` ajusta el número de particiones a 10 sin shuffling.
 
-## Tarea 3: Optimización con Particionamiento y Persistencia
+## Tarea 3. Optimización con particionamiento y persistencia
 
 El control de operaciones implica gestionar cómo se ejecutan las
 transformaciones y acciones en el clúster.
 
--   **Persistencia de RDDs:** Usa persist() o cache() para evitar
-    recalcular RDDs que se usan varias veces.
+-   **Persistencia de RDD:** usa `persist()` o `cache()` para evitar
+    recalcular RDD que se usan varias veces.
 
--   **Control del orden de ejecución:** Las transformaciones son
-    perezosas (lazy), pero puedes forzar la ejecución con acciones como
-    count() o collect().
+-   **Control del orden de ejecución:** las transformaciones son
+    perezosas `(lazy)`, pero puedes forzar la ejecución con acciones como
+    `count()` o `collect()`.
 
+```
 from pyspark import SparkContext, StorageLevel
 
 \# Inicializar SparkContext
@@ -241,29 +248,29 @@ rdd_reparticionado.unpersist()
 \# Cerrar SparkContext
 
 sc.stop()
+```
 
-![](./media/image7.png){width="4.402428915135608in"
-height="2.7680807086614174in"}
 
-![](./media/image8.png){width="3.2791338582677168in"
-height="2.9162510936132984in"}
+![](./media/image7.png)
+
+![](./media/image8.png)
 
 En este ejemplo, optimizaciones aplicadas:
 
--   **Particionamiento por clave:** Se usa partitionBy para distribuir
+-   **Particionamiento por clave:** se usa `partitionBy` para distribuir
     los datos por producto.
 
--   **Persistencia:** El RDD se persiste en memoria y disco para evitar
+-   **Persistencia:** el RDD se persiste en memoria y disco para evitar
     recalcularlo.
 
--   **Reducción local:** reduceByKey realiza una reducción local antes
+-   **Reducción local:** `reduceByKey` realiza una reducción local antes
     del shuffling.
 
-## Tarea 4: Reconocer el impacto del shuffling
+### Tarea 4. Reconocer el impacto del shuffling
 
-El **shuffling** es un concepto muy importante en PySpark y Spark debido
+El `shuffling` es un concepto muy importante en PySpark y Spark debido
 a su impacto significativo en el rendimiento de las aplicaciones
-distribuidas. El shuffling ocurre cuando los datos necesitan ser
+distribuidas. Ocurre cuando los datos necesitan ser
 redistribuidos entre los nodos del clúster, lo que puede ser una
 operación costosa en términos de tiempo y recursos.
 
@@ -271,22 +278,23 @@ El shuffling es el proceso de redistribuir los datos entre los nodos del
 clúster para agruparlos o reorganizarlos según una clave. Esto ocurre en
 operaciones como:
 
--   **groupByKey**: Agrupa los valores por clave.
+-   `groupByKey` agrupa los valores por clave.
 
--   **reduceByKey**: Reduce los valores por clave.
+-   `reduceByKey` reduce los valores por clave.
 
--   **join**: Combina dos RDDs basados en una clave.
+-   `join` combina dos RDD basados en una clave.
 
--   **distinct**: Elimina duplicados.
+-   `distinct` elimina duplicados.
 
--   **repartition**: Cambia el número de particiones.
+-   `repartition` cambia el número de particiones.
 
-Durante el shuffling, los datos se escriben en disco y se transfieren a
+Durante el `shuffling`, los datos se escriben en disco y se transfieren a
 través de la red, lo que lo convierte en una operación costosa.
 
 **Se tiene un RDD con pares clave-valor y se quiere agrupar los valores
 por clave.**
 
+```
 from pyspark import SparkContext
 
 \# Inicializar SparkContext
@@ -312,53 +320,53 @@ print(f"{clave}: {list(valores)}")
 \# Cerrar SparkContext
 
 sc.stop()
+```
 
-![](./media/image9.png){width="5.012517497812773in"
-height="3.1738003062117235in"}
+![](./media/image9.png)
 
-![](./media/image10.png){width="3.3546347331583553in"
-height="1.1147386264216972in"}
+![](./media/image10.png)
 
 En este ejemplo:
 
--   **groupByKey** causa shuffling porque necesita agrupar todos los
+-   `groupByKey` causa shuffling porque necesita agrupar todos los
     valores con la misma clave en la misma partición.
 
--   Durante el shuffling, los datos se transfieren entre los nodos del
+-   Durante el `shuffling`, los datos se transfieren entre los nodos del
     clúster.
 
-## Tarea 5: Minimizar shuffling
+### Tarea 5. Minimizar shuffling
 
 Minimizar el shuffling es clave para optimizar el rendimiento en
 PySpark.
 
--   **Usar reduceByKey en lugar de groupByKey:** reduceByKey realiza una
+-   **Usar `reduceByKey` en lugar de `groupByKey`:** `reduceByKey` realiza una
     reducción local antes de hacer el shuffling, lo que reduce la
     cantidad de datos transferidos.
 
--   **groupByKey** transfiere todos los datos sin reducción previa.
+-   **`groupByKey`** transfiere todos los datos sin reducción previa.
 
--   **Evitar operaciones amplias (wide):** Operaciones como cartesian()
-    o distinct() pueden causar mucho shuffling. Úsalas solo cuando sea
+-   **Evitar operaciones amplias (wide):** operaciones como `cartesian()`
+    o `distinct()` pueden causar mucho shuffling. Úsalas solo cuando sea
     estrictamente necesario.
 
--   **Usar particionamiento adecuado:** Un buen particionamiento puede
-    reducir el shuffling al mantener los datos relacionados en la misma
+-   **Usar particionamiento adecuado:** un buen particionamiento puede
+    reducir el `shuffling` al mantener los datos relacionados en la misma
     partición.
 
--   **Minimizar el tamaño de los datos:** Reduce el tamaño de los datos
+-   **Minimizar el tamaño de los datos:** reduce el tamaño de los datos
     antes de operaciones que causen shuffling. Por ejemplo, filtra o
     proyecta columnas innecesarias.
 
--   **Usar coalesce en lugar de repartition:** **coalesce** reduce el
-    número de particiones sin shuffling, mientras que **repartition**
-    siempre causa shuffling.
+-   **Usar `coalesce` en lugar de `repartition`:** `coalesce` reduce el
+    número de particiones sin shuffling, mientras que `repartition`
+    siempre causa `shuffling`.
 
-**Ejemplo:**
+**Ejemplo**
 
 Se tiene un RDD con registros de ventas y queremos calcular el total de
 ventas por producto, minimizando el shuffling.
 
+```
 from pyspark import SparkContext
 
 sc = SparkContext("local", "CargaCSV")
@@ -400,33 +408,32 @@ for producto, total in resultados:
 print(f"{producto}: {total}")
 
 sc.stop()
+```
 
-![](./media/image11.png){width="4.829694881889764in"
-height="3.040554461942257in"}
+![](./media/image11.png)
 
-![](./media/image12.png){width="4.6360640857392825in"
-height="3.5629975940507435in"}
+![](./media/image12.png)
 
-## 
 
-## Tarea 6: Broadcast de variables
+### Tarea 6. Broadcast de variables
 
-En PySpark, broadcast Variables (variables transmitidas) permite
+En PySpark, el broadcast `variables` (variables transmitidas) permite
 distribuir grandes estructuras de datos de solo lectura a todos los
 nodos del clúster de manera eficiente. Esto evita el costo de enviar
 repetidamente la misma información a cada tarea, lo que mejora el
 rendimiento.
 
-Cuando trabajamos con RDDs en un clúster de Spark, cualquier variable
+Cuando trabajamos con RDD en un clúster de Spark, cualquier variable
 externa utilizada dentro de una función lambda en una transformación
-(map, filter, etc.) se enviará a cada tarea ejecutada en los
+(`map`, `filter`, etcétera) se enviará a cada tarea ejecutada en los
 trabajadores. Si la variable es grande, esto puede generar un uso
 excesivo de la red y reducir el rendimiento.
 
-Con broadcast, enviamos la variable una sola vez, y luego todas las
+Con broadcast, envías la variable una sola vez y luego todas las
 tareas acceden a ella desde su caché local, evitando el reenvío
 repetido.
 
+```
 from pyspark import SparkContext
 
 \# Inicializar SparkContext
@@ -471,30 +478,32 @@ broadcast_diccionario.unpersist()
 \# Cerrar SparkContext
 
 sc.stop()
+```
 
-![](./media/image13.png){width="6.1375in" height="3.591666666666667in"}
+![](./media/image13.png)
 
-![](./media/image14.png){width="4.250592738407699in"
-height="1.3856102362204725in"}
+![](./media/image14.png)
 
 En este ejemplo:
 
--   **sc.broadcast(diccionario_productos):** Crea un objeto broadcast
+-   `sc.broadcast(diccionario_productos)` crea un objeto broadcast
     con el diccionario.
 
--   **broadcast_diccionario.value:** Accede al diccionario en los
-    executors.
+-   `broadcast_diccionario.value` accede al diccionario en los
+    `executors`.
 
--   **map():** Usa el diccionario broadcast para enriquecer el RDD de
+-   `map()` usa el diccionario broadcast para enriquecer el RDD de
     ventas.
 
--   **unpersist():** Libera los recursos utilizados por el broadcast.
+-   `unpersist()` libera los recursos utilizados por el broadcast.
 
-**Broadcast con una Lista**
+**Broadcast con una lista**
 
-Asumamos que se tiene una lista de códigos de productos en oferta y se
+Asume que se tiene una lista de códigos de productos en oferta y se
 quiere filtrar un RDD de ventas para incluir solo esos productos.
 
+
+```
 from pyspark import SparkContext
 
 \# Inicializar SparkContext
@@ -530,28 +539,29 @@ broadcast_oferta.unpersist()
 \# Cerrar SparkContext
 
 sc.stop()
+```
 
-![](./media/image15.png){width="6.1375in" height="4.541666666666667in"}
+![](./media/image15.png)
 
-![](./media/image16.png){width="3.5317432195975504in"
-height="1.3856102362204725in"}
+![](./media/image16.png)
 
 En este ejemplo:
 
--   **sc.broadcast(productos_oferta):** Crea un objeto broadcast con la
+-   `sc.broadcast(productos_oferta)` crea un objeto broadcast con la
     lista de productos en oferta.
 
--   **broadcast_oferta.value:** Accede a la lista en los executors.
+-   `broadcast_oferta.value` accede a la lista en los executors.
 
--   **filter():** Usa la lista broadcast para filtrar el RDD de ventas.
+-   `filter()` usa la lista broadcast para filtrar el RDD de ventas.
 
--   **unpersist():** Libera los recursos utilizados por el broadcast.
+-   `unpersist()` libera los recursos utilizados por el broadcast.
 
-## Tarea 7: Broadcast con tabla de parámetros
+### Tarea 7. Broadcast con tabla de parámetros
 
-Ahora tenemos una tabla de parámetros que se requiere usar en múltiples
+Ahora, tienes una tabla de parámetros que se requiere usar en múltiples
 operaciones.
 
+```
 from pyspark import SparkContext
 
 \# Inicializar SparkContext
@@ -608,28 +618,26 @@ broadcast_config.unpersist()
 \# Cerrar SparkContext
 
 sc.stop()
+```
 
 En este ejemplo:
 
--   **sc.broadcast(configuracion):** Crea un objeto broadcast con la
+-   *`sc.broadcast(configuracion)` crea un objeto broadcast con la
     configuración.
 
--   **broadcast_config.value:** Accede a la configuración en los
+-   `broadcast_config.value` accede a la configuración en los
     executors.
 
--   **map():** Usa la configuración broadcast para calcular montos con
+-   `map()` usa la configuración broadcast para calcular montos con
     impuestos y descuentos.
 
--   **unpersist():** Libera los recursos utilizados por el broadcast.
+-   `unpersist()` libera los recursos utilizados por el broadcast.
 
-![](./media/image17.png){width="6.1375in" height="3.848611111111111in"}
+![](./media/image17.png)
 
-![](./media/image18.png){width="4.386029090113736in"
-height="1.4689545056867892in"}
+![](./media/image18.png)
 
-## 
-
-## Tarea 8: Usando de acumuladores
+### Tarea 8. Usando de acumuladores
 
 Los acumuladores en PySpark son variables compartidas que permiten sumar
 valores de manera eficiente en un clúster distribuido. Son útiles cuando
@@ -638,6 +646,7 @@ comunicación constante entre los nodos.
 
 **Contar elementos que cumplen una condición**
 
+```
 from pyspark import SparkContext
 
 \# Inicializar SparkContext
@@ -661,11 +670,12 @@ print("Números mayores que 5:", contador.value) \# Salida: 5
 \# Cerrar SparkContext
 
 sc.stop()
+```
 
-![](./media/image19.png){width="6.1375in" height="3.58125in"}
 
-![](./media/image20.png){width="3.4900699912510937in"
-height="0.8647036307961505in"}
+![](./media/image19.png)
+
+![](./media/image20.png)
 
 En este ejemplo:
 
@@ -678,6 +688,7 @@ En este ejemplo:
 
 **Sumar valores de un RDD**
 
+```
 from pyspark import SparkContext
 
 sc = SparkContext("local", "Ejemplo Acumulador Suma")
@@ -697,16 +708,15 @@ rdd.foreach(lambda x: suma_acumulador.add(x))
 print("Suma total:", suma_acumulador.value) \# Salida: 15
 
 sc.stop()
+```
 
-![](./media/image21.png){width="5.332528433945757in"
-height="3.8235148731408573in"}
+![](./media/image21.png)
 
-![](./media/image22.png){width="3.969304461942257in"
-height="0.9793033683289589in"}
+![](./media/image22.png)
 
 En este ejemplo:
 
--   Se crea un acumulador suma_acumulador inicializado en 0.
+-   Se crea un acumulador `suma_acumulador` inicializado en 0.
 
 -   En la transformación foreach, se suma cada valor del RDD al
     acumulador.
@@ -715,6 +725,7 @@ En este ejemplo:
 
 **Contabilizar inconsistencias de un RDD**
 
+```
 from pyspark.sql import SparkSession
 
 spark = SparkSession\\
@@ -756,16 +767,16 @@ False))
 print("Usuarios válidos:", rdd_usuarios_validos.collect())
 
 print("Total de registros inválidos:", acumulador_errores.value)
+```
 
-![](./media/image23.png){width="5.422018810148732in"
-height="2.757020997375328in"}
+![](./media/image23.png)
 
-![](./media/image24.png){width="4.9283825459317585in"
-height="0.4784514435695538in"}
+![](./media/image24.png)
 
 En este ejemplo:
 
--   Se usa **acumulador_errores.add(1)** dentro de filter().
+-   Se usa `acumulador_errores.add(1)` dentro de `filter()`.
 
--   Cuando un usuario tiene datos inválidos (None o edad ≤ 0), el
+-   Cuando un usuario tiene datos inválidos (`None` o `edad ≤ 0`), el
     acumulador se incrementa antes de excluir el registro.
+
