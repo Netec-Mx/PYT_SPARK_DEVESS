@@ -794,7 +794,7 @@ rdd1 = sc.parallelize(\[1, 2, 3, 4\])
 
 rdd2 = sc.parallelize(\[3, 4, 5, 6\])
 
-\# Combinar los RDDs usando union
+\# Combinar los RDD usando union
 
 rdd_union = rdd1.union(rdd2)
 
@@ -811,7 +811,7 @@ print(rdd_union.collect())
 
 **RDD de tuplas**
 
-También puedes usar union con RDDs que contienen estructuras más
+También puedes usar union con RDD que contienen estructuras más
 complejas, como tuplas.
 
 ```
@@ -821,13 +821,13 @@ sc = SparkContext("local",\\
 
 "Union de RDD")
 
-\# Crear dos RDDs de tuplas
+\# Crear dos RDD de tuplas
 
 rdd1 = sc.parallelize(\[("Alice", 25), ("Bob", 30)\])
 
 rdd2 = sc.parallelize(\[("Bob", 30), ("Cathy", 28)\])
 
-\# Combinar los RDDs usando union
+\# Combinar los RDD usando union
 
 rdd_union = rdd1.union(rdd2)
 
@@ -857,7 +857,7 @@ originales.
 
 `Intersection` permite encontrar los elementos comunes entre dos
 RDD. Devuelve un nuevo RDD que contiene solo los elementos que están
-presentes en ambos RDDs originales.
+presentes en ambos RDD originales.
 
 -   Ambos RDD deben contener elementos del mismo tipo para que la
     operación sea válida.
@@ -867,7 +867,7 @@ presentes en ambos RDDs originales.
     especialmente con grandes volúmenes de datos.
 
 -   El RDD resultante no contendrá elementos duplicados, incluso si los
-    RDDs originales los tenían.
+    RDD originales los tenían.
 
 rdd1.intersection(rdd2)
 
@@ -909,14 +909,14 @@ from pyspark import SparkContext
 
 sc = SparkContext("local", "Ejemplo intersection")
 
-\# Crear dos RDDs de ejemplo con cadenas de texto
+\# Crear dos RDD de ejemplo con cadenas de texto
 
 rdd1 = sc.parallelize(\["Medellin", "Cali", "Pereira", "Cordoba"\])
 
 rdd2 = sc.parallelize(\["Barranquilla", "Medellin", "Cartagena",
 "Pereira"\])
 
-\# Encontrar la intersección entre los dos RDDs
+\# Encontrar la intersección entre los dos RDD
 
 rdd_intersection = rdd1.intersection(rdd2)
 
@@ -934,7 +934,7 @@ print(rdd_intersection.collect())
 ### Función substract
 
 **subtract -** se utiliza para obtener los elementos que están en un RDD
-pero no en otro. Realiza una diferencia de conjuntos entre dos RDDs. El
+pero no en otro. Realiza una diferencia de conjuntos entre dos RDD. El
 resultado es un nuevo RDD que contiene solo los elementos que están en
 el primer RDD y no en el segundo.
 
@@ -969,7 +969,7 @@ print(rdd_diferencia.collect())
 
 **Usando tuplas**
 
-La función subtract también funciona con RDDs que contienen tuplas o
+La función subtract también funciona con RDD que contienen tuplas o
 estructuras más complejas.
 
 ```
@@ -977,7 +977,7 @@ from pyspark import SparkContext
 
 sc = SparkContext("local", "Subtract tuplas")
 
-\# Crear los RDDs con tuplas
+\# Crear los RDD con tuplas
 
 rdd1 = sc.parallelize(\[("Alice", 25), ("Bob", 30), ("Cathy", 28)\])
 
@@ -1023,7 +1023,7 @@ sc = SparkContext("local",\\
 
 "Producto cartesiano RDD")
 
-\# Crear dos RDDs
+\# Crear dos RDD
 
 rdd1 = sc.parallelize(\[1, 2, 3\])
 
@@ -1041,7 +1041,7 @@ print(cartesian_rdd.collect())
 ```
 
 El producto cartesiano puede generar un RDD muy grande, ya que su tamaño
-es el producto de los tamaños de los dos RDDs originales.
+es el producto de los tamaños de los dos RDD originales.
 
 Por ejemplo, si `rdd1` tiene 1,000 elementos y `rdd2` tiene 1,000 elementos,
 el RDD resultante tendrá 1,000,000 de elementos. Esto puede consumir
@@ -1380,7 +1380,7 @@ un entero.
     excepción. Puedes manejar esto usando bloques try-except dentro de
     la función map.
 
--   **Rendimiento.** Las operaciones de transformación en RDDs son
+-   **Rendimiento.** Las operaciones de transformación en RDD son
     perezosas `(lazy)`, lo que significa que no se ejecutan hasta que se
     llama a una acción (como `collect()`). Esto permite que Spark optimice
     el procesamiento.
@@ -1389,4 +1389,5 @@ un entero.
     necesitas convertir tipos de datos con frecuencia, es recomendable
     usar DataFrames en lugar de RDD. Los `DataFrames` tienen soporte
     integrado para esquemas y conversiones de tipos de datos.
+
 
