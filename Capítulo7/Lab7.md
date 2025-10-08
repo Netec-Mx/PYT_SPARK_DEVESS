@@ -2,13 +2,13 @@
 
 ## Objetivos
 Al finalizar la práctica, serás capaz de:
-- Aplicar técnicas avanzadas a conjuntos de datos, como `shuffling`, `accumulators`, `partitioning` y `brodcast` de variables.
+- Aplicar técnicas avanzadas a conjuntos de datos, como `shuffling`, `accumulators`, `partitioning` y `broadcast` de variables.
 
 
 ## Duración aproximada
 - 60 minutos.
 
-## Prerequisitos
+## Prerrequisitos
 
 -   Acceso a ambiente Linux (credenciales provistas en el curso) o Linux
     local con interfaz gráfica.
@@ -637,7 +637,7 @@ En este ejemplo:
 
 ![](./media/image18.png)
 
-### Tarea 8. Usando de acumuladores
+### Tarea 8. Usar acumuladores
 
 Los acumuladores en PySpark son variables compartidas que permiten sumar
 valores de manera eficiente en un clúster distribuido. Son útiles cuando
@@ -779,4 +779,5 @@ En este ejemplo:
 
 -   Cuando un usuario tiene datos inválidos (`None` o `edad ≤ 0`), el
     acumulador se incrementa antes de excluir el registro.
+
 
