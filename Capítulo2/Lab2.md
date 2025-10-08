@@ -444,6 +444,7 @@ print(line)
 
 Se pueden usar acciones como `collect()`, `take()`, o `first()` para
 inspeccionar los datos del RDD.
+
 ```
 from pyspark import SparkContext
 
@@ -462,6 +463,7 @@ print(rdd.first()) \# Ver el primer elemento
 ![](./media/image23.png)
 
 - Leer usando SparkContext.
+  
 ```
 \# Crear SparkContext
 
@@ -494,6 +496,7 @@ print(rdd_split.take(5))
 En PySpark, se pueden guardar RDD en diferentes tipos de archivos
 utilizando varios métodos. Para estos ejemplos, usaremos un directorio
 llamado salidas.
+
 ```
 mkdir \~/salidas
 ```
@@ -506,6 +509,7 @@ rdd.saveAsTextFile("ruta/del/archivo")
 
 Este método guarda el RDD como un archivo de texto en la ruta
 especificada. Cada elemento del RDD se guarda en una nueva línea.
+
 ```
 \# Crear una SparkSession
 
@@ -537,13 +541,16 @@ archivo.
 
 Este método guarda el RDD como un `SequenceFile`, que es un formato
 binario utilizado por Hadoop.
+
 ```
 rdd.saveAsSequenceFile("ruta/del/archivo")
 ```
+
 **Guardar RDD como archivo Parquet**
 
 Para guardar un RDD como archivo Parquet, primero debes convertirlo a un
 DataFrame.
+
 ```
 from pyspark.sql import SparkSession
 
@@ -577,6 +584,7 @@ df.write.json("ruta/del/archivo")
 
 Para guardar un RDD como archivo CSV, también se debe convertir a un
 DataFrame.
+
 ```
 \# Convertir RDD a DataFrame
 
@@ -586,3 +594,4 @@ df = rdd.toDF(\["columna1", "columna2"\])
 
 df.write.csv("ruta/del/archivo")
 ```
+
