@@ -2,7 +2,7 @@
 
 ## Objetivos
 Al finalizar la práctica, serás capaz de:
-- Aplicar agregaciones, agrupaciones y relaciones
+- Aplicar agregaciones, agrupaciones y relaciones.
 
 ## Duración aproximada
 - 60 minutos.
@@ -753,6 +753,7 @@ spark.sql(query).show()
 ![](./media/image23.png)
 
 ![](./media/image24.png)
+
 
 
 
