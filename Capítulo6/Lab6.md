@@ -1,56 +1,58 @@
-# Laboratorio 6: Acciones
+# Práctica 6. Acciones
 
-**Objetivo:** Entender la función de las acciones y aplicarlas sobre RDD
+## Objetivos
+Al finalizar la práctica, serás capaz de:
+- Entender la función de las acciones y aplicarlas sobre RDD.
 
-Tiempo estimado: 45 minutos
+## Duración aproximada
+- 45 minutos
 
-**Prerrequisitos:**
+## Prerrequisitos
 
 -   Acceso a ambiente Linux (credenciales provistas en el curso) o Linux
-    local con interfaz gráfica
+    local con interfaz gráfica.
 
--   Conexión a internet
+-   Conexión a internet.
 
-**Contexto:**
+## Contexto
 
 Las acciones en PySpark son operaciones que disparan la ejecución de las
 transformaciones acumuladas en un RDD.
 
-Algunas acciones comunes incluyen collect(), count(), first(), take(),
-reduce(), foreach(), y saveAsTextFile().
+Algunas acciones comunes incluyen `collect()`, `count()`, `first()`, `take()`,
+`reduce()`, `foreach()` y `saveAsTextFile()`.
 
 Las acciones devuelven resultados al programa driver o escriben datos en
-un sistema externo. A diferencia de las transformaciones (como map,
-filter, etc.), que son perezosas (lazy) y no se ejecutan hasta que se
-llama a una acción, las acciones disparan la ejecución de todas las
+un sistema externo. A diferencia de las transformaciones (como `map`,
+`filter`, etcétera), que son perezosas (`lazy`) y no se ejecutan hasta que se
+llama a una acción. Las acciones disparan la ejecución de todas las
 transformaciones acumuladas en el RDD.
 
-**Instrucciones:**
+## Instrucciones
+### Tarea 1. Aplicar acciones en un archivo
 
-## Tarea 1: Aplicar acciones en un archivo
+En este ejemplo, leerás el contenido de un archivo para contar las palabras.
 
-En este ejemplo, se leerá el contenido de un archivo para contar las
-palabras
+- Inicia PyCharm.
 
-Iniciamos PyCharm
+`pycharm-community`
 
-pycharm-community
-
-Se introduce el siguiente código, ajustando la ruta del archivo a la
+Introduce el siguiente código, ajustando la ruta del archivo a la
 ruta local.
 
-**\# Inicializar SparkContext sc = SparkContext("local", "Ejemplo RDD
+```
+\# Inicializar SparkContext sc = SparkContext("local", "Ejemplo RDD
 desde archivo")**
 
-**\# Cargar un RDD desde un archivo de texto rdd =
-sc.textFile("/home/miguel/data/TotalSalesRed/Sales2018.csv")**
+\# Cargar un RDD desde un archivo de texto rdd =
+sc.textFile("/home/miguel/data/TotalSalesRed/Sales2018.csv")
 
-**\# Transformación: Dividir cada línea en palabras rdd_palabras =
-rdd.flatMap(lambda linea: linea.split(","))**
+\# Transformación: Dividir cada línea en palabras rdd_palabras =
+rdd.flatMap(lambda linea: linea.split(","))
 
-**\# Transformación: Convertir palabras a minúsculas y mayúsculas
+\# Transformación: Convertir palabras a minúsculas y mayúsculas
 rdd_minusculas = rdd_palabras.map(lambda palabra: palabra.lower())
-rdd_mayusculas = rdd_palabras.map(lambda palabra: palabra.upper())**
+rdd_mayusculas = rdd_palabras.map(lambda palabra: palabra.upper())
 
 \# Acción: Contar la cantidad de palabras
 
@@ -62,52 +64,52 @@ primerasMin_palabras = rdd_minusculas.take(10)
 
 primerasMay_palabras = rdd_mayusculas.take(10)
 
-**\# Mostrar resultados**
+\# Mostrar resultados
 
-**print("Cantidad de palabras:", cantidad_palabras)**
+print("Cantidad de palabras:", cantidad_palabras)
 
-**print("Primeras 10 palabras minúsculas:", primerasMin_palabras)**
+print("Primeras 10 palabras minúsculas:", primerasMin_palabras)
 
-**print("Primeras 10 palabras minúsculas:", primerasMay_palabras)**
+print("Primeras 10 palabras minúsculas:", primerasMay_palabras)
 
 \# Cerrar SparkContext
 
 sc.stop()
+```
 
-![](./media/image1.png){width="4.614406167979003in"
-height="4.366926946631671in"}
+![](./media/image1.png)
 
-![](./media/image2.png){width="6.1375in" height="0.5881944444444445in"}
+![](./media/image2.png)
 
 **Validación de archivos por columnas**
 
-Un uso que se pueden aplicar en archivos CSV, es el contar filas que
-tienen la cantidad válida de columnas. Para esto, copiaremos y
-modificaremos uno de los archivos para reducir la cantidad de columnas.
+Un uso aplicable a archivos CSV es contar filas que
+tienen la cantidad válida de columnas. Para esto, copia y
+modifica uno de los archivos para reducir la cantidad de columnas.
 
-Abrimos una ventana de terminal nueva. En el directorio de data, pasamos
+Abre una ventana de terminal nueva. En el directorio de data, pasa
 al directorio TotalSalesRed
 
-cd data/TotalSalesRed
+```cd data/TotalSalesRed```
 
-Copiamos el archivo Sales2018 a Sales2018Redf.csv
+Copia el archivo `Sales2018` a `Sales2018Redf.csv`.
 
-cp Sales2018.csv Sales2018f.csv
+```cp Sales2018.csv Sales2018f.csv```
 
-![](./media/image3.png){width="6.1375in" height="0.9972222222222222in"}
+![](./media/image3.png)
 
-Con cualquier editor, se abre el archivo y removemos campos en
-diferentes renglones para tener filas de menos de 5 campos. Recordemos
-que los campos están separados por comas (,)
+Con cualquier editor, abre el archivo y remueve campos en
+diferentes renglones para tener filas de menos de cinco campos. Recuerda
+que los campos están separados por comas `(,)`.
 
-![](./media/image4.png){width="3.464838145231846in"
-height="2.2682185039370077in"}
+![](./media/image4.png)
 
-Salvamos el archivo y regresamos a PyCharm (Ctrl+O para salvar y CTRL+X
-para salir)
+- Guarda el archivo y regresa a PyCharm (`Ctrl+O` para guardar y `CTRL+X`
+para salir).
 
-Probamos el siguiente código:
+Prueba el siguiente código:
 
+```
 from pyspark import SparkContext
 
 sc = SparkContext("local", "Ejemplo RDD desde CSV")
@@ -141,16 +143,17 @@ print("Primeras 3 filas:", primeras_filas)
 \# Cerrar SparkContext
 
 sc.stop()
+```
 
-![](./media/image5.png){width="4.381827427821523in"
-height="3.2226607611548554in"}
+![](./media/image5.png)
 
-![](./media/image6.png){width="5.617212379702537in"
-height="0.39769247594050744in"}
+![](./media/image6.png)
 
-**Extraer y calcular valores desde un csv**
+**Extraer y calcular valores desde un CSV**
 
-Se pueden realizar diferentes operaciones con los valores leídos del rdd
+Se pueden realizar diferentes operaciones con los valores leídos del `rdd`.
+
+```
 
 from pyspark import SparkContext
 
@@ -199,16 +202,16 @@ print(f"La suma es: {suma_total}")
 \# Cerrar SparkContext
 
 sc.stop()
+```
 
-![](./media/image7.png){width="5.802475940507437in"
-height="6.1950853018372705in"}
+![](./media/image7.png)
 
-![](./media/image8.png){width="4.281944444444444in"
-height="1.7291666666666667in"}
+![](./media/image8.png)
 
-**Obtener el pedido, fecha cliente, país, cantidad de producto, precio.
-Calcular importe y total de ventas**
-
+- Obtener el pedido, fecha cliente, país, cantidad de producto, precio.
+- Calcular importe y total de ventas.
+  
+```
 from pyspark import SparkContext
 
 sc = SparkContext("local", "CargaCSV")
@@ -258,11 +261,10 @@ y mostrar las ventas por día
 print(f"Fecha: {fecha}, Ventas: {ventas}")
 
 **sc.stop()**
+```
 
-![](./media/image9.png){width="5.569086832895888in"
-height="3.2697430008748904in"}
+![](./media/image9.png)
 
-![](./media/image10.png){width="5.360896762904637in"
-height="1.8094083552055993in"}
+![](./media/image10.png)
 
-\*\*\* Fin del laboratorio
+
