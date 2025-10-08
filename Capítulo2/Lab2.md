@@ -1,17 +1,15 @@
-# Laboratorio 2. Creación de RDD en PySpark
+# Práctica 2. Creación de RDD en PySpark
 
 ## Objetivo
 Al finalizar la práctica, serás capaz de:
-- Iniciar la carga de datos en RDD a partir de diferentes
-fuentes de información.
+- Iniciar la carga de datos en RDD a partir de diferentes fuentes de información.
 
 ## Duración aproximada: 
 - 45 minutos
 
 ## Prerequisitos
 
-- Acceso a ambiente Linux (credenciales provistas en el curso) o Linux
-local con interfaz gráfica.
+- Acceso a ambiente Linux (credenciales provistas en el curso) o Linux local con interfaz gráfica.
 
 - Haber completado la instalación del ambiente (laboratorio 1).
 
@@ -29,7 +27,7 @@ SparkSession es un punto de inicio a la funcionalidad de Spark y es
 necesaria para crear un contexto para operar PySpark. SparkContext
 representa la conexión a un clúster de Spark.
 
-![](./media/image2.png){width="6.135416666666667in" height="2.78125in"}
+![](./media/image2.png)
 
 ### Tarea 1. Crear y configurar SparkSession y SparkContext
 
@@ -39,8 +37,7 @@ Iniciamos PyCharm con el siguiente comando:
 
 Creamos un proyecto y editamos el archivo `.py`. 
 
-![](./media/image3.png){width="3.3448425196850393in"
-height="2.81121062992126in"}
+![](./media/image3.png)
 
 Para acceder a la sesión de Spark y tener acceso a RDD, vas a crear
 un SparkSession. Este puede tomar diferentes parámetros para tomar el
@@ -54,8 +51,7 @@ spark = SparkSession.builder \\
 .getOrCreate()
 ```
 
-![](./media/image4.png){width="5.295334645669291in"
-height="2.3073468941382327in"}
+![](./media/image4.png)
 
 
 La función **SparkSession.builder.getOrCreate()** obtiene una
@@ -74,8 +70,7 @@ sesión:
     "spark://master:7077" para ejecutarse en un clúster independiente de
     Spark.
 
-![](./media/image5.png){width="5.4443733595800525in"
-height="2.3229166666666665in"}
+![](./media/image5.png)
 
 ```
 from pyspark.sql import SparkSession
@@ -104,7 +99,7 @@ spark = SparkSession.builder \\
 
 .getOrCreate()
 
-![](./media/image6.png){width="6.1375in" height="3.3833333333333333in"}
+![](./media/image6.png)
 
 **Configuración básica del SparkContext**
 
@@ -126,8 +121,7 @@ spark = pyspark.sql.SparkSession.builder \\
 
 print(spark)
 
-![](./media/image7.png){width="4.451935695538058in"
-height="1.8033409886264218in"}
+![](./media/image7.png)
 
 Otra forma es crear el objeto SparkConf. Esto principalmente por
 necesidad de control a bajo nivel o por compatibilidad.:
@@ -158,8 +152,7 @@ print(rdd.collect())
 
 sc.stop()
 
-![](./media/image8.png){width="4.254061679790026in"
-height="2.488034776902887in"}
+![](./media/image8.png)
 
 Los mismos parámetros de configuración que se utilizaron anteriormente,
 se pueden aplicar al objeto SparkConfig:
@@ -190,8 +183,7 @@ sc = SparkContext(conf=conf)
 
 sc.stop()
 
-![](./media/image9.png){width="4.495719597550306in"
-height="2.840980971128609in"}
+![](./media/image9.png)
 
 Aunque está disponible, la recomendación es no utilizar el objeto
 SparkContext directamente, ya que SparkSession es una interfaz unificada
@@ -222,8 +214,7 @@ spark = SparkSession.builder \\
 
 spark.stop()
 
-![](./media/image10.png){width="4.355667104111986in"
-height="3.307409230096238in"}
+![](./media/image10.png)
 
 ## Tarea 2. Creando RDD a partir de conjuntos
 
@@ -237,8 +228,7 @@ un clúster, que se puede operar en paralelo. Los RDD se denominan
 resilientes porque siempre se pueden volver a calcular cuando se produce
 un error en un nodo.
 
-![](./media/image11.png){width="2.3291021434820647in"
-height="2.8932939632545933in"}
+![](./media/image11.png)
 
 Se pueden crear de varias maneras.
 
@@ -262,10 +252,9 @@ rddVacio = sc.emptyRDD
 
 print(rddVacio)
 
-![](./media/image12.png){width="4.479792213473316in"
-height="2.792055993000875in"}
+![](./media/image12.png)
 
-![](./media/image13.png){width="6.1375in" height="0.7881944444444444in"}
+![](./media/image13.png)
 
 **Crear RDD con range**
 
@@ -291,10 +280,9 @@ rdd_rango = sc.parallelize(range(1, 1001))
 
 print(rdd_rango.count()) \# Salida: 1000
 
-![](./media/image14.png){width="5.386167979002624in"
-height="3.5629975940507435in"}
+![](./media/image14.png)
 
-![](./media/image15.png){width="6.1375in" height="0.88125in"}
+![](./media/image15.png)
 
 **Crear RDDs desde listas:**
 
@@ -316,8 +304,7 @@ rdd = spark.sparkContext.parallelize(data)
 
 print (data)
 
-![](./media/image16.png){width="4.734523184601925in"
-height="2.3522615923009624in"}
+![](./media/image16.png)
 
 En PySpark, el método **parallelize** se usa para crear un RDD a partir
 de una lista de Python. Esto permite distribuir los datos entre varios
@@ -347,10 +334,9 @@ print(\"Contenido del RDD:\", rdd.collect())
 
 print(\"Tipo de datos:\", type(rdd))
 
-![](./media/image17.png){width="5.792474846894138in"
-height="3.0004188538932635in"}
+![](./media/image17.png)
 
-![](./media/image18.png){width="6.1375in" height="0.9472222222222222in"}
+![](./media/image18.png)
 
 En este ejemplo:
 
@@ -394,9 +380,9 @@ for line in text_rdd.take(5):
 
 print(line)
 
-![](./media/image19.png){width="6.1375in" height="3.363888888888889in"}
+![](./media/image19.png)
 
-![](./media/image20.png){width="6.1375in" height="1.4055555555555554in"}
+![](./media/image20.png)
 
 **Creación de RDD desde múltiples archivos**
 
@@ -429,9 +415,9 @@ for line in multi_rdd.take(5):
 
 print(line)
 
-![](./media/image21.png){width="6.1375in" height="2.9208333333333334in"}
+![](./media/image21.png)
 
-![](./media/image22.png){width="6.1375in" height="1.1243055555555554in"}
+![](./media/image22.png)
 
 **Notas importantes:**
 
@@ -463,8 +449,7 @@ print(rdd.take(2)) \# Ver los primeros 2 elementos
 
 print(rdd.first()) \# Ver el primer elemento
 
-![](./media/image23.png){width="5.415733814523184in"
-height="2.3261056430446194in"}
+![](./media/image23.png)
 
 - Leer usando SparkContext.
 
@@ -490,11 +475,10 @@ línea por comas
 
 print(rdd_split.take(5))
 
-![](./media/image24.png){width="5.729396325459318in"
-height="2.0323206474190725in"}
+![](./media/image24.png)
 
 
-### Tarea 5. Salvar RDDs
+### Tarea 5. Salvar RDD
 
 En PySpark, se pueden guardar RDD en diferentes tipos de archivos
 utilizando varios métodos. Para estos ejemplos, usaremos un directorio
@@ -527,13 +511,12 @@ df = spark.createDataFrame(rdd, \["nombre", "id"\])
 
 df.write.parquet("ruta/a/parquet")
 
-![](./media/image25.png){width="6.1375in" height="2.6881944444444446in"}
+![](./media/image25.png)
 
 Y si desde una ventana de Terminal consultamos la ruta, aparecerá el
 archivo
 
-![](./media/image26.png){width="4.770833333333333in"
-height="3.153024934383202in"}
+![](./media/image26.png)
 
 **Guardar RDD como archivo SequenceFile**
 
@@ -584,6 +567,3 @@ df = rdd.toDF(\["columna1", "columna2"\])
 \# Guardar DataFrame como archivo CSV
 
 df.write.csv("ruta/del/archivo")
-
-\*\*\*Fin del laboratorio
-
