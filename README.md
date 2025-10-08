@@ -18,7 +18,7 @@ Cada uno de estos laboratorios está diseñado para ofrecerte una experiencia pr
      Aprenderás a instalar el ambiente de PySpark, incluyendo un IDE.
    - ⏱️ **Duración estimada**:  60 minutos.
 
- ### [Práctica 2. Creación de RDD en PySpark](./Capítulo2/Lab2.md)
+### [Práctica 2. Creación de RDD en PySpark](./Capítulo2/Lab2.md)
    - **Descripción.**
      Aprenderás a crear sesiones y contextos en PySpark, así como la creación de RDD a partir de diferentes fuentes de datos.
    - ⏱️ **Duración estimada**:  45 minutos.
