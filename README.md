@@ -23,12 +23,12 @@ Cada uno de estos laboratorios está diseñado para ofrecerte una experiencia pr
      Aprenderás a crear sesiones y contextos en PySpark, así como la creación de RDD a partir de diferentes fuentes de datos.
    - ⏱️ **Duración estimada**:  45 minutos.
 
-### [Práctica 3. Uso de funciones de transformación](./Capítulo3/Lab3.md)
+### [Práctica 3. DataFrames en PySpark](./Capítulo3/Lab3.md)
    - **Descripción.**
      Aprenderás a entender y aplicar transformaciones a diferentes tipos de datos.
    - ⏱️ **Duración estimada**: 45 minutos.
 
-### [Práctica 4. Acciones sobre RDD](./Capítulo4/Lab4.md)
+### [Práctica 4. Uso de DataFrames, cálculos y operaciones con columnas y transformaciones](./Capítulo4/Lab4.md)
    - **Descripción.**
      Aprenderás a crear y aplicar Acciones en RDD, además de complementar transformaciones con acciones en RDD.
    - ⏱️ **Duración estimada**: 45 minutos.
