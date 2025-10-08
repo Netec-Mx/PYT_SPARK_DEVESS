@@ -38,19 +38,20 @@ Cada uno de estos laboratorios está diseñado para ofrecerte una experiencia pr
      Aprenderás a implementar técnicas avanzadas en consultas como particionamiento, transmisión de variables y uso de acumuladores.
    - ⏱️ **Duración estimada**: 60 minutos.
 
-### [Práctica 6. Uso de DataFrames, cálculos y operaciones con columnas y transformaciones](./Capítulo6/Lab6.md)
+### [Práctica 6. Acciones](./Capítulo6/Lab6.md)
    - **Descripción.**
-     Aprenderás a implementar lecturas, consultas y transformaciones con SQL en PySpark.
+     Aprenderás a crear y aplicar acciones y complementar transformaciones con acciones.
    - ⏱️ **Duración estimada**: 45 minutos.
 
-### [Práctica 7. Uso de agregaciones, agrupaciones y relaciones](./Capítulo7/Lab7.md)
+### [Práctica 7. Aspectos avanzados](./Capítulo7/Lab7.md)
    - **Descripción.**
-     Aprenderás a realizar la aplicación de consultas con agregaciones.
+     Aprenderás a implementar técnicas avanzadas en consultas como particionamiento, acumuladores,
+transmisión de variables y usar acumuladores.
    - ⏱️ **Duración estimada**: 45 minutos.
 
-### [Práctica 8. Uso de funciones en Spark SQL](./Capítulo8/Lab8.md)
+### [Práctica 8. Uso de agregaciones, agrupaciones y relaciones](./Capítulo8/Lab8.md)
    - **Descripción.**
-     Aprenderás a utilizar funciones de diferentes tipos en consultas SQL en PySpark, también conocerás el uso de CatalystOptimizer. 
+     Aprenderás a aplicar consultas con agregaciones 
    - ⏱️ **Duración estimada**:  60 minutos.
      
 ### [Práctica 9. Monitoreo y optimización de PySpark](./Capítulo9/Lab9.md)
