@@ -350,27 +350,27 @@ Con el objeto **col(),** es posible cambiar el nombre de las columnas
 recuperadas con su atributo **alias()**.
 
 ```
-**from pyspark.sql import SparkSession**
+from pyspark.sql import SparkSession
 
-**from pyspark.sql.functions import col**
+from pyspark.sql.functions import col
 
-**spark = SparkSession\\**
+spark = SparkSession\\
 
-**.builder\\**
+.builder\\
 
-**.appName("Selecion de columnas DataFrame")\\**
+.appName("Selecion de columnas DataFrame")\\
 
-**.getOrCreate()**
+.getOrCreate()
 
-**\# Crear DataFrame**
+\# Crear DataFrame
 
-**df = spark.read.csv("/home/miguel/data/Sales.csv", inferSchema=True,
-header=True)**
+df = spark.read.csv("/home/miguel/data/Sales.csv", inferSchema=True,
+header=True)
 
-**\# Mostrar el DataFrame**
+\# Mostrar el DataFrame
 
-**df.select(col("SalesOrderNumber").alias("Order"),col("Product").alias("Producto")
-,col("Quantity").alias("Cantidad"),col("Sales").alias("Importe")).show(10)**
+df.select(col("SalesOrderNumber").alias("Order"),col("Product").alias("Producto")
+,col("Quantity").alias("Cantidad"),col("Sales").alias("Importe")).show(10)
 ```
 
 ![](./media/image19.png)
@@ -724,6 +724,7 @@ os.rename(f"/home/netec/data/salida/{archivo_csv}",
 ```
 
 ![](./media/image32.png)
+
 
 
 
