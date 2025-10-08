@@ -12,7 +12,7 @@ optimizada que permite trabajar con datos estructurados o
 semiestructurados de manera mucho más eficiente que los RDD.
 
 Los DataFrames se pueden crear a partir de varias fuentes de datos, como
-archivos (CSV, JSON, Parquet), bases de datos, o RDDs.
+archivos (CSV, JSON, Parquet), bases de datos o RDD.
 
 **Crear un DataFrame desde una lista de datos**
 
@@ -416,7 +416,7 @@ La función lit no se limita a valores simples como enteros o cadenas.
 Se pueden manejar expresiones más complejas, como cálculos matemáticos o
 concatenación de múltiples columnas.
 
-**Agregar colunas calculadas**
+**Agregar columnas calculadas**
 
 Una forma de adicionar columnas calculadas es a través de la función
 expr(). El cálculo se puede basar en el nombre de la columna original o
@@ -722,6 +722,7 @@ os.rename(f"/home/netec/data/salida/{archivo_csv}",
 ```
 
 ![](./media/image32.png)
+
 
 
 
