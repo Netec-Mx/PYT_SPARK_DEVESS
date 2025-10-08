@@ -1,4 +1,4 @@
-# Práctica 4. Trabajando con DataFrames 
+# Práctica 4. Uso de DataFrames, cálculos y operaciones con columnas y transformaciones 
 
 **Objetivo**
 Al finalizar la práctica, serás capaz de:
@@ -398,3 +398,4 @@ resultado.show()
 Las vistas temporales son una herramienta poderosa en PySpark para
 combinar SQL y DataFrames, lo que facilita el análisis de datos en
 entornos distribuidos.
+
