@@ -94,7 +94,7 @@ En este ejemplo:
 
 Se pueden aplicar cortes en más de un campo. Es importante considerar
 que si los campos no utilizan una función de agregación, todos ellos
-deberán estar en GROUP BY. El primer campo declarado maneja la
+deberán estar en `GROUP BY`. El primer campo declarado maneja la
 agrupación principal.
 
 ```
@@ -753,6 +753,7 @@ spark.sql(query).show()
 ![](./media/image23.png)
 
 ![](./media/image24.png)
+
 
 
 
