@@ -55,7 +55,7 @@ spark = SparkSession\\
 
 .builder\\
 
-.appName("Usra SQL y DataFrames")\\
+.appName("Usar SQL y DataFrames")\\
 
 .getOrCreate()
 
@@ -104,7 +104,7 @@ spark = SparkSession\\
 
 .builder\\
 
-.appName("Usra SQL y DataFrames")\\
+.appName("Usar SQL y DataFrames")\\
 
 .getOrCreate()
 
@@ -140,7 +140,7 @@ spark = SparkSession\\
 
 .builder\\
 
-.appName("Usra SQL y DataFrames")\\
+.appName("Usar SQL y DataFrames")\\
 
 .getOrCreate()
 
@@ -182,7 +182,7 @@ spark = SparkSession\\
 
 .builder\\
 
-.appName("Usra SQL y DataFrames")\\
+.appName("Usar SQL y DataFrames")\\
 
 .getOrCreate()
 
@@ -218,7 +218,7 @@ dfProducts.show()
 
 ¿Cómo obtener las categorías cuyo total es superior a 100?
 
-La cláusula `WHERE` no puede ser aplicable porque esta se aplica a nivel
+La cláusula `WHERE` no es aplicable porque esta se aplica a nivel
 registro y no a nivel agrupación. Para aplicar condiciones por grupo se
 tiene a la cláusula `HAVING`.
 
@@ -229,7 +229,7 @@ spark = SparkSession\\
 
 .builder\\
 
-.appName("Usra SQL y DataFrames")\\
+.appName("Usar SQL y DataFrames")\\
 
 .getOrCreate()
 
@@ -260,7 +260,7 @@ dfProducts.show()
 ```
 
 La cláusula `HAVING` se puede aplicar a cualquier agregación. También se
-puede combinar con `WHERE`, ya que esta filtra registros y `HAVING`
+puede combinar con `WHERE`, ya que esta filtra registros y `HAVING`,
 agregaciones.
 
 ![](./media/image9.png)
@@ -279,7 +279,7 @@ spark = SparkSession\\
 
 .builder\\
 
-.appName("Usra SQL y DataFrames")\\
+.appName("Usar SQL y DataFrames")\\
 
 .getOrCreate()
 
@@ -347,7 +347,7 @@ spark = SparkSession\\
 
 .builder\\
 
-.appName("Usra SQL y DataFrames")\\
+.appName("Usar SQL y DataFrames")\\
 
 .getOrCreate()
 
@@ -378,7 +378,7 @@ inferSchema=True, header=True)
 
 dfProducts.createOrReplaceTempView("ventas")
 
-#Combina solo las filas que tienen coincidencias en lass tres tablas.
+# Combina solo las filas que tienen coincidencias en las tres tablas.
 
 query = ("SELECT v.SalesOrderNumber,c.Customer, v.OrderDate,p.Product,
 p.Category,"
@@ -439,7 +439,7 @@ data_departamentos = \[
 
 (105, "RH"),
 
-(106, "Operacione"),
+(106, "Operaciones"),
 
 \]
 
@@ -753,6 +753,7 @@ spark.sql(query).show()
 ![](./media/image23.png)
 
 ![](./media/image24.png)
+
 
 
 
