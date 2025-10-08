@@ -30,23 +30,23 @@ Cada uno de estos laboratorios está diseñado para ofrecerte una experiencia pr
 
 ### [Práctica 4. Uso de DataFrames, cálculos y operaciones con columnas y transformaciones](./Capítulo4/Lab4.md)
    - **Descripción.**
-     Aprenderás a crear y aplicar Acciones en RDD, además de complementar transformaciones con acciones en RDD.
-   - ⏱️ **Duración estimada**: 45 minutos.
+     Aprenderás a crear y aplicar acciones en RDD, además de complementar transformaciones con acciones en RDD.
+   - ⏱️ **Duración estimada**: 60 minutos.
 
 ### [Práctica 5. Aplicando aspectos avanzados](./Capítulo5/Lab5.md)
    - **Descripción.**
      Aprenderás a implementar técnicas avanzadas en consultas como particionamiento, transmisión de variables y uso de acumuladores.
-   - ⏱️ **Duración estimada**: 45 minutos.
+   - ⏱️ **Duración estimada**: 60 minutos.
 
 ### [Práctica 6. Uso de DataFrames, cálculos y operaciones con columnas y transformaciones](./Capítulo6/Lab6.md)
    - **Descripción.**
      Aprenderás a implementar lecturas, consultas y transformaciones con SQL en PySpark.
-   - ⏱️ **Duración estimada**: 60 minutos.
+   - ⏱️ **Duración estimada**: 45 minutos.
 
 ### [Práctica 7. Uso de agregaciones, agrupaciones y relaciones](./Capítulo7/Lab7.md)
    - **Descripción.**
      Aprenderás a realizar la aplicación de consultas con agregaciones.
-   - ⏱️ **Duración estimada**:  60 minutos.
+   - ⏱️ **Duración estimada**: 45 minutos.
 
 ### [Práctica 8. Uso de funciones en Spark SQL](./Capítulo8/Lab8.md)
    - **Descripción.**
