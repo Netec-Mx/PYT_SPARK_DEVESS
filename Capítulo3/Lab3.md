@@ -264,18 +264,19 @@ df = spark.createDataFrame(data, columns)
 \# Mostrar el DataFrame
 
 df.show()
+```
 
 **En este ejemplo:**
 
--   **pyspark.sql.functions import col** habilita el acceso al objeto
-    columna (col) en un DataSet
+-   `pyspark.sql.functions import col` habilita el acceso al objeto
+    columna (col) en un DataSet.
 
--   **columns = \["id", "nombre", "edad", "salario"\]** declara las
-    columnas que tendrá el DataFrame
+-   `columns = \["id", "nombre", "edad", "salario"\]` declara las
+    columnas que tendrá el DataFrame.
 
--   **createDataFrame(data, columns)** crea el DataFrame a partir de la
+-   `createDataFrame(data, columns)` crea el DataFrame a partir de la
     colección de datos y la declaración de columnas.
-```
+
 
 ![](./media/image13.png)
 
@@ -453,16 +454,16 @@ expr("Sales \* Quantity").alias("Subtotal")).show(10)
 
 **En este ejemplo:**
 
--   **from pyspark.sql.functions import expr** importa la función exp(),
-    que permite definir una expresión como valor de la columna
+-   `from pyspark.sql.functions import expr` importa la función `exp()`,
+    que permite definir una expresión como valor de la columna.
 
--   **expr("Sales \* Quantity").alias("Subtotal")** crea la nueva
+-   `expr("Sales \* Quantity").alias("Subtotal")` crea la nueva
     columna.
 
 **Agregar columnas calculadas a un DataFrame existente**
 
 La función **withColumn()** devuelve un nuevo DataFrame agregando una
-columna o reemplazando la columna existente que tiene el mismo nombre
+columna o reemplazando la columna existente que tiene el mismo nombre.
 
 ```
 from pyspark.sql import SparkSession
@@ -503,7 +504,7 @@ df_productos.show(3)
 
 Adicionar varias columnas a un DataFrame existente.
 
-La función **withColumns()** permite adicionar varias columnas a un
+La función `withColumns()` permite adicionar varias columnas a un
 DataFrame existente.
 
 ```
@@ -601,13 +602,14 @@ header=True, mode="overwrite")
 
 ![](./media/image28.png)
 
-El parámetro **mode** controla el comportamiento si el archivo ya
-existe. Los valores comunes son **overwrite** (sobrescribir el archivo
-existente), **append** (agregar al archivo existente), **ignore** (no
-guardar si el archivo ya existe) y **error** (lanzar un error si el
+El parámetro `mode` controla el comportamiento si el archivo ya
+existe. Los valores comunes son `overwrite` (sobrescribe el archivo
+existente), `append` (agrega al archivo existente), `ignore` (no
+guarda, si el archivo ya existe) y `error` (lanza un error si el
 archivo ya existe).
 
 **Salvar el archivo como parquet**
+
 ```
 from pyspark.sql import SparkSession
 
@@ -722,6 +724,7 @@ os.rename(f"/home/netec/data/salida/{archivo_csv}",
 ```
 
 ![](./media/image32.png)
+
 
 
 
