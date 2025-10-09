@@ -7,7 +7,7 @@ Al finalizar la práctica, serás capaz de:
 ## Duración aproximada
 - 60 minutos.
 
-## Prerequisitos
+## Prerrequisitos
 
 -   Acceso a ambiente Linux (credenciales provistas en el curso) o Linux
     local con interfaz gráfica.
@@ -112,14 +112,14 @@ schema = StructType(\[
 
 StructField("nombre\", StringType(), ),
 
-Struc"Field("edad\", IntegerType(), ),
+StructField("edad\", IntegerType(), ),
 
 \])
 
 df = spark.read.schema(schema).csv(\"data.csv\")
 ```
 
-b)  **Subir a cache DataFrames cuando sea necesario**
+b)  **Almacenar DataFrames en caché cuando sea necesario**
 
 -   Mantener en caché DataFrames si se reutilizan en múltiples
     operaciones.
@@ -127,7 +127,7 @@ b)  **Subir a cache DataFrames cuando sea necesario**
 ```
     df.cache() \# Almacena el DataFrame en memoria
 
-    df.count() \# Forzar caché
+    df.count() \# Fuerza el caché
 ```
 
 c)  **Particionar datos adecuadamente**
@@ -195,7 +195,7 @@ df_grouped.explain()
 
 +- \*(1) Filter (edad \> 30)
 
-ileScan csv \[ciudad,edad\] Balse, Format: CSV, \...
+FileScan csv \[ciudad,edad\] False, Format: CSV, \...
 ```
 
 **Optimización manual**
@@ -223,7 +223,7 @@ from pyspark.sql.functions import broadcast
 
 \# Iniciar Spark
 
-spark = SparkSession.bulder.appName(\"Optimization
+spark = SparkSession.builder.appName(\"Optimization
 Ejemplo\").getOrCreate()
 
 \# Leer datos
@@ -259,3 +259,4 @@ En resumen:
 
 -   Catalyst Optimizer: aprovecha el optimizador para mejorar el
     rendimiento de tus consultas.
+
