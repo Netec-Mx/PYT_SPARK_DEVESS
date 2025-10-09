@@ -269,7 +269,7 @@ agregaciones.
 
 **Agregación sin agrupación**
 
-Si no se usa GROUP BY, las funciones de agregación se aplican a toda la
+Si no se usa `GROUP BY`, las funciones de agregación se aplican a toda la
 tabla.
 
 ```
@@ -753,6 +753,7 @@ spark.sql(query).show()
 ![](./media/image23.png)
 
 ![](./media/image24.png)
+
 
 
 
