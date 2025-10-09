@@ -70,7 +70,7 @@ print("Cantidad de palabras:", cantidad_palabras)
 
 print("Primeras 10 palabras minúsculas:", primerasMin_palabras)
 
-print("Primeras 10 palabras minúsculas:", primerasMay_palabras)
+print("Primeras 10 palabras mayúsculas:", primerasMay_palabras)
 
 \# Cerrar SparkContext
 
@@ -266,6 +266,7 @@ print(f"Fecha: {fecha}, Ventas: {ventas}")
 ![](./media/image9.png)
 
 ![](./media/image10.png)
+
 
 
 
