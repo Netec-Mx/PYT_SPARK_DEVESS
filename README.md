@@ -1,3 +1,5 @@
+<img src="images/neteclogo (2).png" alt="logo" width="300"/>
+
 # Spark y PySpark Essentials
 
 ## Plataforma de laboratorios
@@ -58,3 +60,13 @@ transmisión de variables y usar acumuladores.
    - **Descripción**:
      Aprenderás a identificar y aplicar mejores prácticas de desempeño y el uso de Catalyst Optimizer. 
    - ⏱️ **Duración estimada**:  60 minutos.
+
+   ---
+
+## 📬 **Contacto y más información**
+
+Si tienes alguna pregunta o necesitas más detalles, no dudes en [contactarnos](mailto:soporte@netec.com). También puedes encontrar más recursos en nuestra [página](https://netec.com).
+
+---
+
+¡Gracias por visitar nuestra plataforma! No olvides revisar todos los laboratorios y comenzar tu viaje de aprendizaje hoy mismo.
